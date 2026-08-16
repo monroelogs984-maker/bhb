@@ -1,0 +1,150 @@
+{
+  "duration": 9,
+  "blend_mask": [
+    "RIGHT_ARM",
+    "LEFT_ARM",
+    "RIGHT_LEG",
+    "LEFT_LEG",
+    "BODY"
+  ],
+  "hit_window": {
+    "start": 2,
+    "end": 5
+  },
+  "trail": {
+    "start": 2,
+    "end": 5
+  },
+  "keyframes": [
+    {
+      "tick": 0,
+      "bone": "RIGHT_ARM",
+      "rx": 23.8,
+      "ry": 23.11,
+      "rz": -7.06,
+      "easing": "EASE_IN_CUBIC"
+    },
+    {
+      "tick": 0,
+      "bone": "LEFT_ARM",
+      "easing": "EASE_IN_CUBIC",
+      "rx": -10.67,
+      "ry": 6.9,
+      "rz": 2.85
+    },
+    {
+      "tick": 3,
+      "bone": "RIGHT_ARM",
+      "rx": -85.05,
+      "ry": 0.0,
+      "rz": 4.66,
+      "easing": "EASE_OUT_CUBIC"
+    },
+    {
+      "tick": 3,
+      "bone": "LEFT_ARM",
+      "easing": "EASE_OUT_CUBIC",
+      "rx": 38.25,
+      "rz": -1.88
+    },
+    {
+      "tick": 6,
+      "bone": "RIGHT_ARM",
+      "rx": -37.44,
+      "ry": 5.86,
+      "rz": 2.33,
+      "easing": "EASE_OUT_QUAD"
+    },
+    {
+      "tick": 6,
+      "bone": "LEFT_ARM",
+      "easing": "EASE_OUT_QUAD",
+      "rx": 16.83,
+      "ry": 1.72,
+      "rz": -0.9
+    },
+    {
+      "tick": 9,
+      "bone": "RIGHT_ARM",
+      "rx": 0.0,
+      "ry": 0.0,
+      "rz": 0.0,
+      "easing": "LINEAR"
+    },
+    {
+      "tick": 9,
+      "bone": "LEFT_ARM",
+      "easing": "LINEAR"
+    },
+    {
+      "tick": 0,
+      "bone": "RIGHT_LEG",
+      "rx": 0.0,
+      "ry": 0.0,
+      "rz": 0.0,
+      "easing": "EASE_IN_QUAD"
+    },
+    {
+      "tick": 2,
+      "bone": "RIGHT_LEG",
+      "rx": 21.0,
+      "ry": 7.0,
+      "rz": 0.0,
+      "easing": "EASE_OUT_CUBIC"
+    },
+    {
+      "tick": 9,
+      "bone": "RIGHT_LEG",
+      "rx": 0.0,
+      "ry": 0.0,
+      "rz": 0.0,
+      "easing": "EASE_OUT_QUAD"
+    },
+    {
+      "tick": 0,
+      "bone": "LEFT_LEG",
+      "rx": 0.0,
+      "ry": 0.0,
+      "rz": 0.0,
+      "easing": "EASE_IN_QUAD"
+    },
+    {
+      "tick": 2,
+      "bone": "LEFT_LEG",
+      "rx": -14.700000000000001,
+      "ry": -5.25,
+      "rz": 0.0,
+      "easing": "EASE_OUT_CUBIC"
+    },
+    {
+      "tick": 9,
+      "bone": "LEFT_LEG",
+      "rx": 0.0,
+      "ry": 0.0,
+      "rz": 0.0,
+      "easing": "EASE_OUT_QUAD"
+    },
+    {
+      "tick": 0,
+      "bone": "BODY",
+      "rx": 30.24,
+      "ry": 50.5,
+      "rz": 6.72,
+      "easing": "EASE_IN_QUAD"
+    },
+    {
+      "tick": 3,
+      "bone": "BODY",
+      "rx": -40.0,
+      "ry": -30.0,
+      "rz": -4.08,
+      "easing": "EASE_OUT_CUBIC"
+    },
+    {
+      "tick": 9,
+      "bone": "BODY",
+      "ry": 0.0,
+      "easing": "LINEAR"
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "category": "sai",
+  "attacks": [
+    {
+      "animation": "bromax_battle:sai_default",
+      "weight": 50,
+      "speed_multiplier": 1.0,
+      "damage_multiplier": 1.0,
+      "hit_delay": 5
+    },
+    {
+      "animation": "bromax_battle:sai_heavy",
+      "weight": 20,
+      "speed_multiplier": 0.9,
+      "damage_multiplier": 1.1,
+      "hit_delay": 8
+    },
+    {
+      "animation": "bromax_battle:sai_light",
+      "weight": 30,
+      "speed_multiplier": 1.1,
+      "damage_multiplier": 0.9,
+      "hit_delay": 3
+    }
+  ]
+}

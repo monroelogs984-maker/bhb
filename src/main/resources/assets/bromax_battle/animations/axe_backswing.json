@@ -1,0 +1,224 @@
+{
+  "duration": 18,
+  "blend_mask": [
+    "RIGHT_ARM",
+    "LEFT_ARM",
+    "BODY",
+    "RIGHT_LEG",
+    "LEFT_LEG",
+    "WEAPON_HAND"
+  ],
+  "hit_window": {
+    "start": 7,
+    "end": 12
+  },
+  "trail": {
+    "start": 6,
+    "end": 12
+  },
+  "keyframes": [
+    {
+      "tick": 0,
+      "bone": "RIGHT_ARM",
+      "rx": 22.09,
+      "ry": -48.47,
+      "rz": 42.19,
+      "easing": "EASE_IN_CUBIC"
+    },
+    {
+      "tick": 0,
+      "bone": "LEFT_ARM",
+      "easing": "EASE_IN_CUBIC",
+      "rx": -9.9,
+      "ry": -14.49,
+      "rz": -16.89
+    },
+    {
+      "tick": 0,
+      "bone": "BODY",
+      "rx": 26.38,
+      "ry": -84.0,
+      "rz": -11.43,
+      "easing": "EASE_IN_QUAD"
+    },
+    {
+      "tick": 4,
+      "bone": "RIGHT_ARM",
+      "rx": 11.79,
+      "ry": -55.89,
+      "rz": 51.49,
+      "easing": "EASE_IN_CUBIC"
+    },
+    {
+      "tick": 4,
+      "bone": "LEFT_ARM",
+      "easing": "EASE_IN_CUBIC",
+      "rx": -5.31,
+      "ry": -16.73,
+      "rz": -20.57
+    },
+    {
+      "tick": 4,
+      "bone": "BODY",
+      "rx": 13.62,
+      "ry": -93.5,
+      "rz": -12.64,
+      "easing": "EASE_IN_QUAD"
+    },
+    {
+      "tick": 9,
+      "bone": "RIGHT_ARM",
+      "rx": 70.78,
+      "ry": 40.88,
+      "rz": -37.53,
+      "easing": "EASE_OUT_CUBIC"
+    },
+    {
+      "tick": 9,
+      "bone": "LEFT_ARM",
+      "easing": "EASE_OUT_CUBIC",
+      "rx": -31.86,
+      "ry": 12.25,
+      "rz": 15.01
+    },
+    {
+      "tick": 9,
+      "bone": "BODY",
+      "rx": 40.0,
+      "ry": 56.0,
+      "rz": 7.54,
+      "easing": "EASE_OUT_CUBIC"
+    },
+    {
+      "tick": 13,
+      "bone": "RIGHT_ARM",
+      "rx": 32.4,
+      "ry": 16.21,
+      "rz": -18.76,
+      "easing": "EASE_OUT_CUBIC"
+    },
+    {
+      "tick": 13,
+      "bone": "LEFT_ARM",
+      "easing": "EASE_OUT_CUBIC",
+      "rx": -14.54,
+      "ry": 4.83,
+      "rz": 7.51
+    },
+    {
+      "tick": 13,
+      "bone": "BODY",
+      "rx": 13.62,
+      "ry": 23.5,
+      "rz": 3.16,
+      "easing": "EASE_OUT_CUBIC"
+    },
+    {
+      "tick": 18,
+      "bone": "RIGHT_ARM",
+      "rx": 0.0,
+      "ry": 0.0,
+      "rz": 0.0,
+      "easing": "LINEAR"
+    },
+    {
+      "tick": 18,
+      "bone": "LEFT_ARM",
+      "easing": "LINEAR"
+    },
+    {
+      "tick": 18,
+      "bone": "BODY",
+      "ry": 0.0,
+      "easing": "LINEAR"
+    },
+    {
+      "tick": 0,
+      "bone": "RIGHT_LEG",
+      "rx": 0.0,
+      "ry": 0.0,
+      "rz": 0.0,
+      "easing": "EASE_IN_QUAD"
+    },
+    {
+      "tick": 6,
+      "bone": "RIGHT_LEG",
+      "rx": 32,
+      "ry": 13.0,
+      "rz": 0.0,
+      "easing": "EASE_OUT_CUBIC"
+    },
+    {
+      "tick": 18,
+      "bone": "RIGHT_LEG",
+      "rx": 0.0,
+      "ry": 0.0,
+      "rz": 0.0,
+      "easing": "EASE_OUT_QUAD"
+    },
+    {
+      "tick": 0,
+      "bone": "LEFT_LEG",
+      "rx": 0.0,
+      "ry": 0.0,
+      "rz": 0.0,
+      "easing": "EASE_IN_QUAD"
+    },
+    {
+      "tick": 6,
+      "bone": "LEFT_LEG",
+      "rx": -27.299999999999997,
+      "ry": -9.75,
+      "rz": 0.0,
+      "easing": "EASE_OUT_CUBIC"
+    },
+    {
+      "tick": 18,
+      "bone": "LEFT_LEG",
+      "rx": 0.0,
+      "ry": 0.0,
+      "rz": 0.0,
+      "easing": "EASE_OUT_QUAD"
+    },
+    {
+      "tick": 0,
+      "bone": "WEAPON_HAND",
+      "easing": "EASE_IN_CUBIC",
+      "rx": 33.1,
+      "ry": -72.7,
+      "rz": 63.3
+    },
+    {
+      "tick": 4,
+      "bone": "WEAPON_HAND",
+      "easing": "EASE_IN_CUBIC",
+      "rx": 17.7,
+      "ry": -83.8,
+      "rz": 77.2
+    },
+    {
+      "tick": 9,
+      "bone": "WEAPON_HAND",
+      "easing": "EASE_OUT_CUBIC",
+      "rx": 106.2,
+      "ry": 61.3,
+      "rz": -56.3
+    },
+    {
+      "tick": 13,
+      "bone": "WEAPON_HAND",
+      "easing": "EASE_OUT_CUBIC",
+      "rx": 48.6,
+      "ry": 24.3,
+      "rz": -28.1
+    },
+    {
+      "tick": 18,
+      "bone": "WEAPON_HAND",
+      "easing": "LINEAR",
+      "rx": 0,
+      "ry": 0,
+      "rz": 0
+    }
+  ]
+}

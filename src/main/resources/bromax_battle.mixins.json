@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "package": "com.bromax.bromaxbattle.client.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "client": [
+    "MixinPlayerModel",
+    "MixinItemInHandLayer",
+    "MixinItemInHandRenderer",
+    "MixinLocalPlayer",
+    "MixinMultiPlayerGameMode"
+  ],
+  "mixins": [],
+  "minVersion": "0.8"
+}

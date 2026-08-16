@@ -1,0 +1,26 @@
+{
+  "category": "warhammer",
+  "attacks": [
+    {
+      "animation": "bromax_battle:warhammer_default",
+      "weight": 60,
+      "speed_multiplier": 1.0,
+      "damage_multiplier": 1.0,
+      "hit_delay": 9
+    },
+    {
+      "animation": "bromax_battle:warhammer_heavy",
+      "weight": 20,
+      "speed_multiplier": 0.5,
+      "damage_multiplier": 1.5,
+      "hit_delay": 36
+    },
+    {
+      "animation": "bromax_battle:warhammer_light",
+      "weight": 20,
+      "speed_multiplier": 1.5,
+      "damage_multiplier": 0.5,
+      "hit_delay": 2
+    }
+  ]
+}

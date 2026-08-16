@@ -1,0 +1,123 @@
+{
+  "duration": 9,
+  "blend_mask": [
+    "RIGHT_ARM",
+    "LEFT_ARM",
+    "RIGHT_LEG",
+    "LEFT_LEG"
+  ],
+  "hit_window": {
+    "start": 2,
+    "end": 5
+  },
+  "trail": {
+    "start": 2,
+    "end": 5
+  },
+  "keyframes": [
+    {
+      "tick": 0,
+      "bone": "RIGHT_ARM",
+      "rx": -6.79,
+      "ry": -12.41,
+      "rz": 1.8,
+      "easing": "EASE_IN_CUBIC"
+    },
+    {
+      "tick": 0,
+      "bone": "LEFT_ARM",
+      "rx": 11.34,
+      "ry": 10.34,
+      "rz": -2.7,
+      "easing": "EASE_IN_CUBIC"
+    },
+    {
+      "tick": 3,
+      "bone": "RIGHT_ARM",
+      "rx": -4.54,
+      "ry": -18.63,
+      "rz": 3.6,
+      "easing": "EASE_OUT_CUBIC"
+    },
+    {
+      "tick": 3,
+      "bone": "LEFT_ARM",
+      "rx": 6.79,
+      "ry": 14.49,
+      "rz": -3.6,
+      "easing": "EASE_OUT_CUBIC"
+    },
+    {
+      "tick": 6,
+      "bone": "RIGHT_ARM",
+      "rx": -2.25,
+      "ry": -8.28,
+      "rz": 1.8,
+      "easing": "EASE_OUT_QUAD"
+    },
+    {
+      "tick": 9,
+      "bone": "RIGHT_ARM",
+      "rx": 0.0,
+      "ry": 0.0,
+      "rz": 0.0,
+      "easing": "LINEAR"
+    },
+    {
+      "tick": 9,
+      "bone": "LEFT_ARM",
+      "rx": 0.0,
+      "ry": 0.0,
+      "rz": 0.0,
+      "easing": "LINEAR"
+    },
+    {
+      "tick": 0,
+      "bone": "RIGHT_LEG",
+      "rx": 0.0,
+      "ry": 0.0,
+      "rz": 0.0,
+      "easing": "EASE_IN_QUAD"
+    },
+    {
+      "tick": 2,
+      "bone": "RIGHT_LEG",
+      "rx": 16.799999999999997,
+      "ry": 3.5,
+      "rz": 0.0,
+      "easing": "EASE_OUT_CUBIC"
+    },
+    {
+      "tick": 9,
+      "bone": "RIGHT_LEG",
+      "rx": 0.0,
+      "ry": 0.0,
+      "rz": 0.0,
+      "easing": "EASE_OUT_QUAD"
+    },
+    {
+      "tick": 0,
+      "bone": "LEFT_LEG",
+      "rx": 0.0,
+      "ry": 0.0,
+      "rz": 0.0,
+      "easing": "EASE_IN_QUAD"
+    },
+    {
+      "tick": 2,
+      "bone": "LEFT_LEG",
+      "rx": 12.600000000000001,
+      "ry": -3.5,
+      "rz": 0.0,
+      "easing": "EASE_OUT_CUBIC"
+    },
+    {
+      "tick": 9,
+      "bone": "LEFT_LEG",
+      "rx": 0.0,
+      "ry": 0.0,
+      "rz": 0.0,
+      "easing": "EASE_OUT_QUAD"
+    }
+  ]
+}

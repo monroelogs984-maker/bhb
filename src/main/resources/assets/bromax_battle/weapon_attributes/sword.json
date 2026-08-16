@@ -1,0 +1,78 @@
+{
+  "category": "sword",
+  "range_bonus": 0.0,
+  "attacks": [
+    {
+      "animation": "bromax_battle:sword_upswing_right",
+      "hitbox": "ARC",
+      "angle": 95,
+      "damage_multiplier": 1.0,
+      "sound": "bromax_battle:sword_swing",
+      "hit_delay": 4
+    },
+    {
+      "animation": "bromax_battle:sword_upswing_left",
+      "hitbox": "ARC",
+      "angle": 95,
+      "damage_multiplier": 1.0,
+      "sound": "bromax_battle:sword_swing",
+      "hit_delay": 4
+    },
+    {
+      "animation": "bromax_battle:sword_descend_right",
+      "hitbox": "ARC",
+      "angle": 120,
+      "damage_multiplier": 1.0,
+      "sound": "bromax_battle:sword_swing",
+      "hit_delay": 5
+    },
+    {
+      "animation": "bromax_battle:sword_descend_left",
+      "hitbox": "ARC",
+      "angle": 120,
+      "damage_multiplier": 1.0,
+      "sound": "bromax_battle:sword_swing",
+      "hit_delay": 5
+    },
+    {
+      "animation": "bromax_battle:sword_overhead_right",
+      "hitbox": "CONE",
+      "angle": 60,
+      "damage_multiplier": 1.2,
+      "sound": "bromax_battle:sword_swing",
+      "hit_delay": 10
+    },
+    {
+      "animation": "bromax_battle:sword_overhead_left",
+      "hitbox": "CONE",
+      "angle": 60,
+      "damage_multiplier": 1.2,
+      "sound": "bromax_battle:sword_swing",
+      "hit_delay": 10
+    },
+    {
+      "animation": "bromax_battle:sword_slash_right",
+      "hitbox": "ARC",
+      "angle": 100,
+      "damage_multiplier": 1.0,
+      "sound": "bromax_battle:sword_swing",
+      "hit_delay": 5
+    },
+    {
+      "animation": "bromax_battle:sword_slash_left",
+      "hitbox": "ARC",
+      "angle": 100,
+      "damage_multiplier": 1.0,
+      "sound": "bromax_battle:sword_swing",
+      "hit_delay": 5
+    },
+    {
+      "animation": "bromax_battle:sword_stab",
+      "hitbox": "BOX",
+      "angle": 60,
+      "damage_multiplier": 1.1,
+      "sound": "bromax_battle:sword_swing",
+      "hit_delay": 7
+    }
+  ]
+}

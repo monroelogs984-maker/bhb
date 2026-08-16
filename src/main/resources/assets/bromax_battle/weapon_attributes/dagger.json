@@ -1,0 +1,26 @@
+{
+  "category": "dagger",
+  "attacks": [
+    {
+      "animation": "bromax_battle:dagger_default",
+      "weight": 60,
+      "speed_multiplier": 1.0,
+      "damage_multiplier": 1.0,
+      "hit_delay": 4
+    },
+    {
+      "animation": "bromax_battle:dagger_heavy",
+      "weight": 15,
+      "speed_multiplier": 0.9,
+      "damage_multiplier": 1.1,
+      "hit_delay": 9
+    },
+    {
+      "animation": "bromax_battle:dagger_light",
+      "weight": 25,
+      "speed_multiplier": 1.1,
+      "damage_multiplier": 0.9,
+      "hit_delay": 3
+    }
+  ]
+}

@@ -1,0 +1,152 @@
+{
+  "duration": 18,
+  "blend_mask": [
+    "RIGHT_ARM",
+    "LEFT_ARM",
+    "BODY",
+    "RIGHT_LEG",
+    "LEFT_LEG"
+  ],
+  "hit_window": {
+    "start": 6,
+    "end": 11
+  },
+  "trail": {
+    "start": 5,
+    "end": 11
+  },
+  "keyframes": [
+    {
+      "tick": 0,
+      "bone": "RIGHT_ARM",
+      "rx": 28.35,
+      "ry": 14.83,
+      "rz": -0.0,
+      "easing": "EASE_IN_CUBIC"
+    },
+    {
+      "tick": 0,
+      "bone": "LEFT_ARM",
+      "rx": 22.68,
+      "ry": -10.0,
+      "rz": 3.23,
+      "easing": "EASE_IN_CUBIC"
+    },
+    {
+      "tick": 7,
+      "bone": "RIGHT_ARM",
+      "rx": -77.94,
+      "ry": 0.0,
+      "rz": -63.8,
+      "easing": "EASE_OUT_CUBIC"
+    },
+    {
+      "tick": 7,
+      "bone": "LEFT_ARM",
+      "rx": -62.37,
+      "ry": 0.0,
+      "rz": -2.18,
+      "easing": "EASE_OUT_CUBIC"
+    },
+    {
+      "tick": 13,
+      "bone": "RIGHT_ARM",
+      "rx": -36.85,
+      "ry": 5.0,
+      "rz": -28.97,
+      "easing": "EASE_OUT_QUAD"
+    },
+    {
+      "tick": 13,
+      "bone": "LEFT_ARM",
+      "rx": -28.35,
+      "ry": -2.42,
+      "rz": -1.05,
+      "easing": "EASE_OUT_QUAD"
+    },
+    {
+      "tick": 18,
+      "bone": "RIGHT_ARM",
+      "rx": 0.0,
+      "ry": 0.0,
+      "rz": -0.0,
+      "easing": "LINEAR"
+    },
+    {
+      "tick": 18,
+      "bone": "LEFT_ARM",
+      "rx": 0.0,
+      "ry": 0.0,
+      "rz": 0.0,
+      "easing": "LINEAR"
+    },
+    {
+      "tick": 0,
+      "bone": "RIGHT_LEG",
+      "rx": 0.0,
+      "ry": 0.0,
+      "rz": 0.0,
+      "easing": "EASE_IN_QUAD"
+    },
+    {
+      "tick": 5,
+      "bone": "RIGHT_LEG",
+      "rx": 24.0,
+      "ry": 5.0,
+      "rz": 0.0,
+      "easing": "EASE_OUT_CUBIC"
+    },
+    {
+      "tick": 18,
+      "bone": "RIGHT_LEG",
+      "rx": 0.0,
+      "ry": 0.0,
+      "rz": 0.0,
+      "easing": "EASE_OUT_QUAD"
+    },
+    {
+      "tick": 0,
+      "bone": "LEFT_LEG",
+      "rx": 0.0,
+      "ry": 0.0,
+      "rz": 0.0,
+      "easing": "EASE_IN_QUAD"
+    },
+    {
+      "tick": 5,
+      "bone": "LEFT_LEG",
+      "rx": 18.0,
+      "ry": -5.0,
+      "rz": 0.0,
+      "easing": "EASE_OUT_CUBIC"
+    },
+    {
+      "tick": 18,
+      "bone": "LEFT_LEG",
+      "rx": 0.0,
+      "ry": 0.0,
+      "rz": 0.0,
+      "easing": "EASE_OUT_QUAD"
+    },
+    {
+      "tick": 0,
+      "bone": "BODY",
+      "ry": 21.5,
+      "rz": 3.27,
+      "easing": "EASE_IN_QUAD"
+    },
+    {
+      "tick": 7,
+      "bone": "BODY",
+      "rx": -40.0,
+      "ry": -17.5,
+      "rz": -2.72,
+      "easing": "EASE_OUT_CUBIC"
+    },
+    {
+      "tick": 18,
+      "bone": "BODY",
+      "easing": "LINEAR"
+    }
+  ]
+}

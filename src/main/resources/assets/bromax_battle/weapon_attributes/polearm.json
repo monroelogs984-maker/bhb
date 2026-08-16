@@ -1,0 +1,30 @@
+{
+  "category": "polearm",
+  "range_bonus": 1.25,
+  "attacks": [
+    {
+      "animation": "bromax_battle:polearm_thrust",
+      "hitbox": "BOX",
+      "angle": 0,
+      "damage_multiplier": 1.1,
+      "sound": "bromax_battle:polearm_swing",
+      "hit_delay": 7
+    },
+    {
+      "animation": "bromax_battle:polearm_sweep",
+      "hitbox": "ARC",
+      "angle": 180,
+      "damage_multiplier": 0.8,
+      "sound": "bromax_battle:polearm_swing",
+      "hit_delay": 9
+    },
+    {
+      "animation": "bromax_battle:polearm_overhead",
+      "hitbox": "CONE",
+      "angle": 62,
+      "damage_multiplier": 1.2,
+      "sound": "bromax_battle:polearm_swing",
+      "hit_delay": 11
+    }
+  ]
+}

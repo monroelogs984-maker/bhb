@@ -1,0 +1,26 @@
+{
+  "category": "falchion",
+  "attacks": [
+    {
+      "animation": "bromax_battle:falchion_default",
+      "weight": 70,
+      "speed_multiplier": 1.0,
+      "damage_multiplier": 1.0,
+      "hit_delay": 7
+    },
+    {
+      "animation": "bromax_battle:falchion_heavy",
+      "weight": 20,
+      "speed_multiplier": 0.7,
+      "damage_multiplier": 1.42,
+      "hit_delay": 17
+    },
+    {
+      "animation": "bromax_battle:falchion_light",
+      "weight": 10,
+      "speed_multiplier": 1.42,
+      "damage_multiplier": 0.7,
+      "hit_delay": 3
+    }
+  ]
+}

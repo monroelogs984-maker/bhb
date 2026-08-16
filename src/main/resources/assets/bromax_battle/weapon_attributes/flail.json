@@ -1,0 +1,26 @@
+{
+  "category": "flail",
+  "attacks": [
+    {
+      "animation": "bromax_battle:flail_default",
+      "weight": 40,
+      "speed_multiplier": 1.0,
+      "damage_multiplier": 1.0,
+      "hit_delay": 8
+    },
+    {
+      "animation": "bromax_battle:flail_heavy",
+      "weight": 30,
+      "speed_multiplier": 0.5,
+      "damage_multiplier": 1.5,
+      "hit_delay": 30
+    },
+    {
+      "animation": "bromax_battle:flail_light",
+      "weight": 30,
+      "speed_multiplier": 1.5,
+      "damage_multiplier": 0.5,
+      "hit_delay": 3
+    }
+  ]
+}

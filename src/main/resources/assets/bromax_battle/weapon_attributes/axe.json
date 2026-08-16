@@ -1,0 +1,38 @@
+{
+  "category": "axe",
+  "range_bonus": -0.25,
+  "attacks": [
+    {
+      "animation": "bromax_battle:axe_chop_right",
+      "hitbox": "CONE",
+      "angle": 58,
+      "damage_multiplier": 1.2,
+      "sound": "bromax_battle:axe_swing",
+      "hit_delay": 9
+    },
+    {
+      "animation": "bromax_battle:axe_chop_left",
+      "hitbox": "CONE",
+      "angle": 58,
+      "damage_multiplier": 1.2,
+      "sound": "bromax_battle:axe_swing",
+      "hit_delay": 9
+    },
+    {
+      "animation": "bromax_battle:axe_diagonal_right",
+      "hitbox": "ARC",
+      "angle": 100,
+      "damage_multiplier": 1.0,
+      "sound": "bromax_battle:axe_swing",
+      "hit_delay": 8
+    },
+    {
+      "animation": "bromax_battle:axe_backswing",
+      "hitbox": "ARC",
+      "angle": 95,
+      "damage_multiplier": 1.0,
+      "sound": "bromax_battle:axe_swing",
+      "hit_delay": 7
+    }
+  ]
+}
