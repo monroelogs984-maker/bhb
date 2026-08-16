@@ -1,43 +1,34 @@
 package com.bromax.bromaxbattle.config;
 
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.common.config.Configuration;
+
+import java.io.File;
 
 public class BromaxBattleConfig {
 
-    private static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
-    public  static final ForgeConfigSpec SPEC;
+    /** Allow weapon type detection via item name patterns (last-resort fallback). */
+    public static boolean enableNameHeuristics = true;
 
-    public static final ForgeConfigSpec.BooleanValue ENABLE_NAME_HEURISTICS;
-    public static final ForgeConfigSpec.DoubleValue  COMBO_RESET_TICKS;
-    public static final ForgeConfigSpec.DoubleValue  BASE_REACH;
+    /** Ticks without attacking before the combo counter resets. */
+    public static float comboResetTicks = 40f;
 
-    static {
-        BUILDER.push("classifier");
-        ENABLE_NAME_HEURISTICS = BUILDER
-            .comment("Allow weapon type detection via item name / registry name patterns. Disable if getting false positives.")
-            .define("enableNameHeuristics", true);
-        BUILDER.pop();
+    /** Base melee reach in blocks before per-weapon range bonus is applied. */
+    public static float baseReach = 3.5f;
 
-        BUILDER.push("combat");
-        COMBO_RESET_TICKS = BUILDER
-            .comment("Ticks before the combo resets after the last attack.")
-            .defineInRange("comboResetTicks", 40.0, 10.0, 200.0);
-        BASE_REACH = BUILDER
-            .comment("Base melee reach in blocks. Per-weapon range_bonus is added on top.")
-            .defineInRange("baseReach", 3.5, 1.0, 10.0);
-        BUILDER.pop();
+    public static void load(File configFile) {
+        Configuration cfg = new Configuration(configFile);
+        cfg.load();
 
-        SPEC = BUILDER.build();
+        enableNameHeuristics = cfg.getBoolean("enableNameHeuristics", "classifier", enableNameHeuristics,
+            "Allow weapon type detection via item name / registry name patterns. " +
+            "Disable if you're getting false positives on non-weapon items.");
+
+        comboResetTicks = cfg.getFloat("comboResetTicks", "combat", comboResetTicks, 10f, 200f,
+            "Ticks before the combo resets after the last attack.");
+
+        baseReach = cfg.getFloat("baseReach", "combat", baseReach, 1f, 10f,
+            "Base melee reach in blocks. Weapon range_bonus is added on top of this.");
+
+        if (cfg.hasChanged()) cfg.save();
     }
-
-    public static void register(IEventBus bus) {
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, SPEC, "bromax_battle.toml");
-    }
-
-    public static boolean enableNameHeuristics() { return ENABLE_NAME_HEURISTICS.get(); }
-    public static float   comboResetTicks()       { return COMBO_RESET_TICKS.get().floatValue(); }
-    public static float   baseReach()             { return BASE_REACH.get().floatValue(); }
 }

@@ -5,21 +5,25 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.fml.loading.FMLPaths;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+import java.util.Collections;
+import java.util.LinkedHashSet;
+import java.util.Set;
+import net.minecraftforge.fml.common.Loader;
 
 import java.io.*;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class WeaponRegistry {
     public static final WeaponRegistry INSTANCE = new WeaponRegistry();
 
-    private final Map<String, WeaponAttributes>          itemOverrides       = new HashMap<>();
-    private final Map<WeaponCategory, WeaponAttributes>  categoryDefaults    = new EnumMap<>(WeaponCategory.class);
-    private final Map<String, WeaponAttributes>          classificationCache = new ConcurrentHashMap<>();
+    private static final JsonParser PARSER = new JsonParser();
+
+    private final Map<String, WeaponAttributes> itemOverrides      = new HashMap<>();
+    private final Map<WeaponCategory, WeaponAttributes> categoryDefaults = new EnumMap<>(WeaponCategory.class);
+    private final Map<String, WeaponAttributes> classificationCache =
+            new java.util.concurrent.ConcurrentHashMap<>();
 
     public void init() {
         loadBuiltinDefaults();
@@ -31,8 +35,9 @@ public class WeaponRegistry {
             String path = "assets/bromax_battle/weapon_attributes/" + cat.name().toLowerCase() + ".json";
             try (InputStream is = WeaponRegistry.class.getClassLoader().getResourceAsStream(path)) {
                 if (is == null) continue;
-                JsonObject json = JsonParser.parseReader(new InputStreamReader(is)).getAsJsonObject();
+                JsonObject json = PARSER.parse(new InputStreamReader(is)).getAsJsonObject();
                 categoryDefaults.put(cat, parseAttributes(json));
+                BromaxBattle.LOGGER.info("Loaded weapon defaults for {}", cat);
             } catch (Exception e) {
                 BromaxBattle.LOGGER.error("Failed to load weapon defaults for {}: {}", cat, e.getMessage());
             }
@@ -40,13 +45,13 @@ public class WeaponRegistry {
     }
 
     private void loadExternalOverrides() {
-        File overrideDir = FMLPaths.CONFIGDIR.get().resolve("bromax_battle/weapon_attributes").toFile();
+        File overrideDir = new File(Loader.instance().getConfigDir(), "bromax_battle/weapon_attributes");
         if (!overrideDir.exists()) { overrideDir.mkdirs(); return; }
         File[] files = overrideDir.listFiles((d, name) -> name.endsWith(".json"));
         if (files == null) return;
         for (File file : files) {
             try (FileReader reader = new FileReader(file)) {
-                JsonObject json = JsonParser.parseReader(reader).getAsJsonObject();
+                JsonObject json = PARSER.parse(reader).getAsJsonObject();
                 if (!json.has("item")) continue;
                 String itemId = json.get("item").getAsString();
                 itemOverrides.put(itemId, parseAttributes(json));
@@ -57,14 +62,19 @@ public class WeaponRegistry {
         }
     }
 
+    /** Returns every animation ResourceLocation referenced by any loaded weapon attributes. */
     public Set<ResourceLocation> getAllAnimationIds() {
         Set<ResourceLocation> ids = new LinkedHashSet<>();
         for (WeaponAttributes attrs : categoryDefaults.values()) {
-            for (AttackDefinition a : attrs.attacks) { if (a.animation != null) ids.add(a.animation); }
+            for (AttackDefinition attack : attrs.attacks) {
+                if (attack.animation != null) ids.add(attack.animation);
+            }
             if (attrs.idleAnimation != null) ids.add(attrs.idleAnimation);
         }
         for (WeaponAttributes attrs : itemOverrides.values()) {
-            for (AttackDefinition a : attrs.attacks) { if (a.animation != null) ids.add(a.animation); }
+            for (AttackDefinition attack : attrs.attacks) {
+                if (attack.animation != null) ids.add(attack.animation);
+            }
             if (attrs.idleAnimation != null) ids.add(attrs.idleAnimation);
         }
         return Collections.unmodifiableSet(ids);
@@ -74,9 +84,8 @@ public class WeaponRegistry {
         if (stack.isEmpty()) {
             return categoryDefaults.getOrDefault(WeaponCategory.GAUNTLETS, null);
         }
-
-        ResourceLocation regName = ForgeRegistries.ITEMS.getKey(stack.getItem());
-        String itemKey = regName != null ? regName.toString() : null;
+        String itemKey = stack.getItem().getRegistryName() != null
+                ? stack.getItem().getRegistryName().toString() : null;
 
         if (itemKey != null) {
             WeaponAttributes override = itemOverrides.get(itemKey);
@@ -117,11 +126,11 @@ public class WeaponRegistry {
             try {
                 JsonObject a = elem.getAsJsonObject();
                 if (!a.has("animation")) continue;
-                ResourceLocation animation    = new ResourceLocation(a.get("animation").getAsString());
-                int   weight          = a.has("weight")            ? a.get("weight").getAsInt()            : 100;
-                float speedMultiplier = a.has("speed_multiplier")  ? a.get("speed_multiplier").getAsFloat() : 1.0f;
-                float damageMultiplier= a.has("damage_multiplier") ? a.get("damage_multiplier").getAsFloat(): 1.0f;
-                int   hitDelay        = a.has("hit_delay")         ? a.get("hit_delay").getAsInt()          : 0;
+                ResourceLocation animation = new ResourceLocation(a.get("animation").getAsString());
+                int   weight          = a.has("weight")           ? a.get("weight").getAsInt()           : 100;
+                float speedMultiplier = a.has("speed_multiplier") ? a.get("speed_multiplier").getAsFloat() : 1.0f;
+                float damageMultiplier= a.has("damage_multiplier")? a.get("damage_multiplier").getAsFloat(): 1.0f;
+                int   hitDelay        = a.has("hit_delay")        ? a.get("hit_delay").getAsInt()         : 0;
                 attacks.add(new AttackDefinition(animation, weight, speedMultiplier, damageMultiplier, hitDelay));
             } catch (Exception e) {
                 BromaxBattle.LOGGER.warn("Skipping malformed attack entry in {}: {}", cat, e.getMessage());

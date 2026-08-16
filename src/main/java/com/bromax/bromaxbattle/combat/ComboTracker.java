@@ -4,9 +4,25 @@ import com.bromax.bromaxbattle.config.BromaxBattleConfig;
 import com.bromax.bromaxbattle.weapon.AttackDefinition;
 import com.bromax.bromaxbattle.weapon.WeaponAttributes;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * Weighted random attack selector with per-player combo memory.
+ *
+ * Tracks how many consecutive attacks each player has made. The combo count
+ * is used as part of the seed so successive attacks in a flurry produce a
+ * varied but deterministic sequence, while idling for comboResetTicks resets
+ * back to the start of the pattern.
+ *
+ * Using (comboIndex XOR currentTick) as the seed means:
+ *  - The same combo position at different ticks gives different variants (tick variance).
+ *  - The same tick at different combo positions gives different variants (combo variance).
+ *  - Both client and server call pickAttack with the same inputs and get the same result.
+ */
 public class ComboTracker {
     public static final ComboTracker INSTANCE = new ComboTracker();
 
@@ -18,8 +34,9 @@ public class ComboTracker {
         if (attacks.isEmpty()) return 0;
         if (attacks.size() == 1) return 0;
 
+        // Reset combo index if player has been idle longer than comboResetTicks
         Integer lastTick = lastAttackTicks.get(playerId);
-        if (lastTick != null && (currentTick - lastTick) > (int) BromaxBattleConfig.comboResetTicks()) {
+        if (lastTick != null && (currentTick - lastTick) > (int) BromaxBattleConfig.comboResetTicks) {
             comboIndices.remove(playerId);
         }
         lastAttackTicks.put(playerId, currentTick);
@@ -38,6 +55,7 @@ public class ComboTracker {
         return attacks.size() - 1;
     }
 
+    /** Clears all per-player state on disconnect. */
     public void clear(UUID playerId) {
         comboIndices.remove(playerId);
         lastAttackTicks.remove(playerId);
