@@ -10,14 +10,14 @@
     },
     {
       "animation": "bromax_battle:sickle_heavy",
-      "weight": 20,
+      "weight": 30,
       "speed_multiplier": 0.9,
       "damage_multiplier": 1.1,
       "hit_delay": 6
     },
     {
       "animation": "bromax_battle:sickle_light",
-      "weight": 40,
+      "weight": 30,
       "speed_multiplier": 1.1,
       "damage_multiplier": 0.9,
       "hit_delay": 3

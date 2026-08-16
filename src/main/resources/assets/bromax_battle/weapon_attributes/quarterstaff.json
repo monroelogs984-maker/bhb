@@ -10,14 +10,14 @@
     },
     {
       "animation": "bromax_battle:quarterstaff_heavy",
-      "weight": 5,
+      "weight": 10,
       "speed_multiplier": 0.6,
       "damage_multiplier": 1.4,
       "hit_delay": 18
     },
     {
       "animation": "bromax_battle:quarterstaff_light",
-      "weight": 15,
+      "weight": 10,
       "speed_multiplier": 1.4,
       "damage_multiplier": 0.6,
       "hit_delay": 2

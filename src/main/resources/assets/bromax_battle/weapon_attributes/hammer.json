@@ -10,14 +10,14 @@
     },
     {
       "animation": "bromax_battle:hammer_heavy",
-      "weight": 18,
+      "weight": 15,
       "speed_multiplier": 0.8,
       "damage_multiplier": 1.2,
       "hit_delay": 14
     },
     {
       "animation": "bromax_battle:hammer_light",
-      "weight": 12,
+      "weight": 15,
       "speed_multiplier": 1.2,
       "damage_multiplier": 0.8,
       "hit_delay": 2

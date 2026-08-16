@@ -1,14 +1,12 @@
 package com.bromax.bromaxbattle.weapon;
 
 import com.bromax.bromaxbattle.config.BromaxBattleConfig;
-import net.minecraft.core.Holder;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.tags.ItemTags;
-import net.minecraft.world.entity.EquipmentSlotGroup;
-import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.*;
-import net.neoforged.neoforge.common.Tags;
+import net.minecraftforge.common.Tags;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.*;
 import java.util.regex.Pattern;
@@ -18,11 +16,11 @@ import java.util.regex.Pattern;
  *
  * Tier 1 (1.00): Per-item JSON override           — WeaponRegistry, before this is called
  * Tier 2 (0.95): Vanilla explicit map             — hardcoded, no failure modes
- * Tier 3 (0.90): Item tags                        — vanilla swords/axes tags + NeoForge tool tags
+ * Tier 3 (0.90): Forge item tags                  — replaces OreDictionary from 1.12.2
  * Tier 4 (0.85): Registry name keywords           — set by mod developer, reliable
  * Tier 5 (0.75): Item class + attribute speed     — SwordItem/AxeItem + speed refinement
  * Tier 6 (0.70): Stats profile (speed + damage)   — catches items with no name signals
- * Tier 7 (0.65): Reach attribute                  — high entity interaction range → polearm family
+ * Tier 7 (0.65): Reach attribute                  — high attack range → polearm family
  * Tier 8 (0.65): Display name keywords            — last keyword pass
  * Tier 9 (0.30): Attack damage heuristic          — absolute last resort
  *
@@ -35,8 +33,8 @@ public class WeaponClassifier {
     // ── Tier 2: vanilla explicit map ─────────────────────────────────────────
     private static final Map<Class<? extends Item>, WeaponCategory> VANILLA_MAP = new IdentityHashMap<>();
     static {
-        VANILLA_MAP.put(SwordItem.class,     WeaponCategory.SHORTSWORD);
-        VANILLA_MAP.put(AxeItem.class,       WeaponCategory.HANDAXE);
+        VANILLA_MAP.put(SwordItem.class,     WeaponCategory.SWORD);
+        VANILLA_MAP.put(AxeItem.class,       WeaponCategory.AXE);
         VANILLA_MAP.put(TridentItem.class,   WeaponCategory.TRIDENT);
         VANILLA_MAP.put(BowItem.class,       WeaponCategory.BOW);
         VANILLA_MAP.put(CrossbowItem.class,  WeaponCategory.CROSSBOW);
@@ -107,17 +105,15 @@ public class WeaponClassifier {
         WeaponCategory vanillaCat = VANILLA_MAP.get(item.getClass());
         if (vanillaCat != null) vote(vanillaCat, 0.95f);
 
-        // Tier 3: item tags (vanilla swords/axes since 1.20.5, NeoForge tool tags otherwise)
-        if (stack.is(ItemTags.SWORDS))            vote(WeaponCategory.SHORTSWORD, 0.90f);
-        if (stack.is(ItemTags.AXES))              vote(WeaponCategory.HANDAXE,    0.90f);
-        if (stack.is(Tags.Items.TOOLS_BOW))       vote(WeaponCategory.BOW,       0.90f);
-        if (stack.is(Tags.Items.TOOLS_CROSSBOW))  vote(WeaponCategory.CROSSBOW,  0.90f);
-        // c:tools/spear covers tridents too in 1.21 conventions; TridentItem is
-        // caught with higher confidence by the Tier 2 class map above
-        if (stack.is(Tags.Items.TOOLS_SPEAR))     vote(WeaponCategory.SPEAR,     0.90f);
+        // Tier 3: Forge item tags
+        if (stack.is(Tags.Items.TOOLS_SWORDS))    vote(WeaponCategory.SWORD,     0.90f);
+        if (stack.is(Tags.Items.TOOLS_AXES))      vote(WeaponCategory.AXE,       0.90f);
+        if (stack.is(Tags.Items.TOOLS_BOWS))      vote(WeaponCategory.BOW,       0.90f);
+        if (stack.is(Tags.Items.TOOLS_CROSSBOWS)) vote(WeaponCategory.CROSSBOW,  0.90f);
+        if (stack.is(Tags.Items.TOOLS_TRIDENTS))  vote(WeaponCategory.TRIDENT,   0.90f);
 
         // Tier 4: registry name keywords
-        net.minecraft.resources.ResourceLocation regLoc = BuiltInRegistries.ITEM.getKey(item);
+        net.minecraft.resources.ResourceLocation regLoc = ForgeRegistries.ITEMS.getKey(item);
         String regPath = regLoc != null ? regLoc.getPath().toLowerCase(Locale.ROOT) : "";
         if (!regPath.isEmpty()) {
             for (Map.Entry<Pattern, WeaponCategory> entry : NAME_PATTERNS) {
@@ -130,26 +126,30 @@ public class WeaponClassifier {
 
         // Tier 5: item class + attribute speed
         if (item instanceof SwordItem) {
-            double speed = getAttributeValue(stack, Attributes.ATTACK_SPEED);
+            double speed = getAttributeValue(stack, EquipmentSlot.MAINHAND,
+                    Attributes.ATTACK_SPEED.getDescriptionId());
             // Vanilla sword speed base is 1.6. Faster → lighter sword category.
             if (speed > 2.2) vote(WeaponCategory.SHORTSWORD, 0.75f);
         }
         if (item instanceof AxeItem) {
-            double speed = getAttributeValue(stack, Attributes.ATTACK_SPEED);
+            double speed = getAttributeValue(stack, EquipmentSlot.MAINHAND,
+                    Attributes.ATTACK_SPEED.getDescriptionId());
             if (speed < 0.6) vote(WeaponCategory.BATTLEAXE, 0.75f);
         }
 
         // Tier 6: stats profile
-        double damage = getAttributeValue(stack, Attributes.ATTACK_DAMAGE);
-        double speed  = getAttributeValue(stack, Attributes.ATTACK_SPEED);
+        double damage = getAttributeValue(stack, EquipmentSlot.MAINHAND,
+                Attributes.ATTACK_DAMAGE.getDescriptionId());
+        double speed  = getAttributeValue(stack, EquipmentSlot.MAINHAND,
+                Attributes.ATTACK_SPEED.getDescriptionId());
         if (damage > 0 || speed != 0) {
             WeaponCategory statCat = guessFromStats(damage, speed);
             if (statCat != null) vote(statCat, 0.70f);
         }
 
-        // Tier 7: reach attribute (entity_interaction_range is vanilla since 1.20.5,
-        // replacing forge:reach_distance)
-        double reach = getAttributeValue(stack, Attributes.ENTITY_INTERACTION_RANGE);
+        // Tier 7: reach attribute
+        double reach = getAttributeValue(stack, EquipmentSlot.MAINHAND,
+                "forge:reach_distance");
         if (reach > 1.5) vote(WeaponCategory.POLEARM, 0.65f);
 
         // Tier 8: display name keywords (if name heuristics enabled)
@@ -164,7 +164,7 @@ public class WeaponClassifier {
         }
 
         // Tier 9: damage heuristic — last resort
-        if (damage >= 5.0) vote(WeaponCategory.SHORTSWORD, 0.30f);
+        if (damage >= 5.0) vote(WeaponCategory.SWORD, 0.30f);
 
         return pickWinner();
     }
@@ -203,15 +203,15 @@ public class WeaponClassifier {
         return null;
     }
 
-    /** Sums MAINHAND modifier amounts for the given attribute from the stack's
-     *  ITEM_ATTRIBUTE_MODIFIERS component (or the item's defaults). */
-    private static double getAttributeValue(ItemStack stack, Holder<Attribute> attribute) {
-        double[] out = {0};
+    private static double getAttributeValue(ItemStack stack, EquipmentSlot slot, String attrId) {
         try {
-            stack.forEachModifier(EquipmentSlotGroup.MAINHAND, (attr, mod) -> {
-                if (attr.equals(attribute)) out[0] += mod.amount();
-            });
+            for (Map.Entry<net.minecraft.world.entity.ai.attributes.Attribute,
+                           AttributeModifier> e : stack.getAttributeModifiers(slot).entries()) {
+                if (e.getKey().getDescriptionId().equals(attrId)) {
+                    return e.getValue().getAmount();
+                }
+            }
         } catch (Exception ignored) {}
-        return out[0];
+        return 0;
     }
 }

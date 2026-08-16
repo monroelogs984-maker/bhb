@@ -4,8 +4,8 @@ import com.bromax.bromaxbattle.BromaxBattle;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.model.geom.ModelPart;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.Map;
 import java.util.UUID;
@@ -168,7 +168,8 @@ public class AnimationController {
         else partialTick = Math.max(0f, Math.min(1f, partialTick));
 
         float[] prev = state.prevCachedDeltas != null ? state.prevCachedDeltas[ord] : null;
-        // WEAPON_HAND keyframe values are scaled down as garnish on top of the grip
+        // WEAPON_HAND values in the animation JSONs were authored without live testing
+        // and are too large — scale down to keep rotation subtle
         final float WEAPON_SCALE = 0.25f;
         if (prev != null) {
             return new float[]{
@@ -178,38 +179,6 @@ public class AnimationController {
             };
         }
         return new float[]{cur[0] * WEAPON_SCALE, cur[1] * WEAPON_SCALE, cur[2] * WEAPON_SCALE};
-    }
-
-    /**
-     * Grip rotation for the held item, or null when inactive. The weapon turns
-     * from the vanilla hold into the animation's ending orientation over the
-     * windup (smoothstep, full by hit-window start) and blends back out after
-     * the strike. Returned quaternion is pre-interpolated — apply directly.
-     */
-    public org.joml.Quaternionf getGripRotation(UUID playerId, boolean mainhand) {
-        AnimationState state = mainhand ? states.get(playerId) : offhandStates.get(playerId);
-        if (state == null) return null;
-        WeaponGrip grip = state.animation.grip;
-        if (grip.rotation == null) return null;
-
-        // Interpolate the ramp between ticks so the turn runs at the same 40Hz
-        // the body animation does instead of stepping at raw tick rate
-        float pt = cachedPartialTick.getOrDefault(playerId, 1.0f);
-        float tickInterp = Math.max(0f, state.tickF - (1f - pt) * state.speedMultiplier);
-
-        float blend = state.getBlendFactor(tickInterp);
-        float hitStart = Math.max(1f, state.animation.hitWindowStart);
-        float ramp = Math.min(1f, tickInterp / hitStart);
-        ramp = ramp * ramp * (3f - 2f * ramp); // smoothstep
-        float factor = Math.min(ramp, blend) * state.animation.gripScale;
-        if (factor <= 0.001f) return null;
-
-        return new org.joml.Quaternionf().slerp(grip.rotation, factor);
-    }
-
-    /** Throttled interpolation partial tick for this player (same source the model uses). */
-    public float getPartialTick(UUID playerId) {
-        return cachedPartialTick.getOrDefault(playerId, 1.0f);
     }
 
     /** Advances all animation states by one game tick. Called from ClientSetup.onClientTick. */
@@ -222,17 +191,11 @@ public class AnimationController {
     private static void tickMap(Map<UUID, AnimationState> map) {
         map.entrySet().removeIf(entry -> {
             AnimationState state = entry.getValue();
-            try {
-                state.tickF += state.speedMultiplier;
-                if (state.isComplete()) return true;
-                if (state.tickF > state.animation.duration * 4f) return true;
-                state.refreshCache();
-                return false;
-            } catch (Exception e) {
-                BromaxBattle.LOGGER.warn("[BHB] Animation tick error for {}, clearing: {}",
-                        entry.getKey(), e.getMessage());
-                return true;
-            }
+            state.tickF += state.speedMultiplier;
+            if (state.isComplete()) return true;
+            if (state.tickF > state.animation.duration * 4f) return true;
+            state.refreshCache();
+            return false;
         });
     }
 
@@ -294,7 +257,21 @@ public class AnimationController {
         if (state.cachedDeltas == null) return;
 
         boolean isPlayerModel = model instanceof PlayerModel;
-        float blend = state.getBlendFactor(state.tickF);
+
+        // Head locking
+        if (!skipBody && !skipHeadLock) {
+            ModelPart head = model.head;
+            ModelPart hat  = isPlayerModel ? ((PlayerModel<?>) model).hat : null;
+            if (head != null) {
+                if (Float.isNaN(state.lockedHeadRX)) {
+                    state.lockedHeadRX = head.xRot;
+                    state.lockedHeadRY = head.yRot;
+                }
+                head.xRot = state.lockedHeadRX;
+                head.yRot = state.lockedHeadRY;
+                if (hat != null) { hat.xRot = state.lockedHeadRX; hat.yRot = state.lockedHeadRY; }
+            }
+        }
 
         for (BoneTarget bone : state.animation.blendMask) {
             if (skipBody && bone != BoneTarget.RIGHT_ARM && bone != BoneTarget.LEFT_ARM) continue;
@@ -317,10 +294,8 @@ public class AnimationController {
 
             switch (bone) {
                 case RIGHT_LEG, LEFT_LEG -> {
-                    // Add animation delta on top of vanilla walking so legs keep swinging normally
-                    float s = mirror ? -1f : 1f;
-                    addDelta(main, c[0], s * c[1], s * c[2]);
-                    addDelta(wear, c[0], s * c[1], s * c[2]);
+                    setPart(main, c[0], mirror ? -c[1] : c[1], mirror ? -c[2] : c[2]);
+                    setPart(wear, c[0], mirror ? -c[1] : c[1], mirror ? -c[2] : c[2]);
                 }
                 case RIGHT_ARM -> {
                     setPart(main, VANILLA_RIGHT_ARM_RX - c[0], mirror ? -c[1] : c[1], mirror ? -c[2] : c[2]);
@@ -334,11 +309,7 @@ public class AnimationController {
                     if (Float.isNaN(state.lockedBodyRY) && main != null) {
                         state.lockedBodyRY = main.yRot;
                     }
-                    // Lerp body yaw back to current vanilla yaw during blendout
-                    float vanillaRY = main != null ? main.yRot : 0f;
-                    float bodyRY = Float.isNaN(state.lockedBodyRY)
-                                 ? vanillaRY
-                                 : state.lockedBodyRY * blend + vanillaRY * (1f - blend);
+                    float bodyRY = Float.isNaN(state.lockedBodyRY) ? 0f : state.lockedBodyRY;
                     setBodyLean(main, c[0], bodyRY, mirror ? -c[2] : c[2]);
                     setBodyLean(wear, c[0], bodyRY, mirror ? -c[2] : c[2]);
                 }

@@ -11,14 +11,14 @@
     },
     {
       "animation": "bromax_battle:greatsword_heavy",
-      "weight": 20,
+      "weight": 15,
       "speed_multiplier": 0.8,
       "damage_multiplier": 1.25,
       "hit_delay": 20
     },
     {
       "animation": "bromax_battle:greatsword_light",
-      "weight": 10,
+      "weight": 15,
       "speed_multiplier": 1.25,
       "damage_multiplier": 0.8,
       "hit_delay": 4

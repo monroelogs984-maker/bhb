@@ -16,14 +16,12 @@ public class AnimationDefinition {
     public final boolean             hasTrail;
     public final boolean             hasTranslations;
     public final float               lunge;
-    public final WeaponGrip          grip;
-    public final float               gripScale;
 
     private final Map<BoneTarget, List<Keyframe>> keyframesByBone;
 
     public AnimationDefinition(ResourceLocation id, int duration, Set<BoneTarget> blendMask,
                                int hitWindowStart, int hitWindowEnd, boolean hasTrail,
-                               float lunge, WeaponGrip grip, float gripScale, List<Keyframe> keyframes) {
+                               float lunge, List<Keyframe> keyframes) {
         this.id             = id;
         this.duration       = duration;
         this.blendMask      = Collections.unmodifiableSet(blendMask);
@@ -31,8 +29,6 @@ public class AnimationDefinition {
         this.hitWindowEnd   = hitWindowEnd;
         this.hasTrail       = hasTrail;
         this.lunge          = Math.max(0f, Math.min(1f, lunge));
-        this.grip           = grip != null ? grip : WeaponGrip.VANILLA;
-        this.gripScale      = Math.max(0f, Math.min(2f, gripScale));
 
         this.keyframesByBone = new EnumMap<>(BoneTarget.class);
         boolean anyTranslation = false;
@@ -109,8 +105,6 @@ public class AnimationDefinition {
 
         boolean hasTrail = json.has("trail");
         float lunge = json.has("lunge") ? Math.max(0f, Math.min(1f, json.get("lunge").getAsFloat())) : 0f;
-        WeaponGrip grip = json.has("grip") ? WeaponGrip.fromString(json.get("grip").getAsString()) : WeaponGrip.VANILLA;
-        float gripScale = json.has("grip_scale") ? json.get("grip_scale").getAsFloat() : 1.0f;
 
         int hitStart = 0, hitEnd = 0;
         if (json.has("hit_window")) {
@@ -133,7 +127,7 @@ public class AnimationDefinition {
 
         if (!json.has("keyframes"))
             return new AnimationDefinition(id, duration, blendMask, hitStart, hitEnd, hasTrail,
-                    lunge, grip, gripScale, Collections.emptyList());
+                    lunge, Collections.emptyList());
 
         List<Keyframe> keyframes = new ArrayList<>();
         for (JsonElement kfElem : json.getAsJsonArray("keyframes")) {
@@ -159,6 +153,6 @@ public class AnimationDefinition {
             } catch (Exception ignored) {}
         }
 
-        return new AnimationDefinition(id, duration, blendMask, hitStart, hitEnd, hasTrail, lunge, grip, gripScale, keyframes);
+        return new AnimationDefinition(id, duration, blendMask, hitStart, hitEnd, hasTrail, lunge, keyframes);
     }
 }

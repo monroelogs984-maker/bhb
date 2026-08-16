@@ -1,7 +1,6 @@
 {
   "duration": 16,
-  "lunge": 0.55,
-  "grip": "stab",
+  "lunge": 0.45,
   "blend_mask": [
     "RIGHT_ARM",
     "LEFT_ARM",
@@ -25,28 +24,31 @@
       "easing": "EASE_IN_QUAD"
     },
     {
-      "tick": 3,
+      "tick": 4,
       "bone": "RIGHT_ARM",
       "easing": "EASE_IN_CUBIC",
-      "rx": -75,
-      "ry": 25,
-      "rz": 6
+      "rx": 38,
+      "ry": 5,
+      "rz": 12,
+      "tz": 0.5
     },
     {
-      "tick": 8,
+      "tick": 9,
       "bone": "RIGHT_ARM",
       "easing": "EASE_OUT_CUBIC",
-      "rx": 95,
+      "rx": -100,
       "ry": 0,
-      "rz": 4
+      "rz": 0,
+      "tz": -3.2
     },
     {
       "tick": 14,
       "bone": "RIGHT_ARM",
       "easing": "EASE_OUT_QUAD",
-      "rx": 68,
-      "ry": 0,
-      "rz": 4
+      "rx": -72,
+      "ry": 3,
+      "rz": 4,
+      "tz": -0.6
     },
     {
       "tick": 0,
@@ -54,28 +56,28 @@
       "easing": "EASE_IN_QUAD"
     },
     {
-      "tick": 3,
+      "tick": 4,
       "bone": "LEFT_ARM",
       "easing": "EASE_IN_CUBIC",
-      "rx": -26,
-      "ry": 9,
-      "rz": 2
+      "rx": 22,
+      "ry": -18,
+      "rz": -15
     },
     {
-      "tick": 8,
+      "tick": 9,
       "bone": "LEFT_ARM",
       "easing": "EASE_OUT_CUBIC",
-      "rx": 33,
-      "ry": 0,
-      "rz": 1
+      "rx": 38,
+      "ry": -28,
+      "rz": -24
     },
     {
       "tick": 14,
       "bone": "LEFT_ARM",
       "easing": "EASE_OUT_QUAD",
-      "rx": 24,
-      "ry": 0,
-      "rz": 1
+      "rx": 28,
+      "ry": -22,
+      "rz": -18
     },
     {
       "tick": 0,
@@ -83,25 +85,25 @@
       "easing": "EASE_IN_QUAD"
     },
     {
-      "tick": 3,
+      "tick": 4,
       "bone": "BODY",
       "easing": "EASE_IN_CUBIC",
-      "rx": -22,
-      "rz": -8
+      "rx": -14,
+      "rz": 30
     },
     {
-      "tick": 8,
+      "tick": 9,
       "bone": "BODY",
       "easing": "EASE_OUT_CUBIC",
-      "rx": 57,
-      "rz": 6
+      "rx": 48,
+      "rz": 62
     },
     {
       "tick": 14,
       "bone": "BODY",
       "easing": "EASE_OUT_QUAD",
-      "rx": 41,
-      "rz": 5
+      "rx": 34,
+      "rz": 48
     },
     {
       "tick": 0,
@@ -109,16 +111,16 @@
       "easing": "EASE_IN_QUAD"
     },
     {
-      "tick": 5,
+      "tick": 7,
       "bone": "RIGHT_LEG",
       "easing": "EASE_OUT_CUBIC",
-      "rx": -57
+      "rx": -78
     },
     {
       "tick": 14,
       "bone": "RIGHT_LEG",
       "easing": "EASE_OUT_QUAD",
-      "rx": -23
+      "rx": -30
     },
     {
       "tick": 0,
@@ -126,48 +128,48 @@
       "easing": "EASE_IN_QUAD"
     },
     {
-      "tick": 5,
+      "tick": 7,
       "bone": "LEFT_LEG",
       "easing": "EASE_OUT_CUBIC",
-      "rx": 69
+      "rx": 52
     },
     {
       "tick": 14,
       "bone": "LEFT_LEG",
       "easing": "EASE_OUT_QUAD",
-      "rx": 28
+      "rx": 20
     },
     {
       "tick": 0,
       "bone": "WEAPON_HAND",
       "easing": "EASE_IN_QUAD",
-      "rx": -34,
-      "ry": 6,
-      "rz": 2
+      "rx": 52,
+      "ry": 5,
+      "rz": -30
     },
     {
-      "tick": 3,
+      "tick": 4,
       "bone": "WEAPON_HAND",
       "easing": "EASE_IN_CUBIC",
-      "rx": -85,
-      "ry": 10,
-      "rz": 3
+      "rx": 68,
+      "ry": 3,
+      "rz": -22
     },
     {
-      "tick": 8,
+      "tick": 9,
       "bone": "WEAPON_HAND",
       "easing": "EASE_OUT_CUBIC",
-      "rx": 120,
-      "ry": -4,
-      "rz": 0
+      "rx": -158,
+      "ry": 0,
+      "rz": -5
     },
     {
       "tick": 14,
       "bone": "WEAPON_HAND",
       "easing": "EASE_OUT_QUAD",
-      "rx": 90,
-      "ry": -4,
-      "rz": 0
+      "rx": -118,
+      "ry": 2,
+      "rz": -8
     }
   ]
 }

@@ -25,57 +25,45 @@ public class AoeCalculator {
 
     static final int MAX_TARGETS = 8;
 
-    // Three AOE archetypes:
-    //   BALANCED  — medium radius, medium arc (~55°)  e.g. shortswords, axes, blunt
-    //   WIDE      — wider arc (~80–85°), similar radius  e.g. greatswords, scythes
-    //   FORWARD   — long radius, narrow arc (~12–22°)  e.g. spears, rapiers, lance
     private static final EnumMap<WeaponCategory, Profile> PROFILES = new EnumMap<>(WeaponCategory.class);
     static {
-        // ── BALANCED ──────────────────────────────────────────────────────────
-        PROFILES.put(WeaponCategory.SHORTSWORD,        new Profile(2.2f, 55f, 0.55f));
-        PROFILES.put(WeaponCategory.LONGSWORD,         new Profile(2.6f, 55f, 0.60f));
-        PROFILES.put(WeaponCategory.SABRE,             new Profile(2.5f, 55f, 0.58f));
-        PROFILES.put(WeaponCategory.FALCHION,          new Profile(2.4f, 55f, 0.58f));
-        PROFILES.put(WeaponCategory.KATANA,            new Profile(2.5f, 55f, 0.58f));
-        PROFILES.put(WeaponCategory.TWINBLADES,        new Profile(2.0f, 60f, 0.50f));
-        PROFILES.put(WeaponCategory.EXECUTIONER_SWORD, new Profile(2.6f, 50f, 0.72f));
-        PROFILES.put(WeaponCategory.DAGGER,            new Profile(1.5f, 55f, 0.45f));
-        PROFILES.put(WeaponCategory.HUNTERS_KNIFE,     new Profile(1.8f, 55f, 0.50f));
-        PROFILES.put(WeaponCategory.SAI,               new Profile(1.6f, 55f, 0.48f));
-        PROFILES.put(WeaponCategory.MACE,              new Profile(2.0f, 55f, 0.55f));
-        PROFILES.put(WeaponCategory.WARHAMMER,         new Profile(2.2f, 50f, 0.70f));
-        PROFILES.put(WeaponCategory.HAMMER,            new Profile(1.8f, 50f, 0.55f));
-        PROFILES.put(WeaponCategory.HANDAXE,           new Profile(2.0f, 55f, 0.55f));
-        PROFILES.put(WeaponCategory.BATTLEAXE,         new Profile(2.6f, 55f, 0.65f));
-        PROFILES.put(WeaponCategory.SICKLE,            new Profile(2.0f, 60f, 0.50f));
-        PROFILES.put(WeaponCategory.CLAW,              new Profile(1.6f, 60f, 0.48f));
-        PROFILES.put(WeaponCategory.NUNCHAKU,          new Profile(2.0f, 65f, 0.50f));
-        PROFILES.put(WeaponCategory.SWORD,             new Profile(2.5f, 55f, 0.60f));
-        PROFILES.put(WeaponCategory.AXE,               new Profile(2.0f, 55f, 0.55f));
-
-        // ── WIDE ──────────────────────────────────────────────────────────────
-        PROFILES.put(WeaponCategory.BROADSWORD,        new Profile(2.8f, 80f, 0.65f));
-        PROFILES.put(WeaponCategory.GREATSWORD,        new Profile(3.2f, 80f, 0.68f));
-        PROFILES.put(WeaponCategory.FLAMBERGE,         new Profile(3.2f, 80f, 0.65f));
-        PROFILES.put(WeaponCategory.ZWEIHANDER,        new Profile(3.5f, 85f, 0.68f));
-        PROFILES.put(WeaponCategory.GLAIVE,            new Profile(3.4f, 85f, 0.65f));
-        PROFILES.put(WeaponCategory.FLAIL,             new Profile(2.8f, 80f, 0.55f));
-        PROFILES.put(WeaponCategory.LUMBERAXE,         new Profile(2.8f, 80f, 0.65f));
-        PROFILES.put(WeaponCategory.SCYTHE,            new Profile(3.2f, 85f, 0.60f));
-        PROFILES.put(WeaponCategory.STAFF,             new Profile(2.2f, 75f, 0.50f));
-        PROFILES.put(WeaponCategory.QUARTERSTAFF,      new Profile(2.8f, 75f, 0.55f));
-
-        // ── LONG FORWARD ──────────────────────────────────────────────────────
-        PROFILES.put(WeaponCategory.RAPIER,            new Profile(2.8f, 18f, 0.45f));
-        PROFILES.put(WeaponCategory.SPEAR,             new Profile(3.5f, 18f, 0.55f));
-        PROFILES.put(WeaponCategory.TRIDENT,           new Profile(3.3f, 22f, 0.58f));
-        PROFILES.put(WeaponCategory.HALBERD,           new Profile(3.2f, 22f, 0.62f));
-        PROFILES.put(WeaponCategory.LANCE,             new Profile(4.0f, 12f, 0.60f));
-        PROFILES.put(WeaponCategory.GREATHAMMER,       new Profile(2.5f, 20f, 0.75f));
-        PROFILES.put(WeaponCategory.CLEAVER,           new Profile(2.2f, 20f, 0.65f));
-        PROFILES.put(WeaponCategory.GAUNTLETS,         new Profile(1.5f, 22f, 0.45f));
-        PROFILES.put(WeaponCategory.WHIP,              new Profile(5.0f, 10f, 0.45f));
-        PROFILES.put(WeaponCategory.POLEARM,           new Profile(3.0f, 22f, 0.60f));
+        PROFILES.put(WeaponCategory.SHORTSWORD,        new Profile(2.2f,  50f, 0.55f));
+        PROFILES.put(WeaponCategory.LONGSWORD,         new Profile(2.6f,  55f, 0.60f));
+        PROFILES.put(WeaponCategory.BROADSWORD,        new Profile(2.8f,  65f, 0.65f));
+        PROFILES.put(WeaponCategory.SABRE,             new Profile(2.5f,  70f, 0.60f));
+        PROFILES.put(WeaponCategory.RAPIER,            new Profile(2.8f,  18f, 0.45f));
+        PROFILES.put(WeaponCategory.GREATSWORD,        new Profile(3.2f,  70f, 0.70f));
+        PROFILES.put(WeaponCategory.ZWEIHANDER,        new Profile(3.5f,  80f, 0.70f));
+        PROFILES.put(WeaponCategory.KATANA,            new Profile(2.5f,  55f, 0.58f));
+        PROFILES.put(WeaponCategory.FLAMBERGE,         new Profile(3.2f,  75f, 0.68f));
+        PROFILES.put(WeaponCategory.EXECUTIONER_SWORD, new Profile(2.6f,  38f, 0.75f));
+        PROFILES.put(WeaponCategory.FALCHION,          new Profile(2.4f,  62f, 0.58f));
+        PROFILES.put(WeaponCategory.SWORD,             new Profile(2.5f,  55f, 0.60f));
+        PROFILES.put(WeaponCategory.DAGGER,            new Profile(1.5f,  35f, 0.45f));
+        PROFILES.put(WeaponCategory.HUNTERS_KNIFE,     new Profile(1.8f,  40f, 0.50f));
+        PROFILES.put(WeaponCategory.SPEAR,             new Profile(3.5f,  20f, 0.55f));
+        PROFILES.put(WeaponCategory.TRIDENT,           new Profile(3.3f,  38f, 0.58f));
+        PROFILES.put(WeaponCategory.HALBERD,           new Profile(3.2f,  50f, 0.65f));
+        PROFILES.put(WeaponCategory.GLAIVE,            new Profile(3.4f,  80f, 0.65f));
+        PROFILES.put(WeaponCategory.LANCE,             new Profile(4.0f,  15f, 0.60f));
+        PROFILES.put(WeaponCategory.POLEARM,           new Profile(3.0f,  35f, 0.60f));
+        PROFILES.put(WeaponCategory.MACE,              new Profile(2.0f,  40f, 0.55f));
+        PROFILES.put(WeaponCategory.WARHAMMER,         new Profile(2.2f,  35f, 0.70f));
+        PROFILES.put(WeaponCategory.HAMMER,            new Profile(1.8f,  30f, 0.55f));
+        PROFILES.put(WeaponCategory.FLAIL,             new Profile(2.8f,  60f, 0.55f));
+        PROFILES.put(WeaponCategory.HANDAXE,           new Profile(2.0f,  45f, 0.55f));
+        PROFILES.put(WeaponCategory.BATTLEAXE,         new Profile(2.6f,  55f, 0.65f));
+        PROFILES.put(WeaponCategory.CLEAVER,           new Profile(2.2f,  55f, 0.60f));
+        PROFILES.put(WeaponCategory.LUMBERAXE,         new Profile(2.8f,  50f, 0.65f));
+        PROFILES.put(WeaponCategory.AXE,               new Profile(2.0f,  40f, 0.55f));
+        PROFILES.put(WeaponCategory.SCYTHE,            new Profile(3.2f,  80f, 0.60f));
+        PROFILES.put(WeaponCategory.SICKLE,            new Profile(2.0f,  55f, 0.50f));
+        PROFILES.put(WeaponCategory.GAUNTLETS,         new Profile(1.5f,  40f, 0.45f));
+        PROFILES.put(WeaponCategory.CLAW,              new Profile(1.6f,  50f, 0.48f));
+        PROFILES.put(WeaponCategory.NUNCHAKU,          new Profile(2.0f,  65f, 0.50f));
+        PROFILES.put(WeaponCategory.QUARTERSTAFF,      new Profile(2.8f,  58f, 0.55f));
+        PROFILES.put(WeaponCategory.WHIP,              new Profile(5.0f,  10f, 0.45f));
+        PROFILES.put(WeaponCategory.STAFF,             new Profile(2.2f,  35f, 0.50f));
     }
 
     public static boolean hasAoe(WeaponCategory cat) {
@@ -94,7 +82,7 @@ public class AoeCalculator {
         float effectiveRadius = p.radius * (BromaxBattleConfig.baseReach() / 3.5f);
 
         AABB searchBox = player.getBoundingBox().inflate(effectiveRadius);
-        List<LivingEntity> nearby = player.level().getEntitiesOfClass(
+        List<LivingEntity> nearby = player.level.getEntitiesOfClass(
                 LivingEntity.class, searchBox, e -> e != player);
         if (nearby.isEmpty()) return Collections.emptyList();
 

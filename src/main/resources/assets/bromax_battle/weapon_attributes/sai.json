@@ -10,14 +10,14 @@
     },
     {
       "animation": "bromax_battle:sai_heavy",
-      "weight": 20,
+      "weight": 25,
       "speed_multiplier": 0.9,
       "damage_multiplier": 1.1,
       "hit_delay": 8
     },
     {
       "animation": "bromax_battle:sai_light",
-      "weight": 30,
+      "weight": 25,
       "speed_multiplier": 1.1,
       "damage_multiplier": 0.9,
       "hit_delay": 3
