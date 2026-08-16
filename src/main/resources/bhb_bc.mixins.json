@@ -1,0 +1,15 @@
+{
+  "required": true,
+  "package": "com.bromax.bhbbc.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "client": [
+    "MixinCombatHandlerClient",
+    "MixinItemInHandLayerBhbbc",
+    "MixinItemInHandRendererBhbbc",
+    "MixinPlayerModelBhbbc"
+  ],
+  "mixins": [
+    "MixinCombatHandler"
+  ],
+  "minVersion": "0.8"
+}

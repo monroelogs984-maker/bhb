@@ -1,1 +1,8 @@
-rootProject.name = 'bromax_battle'
+pluginManagement {
+    repositories {
+        maven { url = 'https://maven.neoforged.net/releases' }
+        gradlePluginPortal()
+    }
+}
+
+rootProject.name = 'bhb-bc'

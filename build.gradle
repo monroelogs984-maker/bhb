@@ -1,70 +1,56 @@
-buildscript {
-    repositories {
-        maven { url = 'https://maven.minecraftforge.net/' }
-        mavenCentral()
-    }
-    dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:3.+'
-    }
+plugins {
+    id 'net.neoforged.gradle.userdev' version '7.1.38'
 }
 
-apply plugin: 'net.minecraftforge.gradle'
+version = '1.0.0-Neoforge1.21.1'
+group = 'com.bromax.bhbbc'
 
-version = '0.9'
-group = 'com.bromax.bromaxbattle'
-archivesBaseName = 'bromax_battle'
+base {
+    archivesName = 'bhb_bc'
+}
 
-sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
+java {
+    toolchain.languageVersion = JavaLanguageVersion.of(21)
+}
 
-minecraft {
-    mappings channel: 'snapshot', version: '20171003-1.12'
-
-    runs {
-        client {
-            workingDirectory project.file('run')
-            property 'forge.logging.console.level', 'debug'
-        }
+runs {
+    configureEach {
+        systemProperty 'neoforge.logging.markers', 'REGISTRIES'
+        systemProperty 'neoforge.logging.console.level', 'debug'
+        modSource project.sourceSets.main
     }
+    client {}
+    server {}
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.12.2-14.23.5.2859'
-    // Build bromaxlib first: cd ../bromaxlib && ./gradlew build
-    compile files('../bromaxlib/build/libs/bromaxlib-1.0.0.jar')
+    implementation "net.neoforged:neoforge:21.1.233"
+
+    // BHB — needed for AnimationController, AnimationDefinition
+    compileOnly files('/home/glenn/mc-modding/mod-dev/bhb-1211/build/libs/bromax_battle-1.3.7-Neoforge1.21.1.jar')
+
+    // Better Combat — needed for CombatFlags, PlayerAttackProperties, PlayerAttackAnimatable, AnimatedHand
+    compileOnly files('/home/glenn/Documents/curseforge/minecraft/Instances/S202 Neoforge/mods/bettercombat-neoforge-2.4.0+1.21.1.jar')
 }
 
 jar {
     manifest {
         attributes([
-            'Implementation-Title': 'bromax_battle',
-            'Implementation-Version': "${version}"
+            'Specification-Title'     : 'bhb_bc',
+            'Specification-Vendor'    : 'bromax',
+            'Specification-Version'   : '1',
+            'Implementation-Title'    : project.name,
+            'Implementation-Version'  : "${version}",
+            'Implementation-Vendor'   : 'bromax',
         ])
     }
 }
 
-jar.finalizedBy('reobfJar')
-
-task deploy {
-    doLast {
-        copy {
-            from 'build/libs/bromax_battle-0.9.jar'
-            into '/home/glenn/Documents/curseforge/minecraft/Instances/Dummy 101/mods'
-        }
-        println "[DEPLOY] bromax_battle → Dummy 101"
+tasks.register('deploy', Copy) {
+    dependsOn build
+    from(layout.buildDirectory.dir('libs')) {
+        include "bhb_bc-*.jar"
+        exclude "*-sources.jar"
     }
-}
-build.finalizedBy(deploy)
-
-processResources {
-    inputs.property 'version', project.version
-    inputs.property 'mcversion', '1.12.2'
-
-    from(sourceSets.main.resources.srcDirs) {
-        include 'mcmod.info'
-        expand 'version': project.version, 'mcversion': '1.12.2'
-    }
-
-    from(sourceSets.main.resources.srcDirs) {
-        exclude 'mcmod.info'
-    }
+    into '/home/glenn/Documents/curseforge/minecraft/Instances/S202 Neoforge/mods'
 }

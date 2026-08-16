@@ -1,0 +1,175 @@
+{
+  "bromax_battle:shortsword_default": { "animation": "bettercombat:one_handed_slash_horizontal_right", "hand": "MAIN_HAND", "upswing": 0.40, "sound": null },
+  "bromax_battle:shortsword_heavy":   { "animation": "bettercombat:one_handed_slam",                   "hand": "MAIN_HAND", "upswing": 0.55, "sound": null },
+  "bromax_battle:shortsword_light":   { "animation": "bettercombat:one_handed_slash_switch_blade_right","hand": "MAIN_HAND", "upswing": 0.28, "sound": null },
+
+  "bromax_battle:longsword_default":  { "animation": "bettercombat:one_handed_slash_horizontal_right", "hand": "MAIN_HAND", "upswing": 0.45, "sound": null },
+  "bromax_battle:longsword_heavy":    { "animation": "bettercombat:one_handed_slam",                   "hand": "MAIN_HAND", "upswing": 0.60, "sound": null },
+  "bromax_battle:longsword_light":    { "animation": "bettercombat:one_handed_stab",                   "hand": "MAIN_HAND", "upswing": 0.35, "sound": null },
+
+  "bromax_battle:broadsword_default": { "animation": "bettercombat:one_handed_slash_horizontal_right", "hand": "MAIN_HAND", "upswing": 0.50, "sound": null },
+  "bromax_battle:broadsword_heavy":   { "animation": "bettercombat:one_handed_slam",                   "hand": "MAIN_HAND", "upswing": 0.65, "sound": null },
+  "bromax_battle:broadsword_light":   { "animation": "bettercombat:one_handed_swipe_horizontal_right", "hand": "MAIN_HAND", "upswing": 0.35, "sound": null },
+
+  "bromax_battle:sabre_default":      { "animation": "bettercombat:one_handed_swipe_horizontal_right", "hand": "MAIN_HAND", "upswing": 0.40, "sound": null },
+  "bromax_battle:sabre_heavy":        { "animation": "bettercombat:one_handed_slash_horizontal_right", "hand": "MAIN_HAND", "upswing": 0.55, "sound": null },
+  "bromax_battle:sabre_light":        { "animation": "bettercombat:one_handed_slash_switch_blade_right","hand": "MAIN_HAND", "upswing": 0.28, "sound": null },
+
+  "bromax_battle:rapier_default":     { "animation": "bettercombat:one_handed_stab",                   "hand": "MAIN_HAND", "upswing": 0.40, "sound": null },
+  "bromax_battle:rapier_heavy":       { "animation": "bettercombat:one_handed_slam",                   "hand": "MAIN_HAND", "upswing": 0.55, "sound": null },
+  "bromax_battle:rapier_light":       { "animation": "bettercombat:one_handed_stab",                   "hand": "MAIN_HAND", "upswing": 0.30, "sound": null },
+
+  "bromax_battle:katana_default":     { "animation": "bettercombat:one_handed_slash_horizontal_right", "hand": "MAIN_HAND", "upswing": 0.45, "sound": null },
+  "bromax_battle:katana_heavy":       { "animation": "bettercombat:one_handed_slam",                   "hand": "MAIN_HAND", "upswing": 0.60, "sound": null },
+  "bromax_battle:katana_light":       { "animation": "bettercombat:one_handed_slash_switch_blade_right","hand": "MAIN_HAND", "upswing": 0.28, "sound": null },
+
+  "bromax_battle:falchion_default":   { "animation": "bettercombat:one_handed_slash_horizontal_right", "hand": "MAIN_HAND", "upswing": 0.45, "sound": null },
+  "bromax_battle:falchion_heavy":     { "animation": "bettercombat:one_handed_slam",                   "hand": "MAIN_HAND", "upswing": 0.60, "sound": null },
+  "bromax_battle:falchion_light":     { "animation": "bettercombat:one_handed_slash_switch_blade_left", "hand": "MAIN_HAND", "upswing": 0.28, "sound": null },
+
+  "bromax_battle:greatsword_default": { "animation": "bettercombat:two_handed_slash_horizontal_right", "hand": "TWO_HANDED", "upswing": 0.50, "sound": null },
+  "bromax_battle:greatsword_heavy":   { "animation": "bettercombat:two_handed_slam_heavy",              "hand": "TWO_HANDED", "upswing": 0.65, "sound": null },
+  "bromax_battle:greatsword_light":   { "animation": "bettercombat:two_handed_slash_horizontal_left",   "hand": "TWO_HANDED", "upswing": 0.35, "sound": null },
+
+  "bromax_battle:zweihander_default": { "animation": "bettercombat:two_handed_slash_horizontal_right", "hand": "TWO_HANDED", "upswing": 0.50, "sound": null },
+  "bromax_battle:zweihander_heavy":   { "animation": "bettercombat:two_handed_slam_heavy",              "hand": "TWO_HANDED", "upswing": 0.70, "sound": null },
+  "bromax_battle:zweihander_light":   { "animation": "bettercombat:two_handed_slash_horizontal_left",   "hand": "TWO_HANDED", "upswing": 0.35, "sound": null },
+
+  "bromax_battle:flamberge_default":  { "animation": "bettercombat:two_handed_slash_vertical_right",   "hand": "TWO_HANDED", "upswing": 0.50, "sound": null },
+  "bromax_battle:flamberge_heavy":    { "animation": "bettercombat:two_handed_slam_heavy",              "hand": "TWO_HANDED", "upswing": 0.65, "sound": null },
+  "bromax_battle:flamberge_light":    { "animation": "bettercombat:two_handed_slash_horizontal_right",  "hand": "TWO_HANDED", "upswing": 0.35, "sound": null },
+
+  "bromax_battle:executioner_sword_default": { "animation": "bettercombat:two_handed_slash_horizontal_right", "hand": "TWO_HANDED", "upswing": 0.55, "sound": null },
+  "bromax_battle:executioner_sword_heavy":   { "animation": "bettercombat:two_handed_slam_heavy",              "hand": "TWO_HANDED", "upswing": 0.70, "sound": null },
+  "bromax_battle:executioner_sword_light":   { "animation": "bettercombat:two_handed_slash_vertical_right",    "hand": "TWO_HANDED", "upswing": 0.35, "sound": null },
+
+  "bromax_battle:dagger_default":     { "animation": "bettercombat:one_handed_stab",                   "hand": "MAIN_HAND", "upswing": 0.35, "sound": null },
+  "bromax_battle:dagger_heavy":       { "animation": "bettercombat:one_handed_slash_horizontal_right", "hand": "MAIN_HAND", "upswing": 0.45, "sound": null },
+  "bromax_battle:dagger_light":       { "animation": "bettercombat:one_handed_slash_switch_blade_right","hand": "MAIN_HAND", "upswing": 0.25, "sound": null },
+
+  "bromax_battle:hunters_knife_default": { "animation": "bettercombat:one_handed_stab",                "hand": "MAIN_HAND", "upswing": 0.35, "sound": null },
+  "bromax_battle:hunters_knife_heavy":   { "animation": "bettercombat:one_handed_swipe_horizontal_right","hand": "MAIN_HAND", "upswing": 0.45, "sound": null },
+  "bromax_battle:hunters_knife_light":   { "animation": "bettercombat:one_handed_slash_switch_blade_right","hand": "MAIN_HAND", "upswing": 0.25, "sound": null },
+
+  "bromax_battle:sai_default":        { "animation": "bettercombat:one_handed_stab",                   "hand": "MAIN_HAND", "upswing": 0.35, "sound": null },
+  "bromax_battle:sai_heavy":          { "animation": "bettercombat:one_handed_slash_horizontal_right", "hand": "MAIN_HAND", "upswing": 0.45, "sound": null },
+  "bromax_battle:sai_light":          { "animation": "bettercombat:one_handed_slash_switch_blade_left", "hand": "MAIN_HAND", "upswing": 0.25, "sound": null },
+
+  "bromax_battle:spear_default":      { "animation": "bettercombat:two_handed_stab_right",             "hand": "TWO_HANDED", "upswing": 0.45, "sound": null },
+  "bromax_battle:spear_heavy":        { "animation": "bettercombat:two_handed_slam",                   "hand": "TWO_HANDED", "upswing": 0.60, "sound": null },
+  "bromax_battle:spear_light":        { "animation": "bettercombat:two_handed_stab_left",              "hand": "TWO_HANDED", "upswing": 0.30, "sound": null },
+
+  "bromax_battle:trident_default":    { "animation": "bettercombat:two_handed_stab_right",             "hand": "TWO_HANDED", "upswing": 0.45, "sound": null },
+  "bromax_battle:trident_heavy":      { "animation": "bettercombat:two_handed_slash_vertical_right",   "hand": "TWO_HANDED", "upswing": 0.60, "sound": null },
+  "bromax_battle:trident_light":      { "animation": "bettercombat:two_handed_stab_left",              "hand": "TWO_HANDED", "upswing": 0.30, "sound": null },
+
+  "bromax_battle:halberd_default":    { "animation": "bettercombat:two_handed_slash_horizontal_right", "hand": "TWO_HANDED", "upswing": 0.50, "sound": null },
+  "bromax_battle:halberd_heavy":      { "animation": "bettercombat:two_handed_slam",                   "hand": "TWO_HANDED", "upswing": 0.60, "sound": null },
+  "bromax_battle:halberd_light":      { "animation": "bettercombat:two_handed_stab_right",             "hand": "TWO_HANDED", "upswing": 0.35, "sound": null },
+
+  "bromax_battle:glaive_default":     { "animation": "bettercombat:two_handed_slash_horizontal_right", "hand": "TWO_HANDED", "upswing": 0.50, "sound": null },
+  "bromax_battle:glaive_heavy":       { "animation": "bettercombat:two_handed_slash_vertical_right",   "hand": "TWO_HANDED", "upswing": 0.60, "sound": null },
+  "bromax_battle:glaive_light":       { "animation": "bettercombat:two_handed_slash_horizontal_left",  "hand": "TWO_HANDED", "upswing": 0.35, "sound": null },
+
+  "bromax_battle:lance_default":      { "animation": "bettercombat:two_handed_stab_right",             "hand": "TWO_HANDED", "upswing": 0.45, "sound": null },
+  "bromax_battle:lance_heavy":        { "animation": "bettercombat:two_handed_stab_right",             "hand": "TWO_HANDED", "upswing": 0.65, "sound": null },
+  "bromax_battle:lance_light":        { "animation": "bettercombat:two_handed_stab_left",              "hand": "TWO_HANDED", "upswing": 0.30, "sound": null },
+
+  "bromax_battle:polearm_overhead":   { "animation": "bettercombat:two_handed_slam",                   "hand": "TWO_HANDED", "upswing": 0.55, "sound": null },
+  "bromax_battle:polearm_sweep":      { "animation": "bettercombat:two_handed_slash_horizontal_right", "hand": "TWO_HANDED", "upswing": 0.45, "sound": null },
+  "bromax_battle:polearm_thrust":     { "animation": "bettercombat:two_handed_stab_right",             "hand": "TWO_HANDED", "upswing": 0.40, "sound": null },
+
+  "bromax_battle:mace_default":       { "animation": "bettercombat:one_handed_slam",                   "hand": "MAIN_HAND", "upswing": 0.50, "sound": null },
+  "bromax_battle:mace_heavy":         { "animation": "bettercombat:one_handed_slam",                   "hand": "MAIN_HAND", "upswing": 0.65, "sound": null },
+  "bromax_battle:mace_light":         { "animation": "bettercombat:one_handed_swipe_horizontal_right", "hand": "MAIN_HAND", "upswing": 0.35, "sound": null },
+
+  "bromax_battle:hammer_default":     { "animation": "bettercombat:one_handed_slam",                   "hand": "MAIN_HAND", "upswing": 0.50, "sound": null },
+  "bromax_battle:hammer_heavy":       { "animation": "bettercombat:one_handed_slam",                   "hand": "MAIN_HAND", "upswing": 0.65, "sound": null },
+  "bromax_battle:hammer_light":       { "animation": "bettercombat:one_handed_slash_horizontal_right", "hand": "MAIN_HAND", "upswing": 0.35, "sound": null },
+
+  "bromax_battle:warhammer_default":  { "animation": "bettercombat:two_handed_slam",                   "hand": "TWO_HANDED", "upswing": 0.55, "sound": null },
+  "bromax_battle:warhammer_heavy":    { "animation": "bettercombat:two_handed_slam_heavy",              "hand": "TWO_HANDED", "upswing": 0.70, "sound": null },
+  "bromax_battle:warhammer_light":    { "animation": "bettercombat:two_handed_slash_horizontal_right",  "hand": "TWO_HANDED", "upswing": 0.35, "sound": null },
+
+  "bromax_battle:greathammer_default":{ "animation": "bettercombat:two_handed_slam",                   "hand": "TWO_HANDED", "upswing": 0.55, "sound": null },
+  "bromax_battle:greathammer_heavy":  { "animation": "bettercombat:two_handed_slam_heavy",              "hand": "TWO_HANDED", "upswing": 0.75, "sound": null },
+  "bromax_battle:greathammer_light":  { "animation": "bettercombat:two_handed_slash_horizontal_right",  "hand": "TWO_HANDED", "upswing": 0.35, "sound": null },
+
+  "bromax_battle:flail_default":      { "animation": "bettercombat:one_handed_swipe_horizontal_right", "hand": "MAIN_HAND", "upswing": 0.45, "sound": null },
+  "bromax_battle:flail_heavy":        { "animation": "bettercombat:one_handed_slam",                   "hand": "MAIN_HAND", "upswing": 0.55, "sound": null },
+  "bromax_battle:flail_light":        { "animation": "bettercombat:one_handed_slash_switch_blade_right","hand": "MAIN_HAND", "upswing": 0.30, "sound": null },
+
+  "bromax_battle:handaxe_default":    { "animation": "bettercombat:one_handed_slash_horizontal_right", "hand": "MAIN_HAND", "upswing": 0.50, "sound": null },
+  "bromax_battle:handaxe_heavy":      { "animation": "bettercombat:one_handed_slam",                   "hand": "MAIN_HAND", "upswing": 0.60, "sound": null },
+  "bromax_battle:handaxe_light":      { "animation": "bettercombat:one_handed_swipe_horizontal_right", "hand": "MAIN_HAND", "upswing": 0.35, "sound": null },
+
+  "bromax_battle:cleaver_default":    { "animation": "bettercombat:one_handed_slam",                   "hand": "MAIN_HAND", "upswing": 0.50, "sound": null },
+  "bromax_battle:cleaver_heavy":      { "animation": "bettercombat:one_handed_slam",                   "hand": "MAIN_HAND", "upswing": 0.65, "sound": null },
+  "bromax_battle:cleaver_light":      { "animation": "bettercombat:one_handed_slash_horizontal_right", "hand": "MAIN_HAND", "upswing": 0.35, "sound": null },
+
+  "bromax_battle:battleaxe_default":  { "animation": "bettercombat:two_handed_slash_vertical_right",   "hand": "TWO_HANDED", "upswing": 0.50, "sound": null },
+  "bromax_battle:battleaxe_heavy":    { "animation": "bettercombat:two_handed_slam_heavy",              "hand": "TWO_HANDED", "upswing": 0.65, "sound": null },
+  "bromax_battle:battleaxe_light":    { "animation": "bettercombat:two_handed_slash_horizontal_right",  "hand": "TWO_HANDED", "upswing": 0.35, "sound": null },
+
+  "bromax_battle:lumberaxe_default":  { "animation": "bettercombat:two_handed_slash_vertical_right",   "hand": "TWO_HANDED", "upswing": 0.55, "sound": null },
+  "bromax_battle:lumberaxe_heavy":    { "animation": "bettercombat:two_handed_slam_heavy",              "hand": "TWO_HANDED", "upswing": 0.75, "sound": null },
+  "bromax_battle:lumberaxe_light":    { "animation": "bettercombat:two_handed_slash_horizontal_right",  "hand": "TWO_HANDED", "upswing": 0.35, "sound": null },
+
+  "bromax_battle:axe_chop_right":     { "animation": "bettercombat:one_handed_slam",                   "hand": "MAIN_HAND", "upswing": 0.50, "sound": null },
+  "bromax_battle:axe_chop_left":      { "animation": "bettercombat:one_handed_slam",                   "hand": "MAIN_HAND", "upswing": 0.50, "sound": null },
+  "bromax_battle:axe_diagonal_right": { "animation": "bettercombat:one_handed_slash_horizontal_right", "hand": "MAIN_HAND", "upswing": 0.45, "sound": null },
+  "bromax_battle:axe_backswing":      { "animation": "bettercombat:one_handed_swipe_horizontal_right", "hand": "MAIN_HAND", "upswing": 0.35, "sound": null },
+
+  "bromax_battle:gauntlets_default":  { "animation": "bettercombat:one_handed_punch",                  "hand": "MAIN_HAND", "upswing": 0.35, "sound": null },
+  "bromax_battle:gauntlets_heavy":    { "animation": "bettercombat:one_handed_uppercut_right",          "hand": "MAIN_HAND", "upswing": 0.45, "sound": null },
+  "bromax_battle:gauntlets_light":    { "animation": "bettercombat:one_handed_punch",                  "hand": "MAIN_HAND", "upswing": 0.25, "sound": null },
+
+  "bromax_battle:claw_default":       { "animation": "bettercombat:one_handed_slash_horizontal_right", "hand": "MAIN_HAND", "upswing": 0.35, "sound": null },
+  "bromax_battle:claw_heavy":         { "animation": "bettercombat:one_handed_uppercut_right",          "hand": "MAIN_HAND", "upswing": 0.45, "sound": null },
+  "bromax_battle:claw_light":         { "animation": "bettercombat:one_handed_slash_switch_blade_right","hand": "MAIN_HAND", "upswing": 0.25, "sound": null },
+
+  "bromax_battle:nunchaku_default":   { "animation": "bettercombat:one_handed_swipe_horizontal_right", "hand": "MAIN_HAND", "upswing": 0.40, "sound": null },
+  "bromax_battle:nunchaku_heavy":     { "animation": "bettercombat:one_handed_slam",                   "hand": "MAIN_HAND", "upswing": 0.50, "sound": null },
+  "bromax_battle:nunchaku_light":     { "animation": "bettercombat:one_handed_slash_switch_blade_right","hand": "MAIN_HAND", "upswing": 0.25, "sound": null },
+
+  "bromax_battle:sickle_default":     { "animation": "bettercombat:one_handed_swipe_horizontal_right", "hand": "MAIN_HAND", "upswing": 0.40, "sound": null },
+  "bromax_battle:sickle_heavy":       { "animation": "bettercombat:one_handed_slam",                   "hand": "MAIN_HAND", "upswing": 0.55, "sound": null },
+  "bromax_battle:sickle_light":       { "animation": "bettercombat:one_handed_slash_switch_blade_left", "hand": "MAIN_HAND", "upswing": 0.30, "sound": null },
+
+  "bromax_battle:quarterstaff_default":{ "animation": "bettercombat:two_handed_slash_horizontal_right","hand": "TWO_HANDED", "upswing": 0.45, "sound": null },
+  "bromax_battle:quarterstaff_heavy":  { "animation": "bettercombat:two_handed_slam",                  "hand": "TWO_HANDED", "upswing": 0.60, "sound": null },
+  "bromax_battle:quarterstaff_light":  { "animation": "bettercombat:two_handed_stab_right",            "hand": "TWO_HANDED", "upswing": 0.30, "sound": null },
+
+  "bromax_battle:staff_default":      { "animation": "bettercombat:two_handed_slash_horizontal_right", "hand": "TWO_HANDED", "upswing": 0.45, "sound": null },
+  "bromax_battle:staff_heavy":        { "animation": "bettercombat:two_handed_slam_heavy",              "hand": "TWO_HANDED", "upswing": 0.60, "sound": null },
+  "bromax_battle:staff_light":        { "animation": "bettercombat:two_handed_stab_right",             "hand": "TWO_HANDED", "upswing": 0.30, "sound": null },
+
+  "bromax_battle:scythe_default":     { "animation": "bettercombat:two_handed_slash_horizontal_right", "hand": "TWO_HANDED", "upswing": 0.50, "sound": null },
+  "bromax_battle:scythe_heavy":       { "animation": "bettercombat:two_handed_slash_vertical_right",   "hand": "TWO_HANDED", "upswing": 0.65, "sound": null },
+  "bromax_battle:scythe_light":       { "animation": "bettercombat:two_handed_slash_horizontal_left",  "hand": "TWO_HANDED", "upswing": 0.35, "sound": null },
+
+  "bromax_battle:twinblades_default": { "animation": "bettercombat:two_handed_slash_horizontal_right", "hand": "TWO_HANDED", "upswing": 0.45, "sound": null },
+  "bromax_battle:twinblades_heavy":   { "animation": "bettercombat:two_handed_slam",                   "hand": "TWO_HANDED", "upswing": 0.60, "sound": null },
+  "bromax_battle:twinblades_light":   { "animation": "bettercombat:two_handed_slash_horizontal_left",  "hand": "TWO_HANDED", "upswing": 0.30, "sound": null },
+
+  "bromax_battle:whip_default":       { "animation": "bettercombat:two_handed_slash_horizontal_right", "hand": "TWO_HANDED", "upswing": 0.45, "sound": null },
+  "bromax_battle:whip_heavy":         { "animation": "bettercombat:two_handed_slam",                   "hand": "TWO_HANDED", "upswing": 0.60, "sound": null },
+  "bromax_battle:whip_light":         { "animation": "bettercombat:two_handed_slash_vertical_right",   "hand": "TWO_HANDED", "upswing": 0.30, "sound": null },
+
+  "bromax_battle:sword_upswing_right":  { "animation": "bettercombat:one_handed_uppercut_right",       "hand": "MAIN_HAND", "upswing": 0.40, "sound": null },
+  "bromax_battle:sword_upswing_left":   { "animation": "bettercombat:one_handed_uppercut_right",       "hand": "MAIN_HAND", "upswing": 0.40, "sound": null },
+  "bromax_battle:sword_descend_right":  { "animation": "bettercombat:one_handed_slam",                 "hand": "MAIN_HAND", "upswing": 0.50, "sound": null },
+  "bromax_battle:sword_descend_left":   { "animation": "bettercombat:one_handed_slam",                 "hand": "MAIN_HAND", "upswing": 0.50, "sound": null },
+  "bromax_battle:sword_overhead_right": { "animation": "bettercombat:one_handed_slam",                 "hand": "MAIN_HAND", "upswing": 0.55, "sound": null },
+  "bromax_battle:sword_overhead_left":  { "animation": "bettercombat:one_handed_slam",                 "hand": "MAIN_HAND", "upswing": 0.55, "sound": null },
+  "bromax_battle:sword_slash_right":    { "animation": "bettercombat:one_handed_slash_horizontal_right","hand": "MAIN_HAND", "upswing": 0.45, "sound": null },
+  "bromax_battle:sword_slash_left":     { "animation": "bettercombat:one_handed_slash_horizontal_left", "hand": "MAIN_HAND", "upswing": 0.45, "sound": null },
+  "bromax_battle:sword_stab":           { "animation": "bettercombat:one_handed_stab",                 "hand": "MAIN_HAND", "upswing": 0.40, "sound": null },
+
+  "bromax_battle:bow_draw":      { "animation": "bettercombat:one_handed_stab", "hand": "MAIN_HAND", "upswing": 0.50, "sound": null },
+  "bromax_battle:bow_draw_high": { "animation": "bettercombat:one_handed_stab", "hand": "MAIN_HAND", "upswing": 0.50, "sound": null },
+  "bromax_battle:bow_draw_side": { "animation": "bettercombat:one_handed_stab", "hand": "MAIN_HAND", "upswing": 0.50, "sound": null },
+  "bromax_battle:longbow_draw":  { "animation": "bettercombat:one_handed_stab", "hand": "TWO_HANDED","upswing": 0.50, "sound": null },
+  "bromax_battle:shortbow_draw": { "animation": "bettercombat:one_handed_stab", "hand": "MAIN_HAND", "upswing": 0.50, "sound": null },
+  "bromax_battle:crossbow_fire": { "animation": "bettercombat:one_handed_stab", "hand": "MAIN_HAND", "upswing": 0.50, "sound": null }
+}
