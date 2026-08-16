@@ -4,33 +4,30 @@ import com.bromax.bromaxbattle.client.ClientSetup;
 import com.bromax.bromaxbattle.combat.CombatHandler;
 import com.bromax.bromaxbattle.config.BromaxBattleConfig;
 import com.bromax.bromaxbattle.weapon.WeaponRegistry;
-import com.mojang.logging.LogUtils;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.bus.api.IEventBus;
-import net.neoforged.fml.ModContainer;
-import net.neoforged.fml.common.Mod;
-import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.neoforged.fml.loading.FMLEnvironment;
-import net.neoforged.neoforge.common.NeoForge;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.api.distmarker.Dist;
 import org.slf4j.Logger;
+import com.mojang.logging.LogUtils;
 
 @Mod(BromaxBattle.MOD_ID)
 public class BromaxBattle {
     public static final String MOD_ID = "bromax_battle";
     public static final Logger LOGGER = LogUtils.getLogger();
 
-    public BromaxBattle(IEventBus modBus, ModContainer container) {
-        BromaxBattleConfig.register(container);
+    public BromaxBattle() {
+        BromaxBattleConfig.register(FMLJavaModLoadingContext.get().getModEventBus());
 
-        modBus.addListener(this::commonSetup);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::commonSetup);
 
-        if (FMLEnvironment.dist == Dist.CLIENT) {
-            ClientSetup.register(modBus);
-        }
+        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> ClientSetup::register);
 
         CombatHandler handler = new CombatHandler();
         CombatHandler.INSTANCE = handler;
-        NeoForge.EVENT_BUS.register(handler);
+        MinecraftForge.EVENT_BUS.register(handler);
     }
 
     private void commonSetup(FMLCommonSetupEvent event) {

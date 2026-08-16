@@ -10,14 +10,14 @@
     },
     {
       "animation": "bromax_battle:scythe_heavy",
-      "weight": 18,
+      "weight": 15,
       "speed_multiplier": 0.6,
       "damage_multiplier": 1.4,
       "hit_delay": 22
     },
     {
       "animation": "bromax_battle:scythe_light",
-      "weight": 12,
+      "weight": 15,
       "speed_multiplier": 1.4,
       "damage_multiplier": 0.6,
       "hit_delay": 3
