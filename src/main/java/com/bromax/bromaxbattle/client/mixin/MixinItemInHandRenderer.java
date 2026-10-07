@@ -2,7 +2,6 @@ package com.bromax.bromaxbattle.client.mixin;
 
 import com.bromax.bromaxbattle.animation.AnimationController;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Quaternion;
 import com.mojang.math.Vector3f;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.ItemInHandRenderer;
@@ -48,11 +47,8 @@ public class MixinItemInHandRenderer {
         float[] angles = AnimationController.INSTANCE.getArmAngles(id, mainhand, partialTick);
         if (angles == null) return;
 
-        if (Math.abs(angles[0]) > 0.001f)
-            poseStack.mulPose(new Quaternion(Vector3f.XP, angles[0], false));
-        if (Math.abs(angles[1]) > 0.001f)
-            poseStack.mulPose(new Quaternion(Vector3f.YP, angles[1], false));
-        if (Math.abs(angles[2]) > 0.001f)
-            poseStack.mulPose(new Quaternion(Vector3f.ZP, angles[2], false));
+        if (Math.abs(angles[0]) > 0.001f) poseStack.mulPose(Vector3f.XP.rotation(angles[0]));
+        if (Math.abs(angles[1]) > 0.001f) poseStack.mulPose(Vector3f.YP.rotation(angles[1]));
+        if (Math.abs(angles[2]) > 0.001f) poseStack.mulPose(Vector3f.ZP.rotation(angles[2]));
     }
 }

@@ -8,7 +8,7 @@ import com.google.gson.JsonParser;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.fml.loading.FMLPaths;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraft.core.Registry;
 
 import java.io.*;
 import java.util.*;
@@ -24,6 +24,7 @@ public class WeaponRegistry {
     public void init() {
         loadBuiltinDefaults();
         loadExternalOverrides();
+        CategoryAssignments.load();
     }
 
     private void loadBuiltinDefaults() {
@@ -75,7 +76,7 @@ public class WeaponRegistry {
             return categoryDefaults.getOrDefault(WeaponCategory.GAUNTLETS, null);
         }
 
-        ResourceLocation regName = ForgeRegistries.ITEMS.getKey(stack.getItem());
+        ResourceLocation regName = Registry.ITEM.getKey(stack.getItem());
         String itemKey = regName != null ? regName.toString() : null;
 
         if (itemKey != null) {
@@ -83,6 +84,16 @@ public class WeaponRegistry {
             if (override != null) return override;
             WeaponAttributes cached = classificationCache.get(itemKey);
             if (cached != null) return cached;
+
+            // Config category assignment beats the classifier
+            WeaponCategory assigned = CategoryAssignments.lookup(itemKey);
+            if (assigned != null) {
+                WeaponAttributes attrs = categoryDefaults.get(assigned);
+                if (attrs != null) {
+                    classificationCache.put(itemKey, attrs);
+                    return attrs;
+                }
+            }
         }
 
         ClassificationResult result = WeaponClassifier.classify(stack);
@@ -121,7 +132,7 @@ public class WeaponRegistry {
                 int   weight          = a.has("weight")            ? a.get("weight").getAsInt()            : 100;
                 float speedMultiplier = a.has("speed_multiplier")  ? a.get("speed_multiplier").getAsFloat() : 1.0f;
                 float damageMultiplier= a.has("damage_multiplier") ? a.get("damage_multiplier").getAsFloat(): 1.0f;
-                int   hitDelay        = a.has("hit_delay")         ? a.get("hit_delay").getAsInt()          : 0;
+                int   hitDelay        = a.has("hit_delay")         ? Math.min(a.get("hit_delay").getAsInt(), 15) : 0;
                 attacks.add(new AttackDefinition(animation, weight, speedMultiplier, damageMultiplier, hitDelay));
             } catch (Exception e) {
                 BromaxBattle.LOGGER.warn("Skipping malformed attack entry in {}: {}", cat, e.getMessage());

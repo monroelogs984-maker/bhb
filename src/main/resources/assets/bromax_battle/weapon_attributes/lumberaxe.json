@@ -10,14 +10,14 @@
     },
     {
       "animation": "bromax_battle:lumberaxe_heavy",
-      "weight": 10,
+      "weight": 13,
       "speed_multiplier": 0.3,
       "damage_multiplier": 1.7,
       "hit_delay": 93
     },
     {
       "animation": "bromax_battle:lumberaxe_light",
-      "weight": 10,
+      "weight": 7,
       "speed_multiplier": 1.7,
       "damage_multiplier": 0.3,
       "hit_delay": 2

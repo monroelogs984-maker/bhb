@@ -4,14 +4,15 @@ import com.bromax.bromaxbattle.client.ClientSetup;
 import com.bromax.bromaxbattle.combat.CombatHandler;
 import com.bromax.bromaxbattle.config.BromaxBattleConfig;
 import com.bromax.bromaxbattle.weapon.WeaponRegistry;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.DistExecutor;
+import com.mojang.logging.LogUtils;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.fml.loading.FMLEnvironment;
+import net.minecraftforge.common.MinecraftForge;
 import org.slf4j.Logger;
-import com.mojang.logging.LogUtils;
 
 @Mod(BromaxBattle.MOD_ID)
 public class BromaxBattle {
@@ -19,15 +20,19 @@ public class BromaxBattle {
     public static final Logger LOGGER = LogUtils.getLogger();
 
     public BromaxBattle() {
-        BromaxBattleConfig.register(FMLJavaModLoadingContext.get().getModEventBus());
+        IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
+        BromaxBattleConfig.register();
 
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::commonSetup);
+        modBus.addListener(this::commonSetup);
 
-        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> ClientSetup::register);
+        if (FMLEnvironment.dist == Dist.CLIENT) {
+            ClientSetup.register(modBus);
+        }
 
         CombatHandler handler = new CombatHandler();
         CombatHandler.INSTANCE = handler;
         MinecraftForge.EVENT_BUS.register(handler);
+        com.bromax.bromaxbattle.combat.DamageProbe.register();
     }
 
     private void commonSetup(FMLCommonSetupEvent event) {

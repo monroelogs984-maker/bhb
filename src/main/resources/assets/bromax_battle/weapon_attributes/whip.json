@@ -10,14 +10,14 @@
     },
     {
       "animation": "bromax_battle:whip_heavy",
-      "weight": 35,
+      "weight": 40,
       "speed_multiplier": 0.8,
       "damage_multiplier": 1.2,
       "hit_delay": 12
     },
     {
       "animation": "bromax_battle:whip_light",
-      "weight": 35,
+      "weight": 30,
       "speed_multiplier": 1.2,
       "damage_multiplier": 0.8,
       "hit_delay": 2

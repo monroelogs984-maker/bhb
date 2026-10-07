@@ -2,6 +2,7 @@ package com.bromax.bromaxbattle.client.mixin;
 
 import com.bromax.bromaxbattle.animation.AnimationController;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Vector3f;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.layers.ItemInHandLayer;
@@ -9,8 +10,6 @@ import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.world.item.ItemStack;
-import com.mojang.math.Quaternion;
-import com.mojang.math.Vector3f;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -19,29 +18,29 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.UUID;
 
 /**
- * Injects WEAPON_HAND bone rotation into ItemInHandLayer.renderArmWithItem.
+ * Injects grip + WEAPON_HAND bone rotation into ItemInHandLayer.renderArmWithItem.
  *
- * In 1.19.2, ItemInHandLayer.renderArmWithItem(AbstractClientPlayer, HumanoidArm, ItemStack,
- * PoseStack, MultiBufferSource, int) is called once per hand per render frame.
- * We push a pose rotation onto the PoseStack before the item is rendered so the
- * item pivots from the grip point as if the wrist twisted.
- *
- * Injection is at HEAD so the rotation is on the stack before the item render call.
- * At RETURN we would need to explicitly pop, which is error-prone. Instead we
- * push at HEAD, render happens, then the caller pops its own push — the PoseStack
- * is balanced by the existing code after we exit.
- *
- * NOTE: Verify the exact method name against decompiled 1.19.2 sources.
- * Candidate: "renderArmWithItem" or the private helper called inside render().
+ * Injection point is right before the ItemInHandRenderer.renderItem call, AFTER
+ * vanilla's translate-to-hand and base rotations — so the PoseStack origin sits
+ * at the item itself and rotations pivot there instead of at the model root
+ * (a HEAD injection made large rotations swing the item out of the hand).
+ * A small pivot shift toward the grip end keeps long weapons anchored in the
+ * fist while they turn. The caller pops its own push after renderItem, so the
+ * PoseStack stays balanced.
  */
 @Mixin(ItemInHandLayer.class)
 public class MixinItemInHandLayer {
 
-    @Inject(method = "renderArmWithItem", at = @At("HEAD"))
+    // Item-frame offset from the render origin toward the grip end of the blade
+    private static final float GRIP_PIVOT = 0.18f;
+
+    @Inject(method = "renderArmWithItem",
+            at = @At(value = "INVOKE",
+                     target = "Lnet/minecraft/client/renderer/ItemInHandRenderer;renderItem(Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/client/renderer/block/model/ItemTransforms$TransformType;ZLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V"))
     private void bhb_applyWeaponHandRotation(
             LivingEntity livingEntity,
             ItemStack stack,
-            ItemTransforms.TransformType transformType,
+            ItemTransforms.TransformType displayContext,
             HumanoidArm arm,
             PoseStack poseStack,
             MultiBufferSource bufferSource,
@@ -51,18 +50,20 @@ public class MixinItemInHandLayer {
         if (!(livingEntity instanceof AbstractClientPlayer player)) return;
         UUID id = player.getUUID();
         boolean mainhand = (arm == player.getMainArm());
-        float[] angles = AnimationController.INSTANCE.getWeaponAngles(id, mainhand, 1.0f);
-        if (angles == null) return;
 
-        // Apply wrist rotation around each axis if non-trivial (angles are radians)
-        if (Math.abs(angles[0]) > 0.001f) {
-            poseStack.mulPose(new Quaternion(Vector3f.XP, angles[0], false));
+        com.bromax.bromaxbattle.animation.Quat grip = AnimationController.INSTANCE.getGripRotation(id, mainhand);
+        float[] angles = AnimationController.INSTANCE.getWeaponAngles(
+                id, mainhand, AnimationController.INSTANCE.getPartialTick(id));
+        if (grip == null && angles == null) return;
+
+        // Pivot at the grip end of the blade so the weapon turns in the fist
+        poseStack.translate(-GRIP_PIVOT, -GRIP_PIVOT, 0f);
+        if (grip != null) poseStack.mulPose(grip.toMojang());
+        if (angles != null) {
+            if (Math.abs(angles[0]) > 0.001f) poseStack.mulPose(Vector3f.XP.rotation(angles[0]));
+            if (Math.abs(angles[1]) > 0.001f) poseStack.mulPose(Vector3f.YP.rotation(angles[1]));
+            if (Math.abs(angles[2]) > 0.001f) poseStack.mulPose(Vector3f.ZP.rotation(angles[2]));
         }
-        if (Math.abs(angles[1]) > 0.001f) {
-            poseStack.mulPose(new Quaternion(Vector3f.YP, angles[1], false));
-        }
-        if (Math.abs(angles[2]) > 0.001f) {
-            poseStack.mulPose(new Quaternion(Vector3f.ZP, angles[2], false));
-        }
+        poseStack.translate(GRIP_PIVOT, GRIP_PIVOT, 0f);
     }
 }

@@ -10,14 +10,14 @@
     },
     {
       "animation": "bromax_battle:twinblades_heavy",
-      "weight": 5,
+      "weight": 2,
       "speed_multiplier": 0.3,
       "damage_multiplier": 1.7,
       "hit_delay": 16
     },
     {
       "animation": "bromax_battle:twinblades_light",
-      "weight": 5,
+      "weight": 8,
       "speed_multiplier": 1.7,
       "damage_multiplier": 0.3,
       "hit_delay": 3

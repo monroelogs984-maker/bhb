@@ -1,9 +1,8 @@
 package com.bromax.bromaxbattle.config;
 
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.common.ForgeConfigSpec;
 
 public class BromaxBattleConfig {
 
@@ -13,6 +12,7 @@ public class BromaxBattleConfig {
     public static final ForgeConfigSpec.BooleanValue ENABLE_NAME_HEURISTICS;
     public static final ForgeConfigSpec.DoubleValue  COMBO_RESET_TICKS;
     public static final ForgeConfigSpec.DoubleValue  BASE_REACH;
+    public static final ForgeConfigSpec.BooleanValue ENABLE_SPEED_DAMAGE_BONUS;
 
     static {
         BUILDER.push("classifier");
@@ -28,16 +28,22 @@ public class BromaxBattleConfig {
         BASE_REACH = BUILDER
             .comment("Base melee reach in blocks. Per-weapon range_bonus is added on top.")
             .defineInRange("baseReach", 3.5, 1.0, 10.0);
+        ENABLE_SPEED_DAMAGE_BONUS = BUILDER
+            .comment("Bonus damage based on movement speed at the moment of attack: "
+                   + "5% of base weapon damage at sprint speed, 10% at sprint-jump speed, "
+                   + "15% beyond vanilla max (mounts, elytra, speed effects).")
+            .define("enableSpeedDamageBonus", true);
         BUILDER.pop();
 
         SPEC = BUILDER.build();
     }
 
-    public static void register(IEventBus bus) {
+    public static void register() {
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, SPEC, "bromax_battle.toml");
     }
 
-    public static boolean enableNameHeuristics() { return ENABLE_NAME_HEURISTICS.get(); }
-    public static float   comboResetTicks()       { return COMBO_RESET_TICKS.get().floatValue(); }
-    public static float   baseReach()             { return BASE_REACH.get().floatValue(); }
+    public static boolean enableNameHeuristics()    { return ENABLE_NAME_HEURISTICS.get(); }
+    public static float   comboResetTicks()          { return COMBO_RESET_TICKS.get().floatValue(); }
+    public static float   baseReach()                { return BASE_REACH.get().floatValue(); }
+    public static boolean enableSpeedDamageBonus()   { return ENABLE_SPEED_DAMAGE_BONUS.get(); }
 }

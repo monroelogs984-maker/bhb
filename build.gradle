@@ -3,7 +3,7 @@ plugins {
     id 'org.spongepowered.mixin' version '0.7.+'
 }
 
-version = '0.1-dev'
+version = '1.4.0-1.19.2'
 group = 'com.bromax.bromaxbattle'
 archivesBaseName = 'bromax_battle'
 
@@ -15,6 +15,14 @@ minecraft {
     runs {
         client {
             workingDirectory project.file('run')
+            // Unattended animation preview: ./gradlew runClient -PbhbPreview=all (or a name filter); add -PbhbGrips for grip sheets
+            if (project.hasProperty('bhbPreview')) property 'bhb.preview', project.property('bhbPreview')
+            if (project.hasProperty('bhbGrips')) property 'bhb.preview.grips', 'true'
+            // Dev damage harness: -PbhbDmgTest="60 minecraft:iron_sword"
+            if (project.hasProperty('bhbDmgTest')) {
+                property 'bhb.debug', 'true'
+                property 'bhb.dmgtest', project.property('bhbDmgTest')
+            }
             property 'forge.logging.console.level', 'debug'
             mods {
                 bromax_battle { source sourceSets.main }
