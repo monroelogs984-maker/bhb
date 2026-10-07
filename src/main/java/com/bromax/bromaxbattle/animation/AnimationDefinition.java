@@ -16,12 +16,16 @@ public class AnimationDefinition {
     public final boolean             hasTrail;
     public final boolean             hasTranslations;
     public final float               lunge;
+    public final WeaponGrip          grip;
+    public final float               gripScale;
+    /** Weapon category inferred from the id ("greatsword_heavy" -> GREATSWORD), or null. */
+    public final com.bromax.bromaxbattle.weapon.WeaponCategory category;
 
     private final Map<BoneTarget, List<Keyframe>> keyframesByBone;
 
     public AnimationDefinition(ResourceLocation id, int duration, Set<BoneTarget> blendMask,
                                int hitWindowStart, int hitWindowEnd, boolean hasTrail,
-                               float lunge, List<Keyframe> keyframes) {
+                               float lunge, WeaponGrip grip, float gripScale, List<Keyframe> keyframes) {
         this.id             = id;
         this.duration       = duration;
         this.blendMask      = Collections.unmodifiableSet(blendMask);
@@ -29,6 +33,9 @@ public class AnimationDefinition {
         this.hitWindowEnd   = hitWindowEnd;
         this.hasTrail       = hasTrail;
         this.lunge          = Math.max(0f, Math.min(1f, lunge));
+        this.grip           = grip != null ? grip : WeaponGrip.VANILLA;
+        this.gripScale      = Math.max(0f, Math.min(2f, gripScale));
+        this.category       = categoryOf(id);
 
         this.keyframesByBone = new EnumMap<>(BoneTarget.class);
         boolean anyTranslation = false;
@@ -40,6 +47,47 @@ public class AnimationDefinition {
         for (List<Keyframe> list : this.keyframesByBone.values()) {
             list.sort(Comparator.comparingInt(k -> k.tick));
         }
+    }
+
+    /** Longest category name that prefixes the animation path, so hunters_knife_* beats a shorter match. */
+    private static com.bromax.bromaxbattle.weapon.WeaponCategory categoryOf(ResourceLocation id) {
+        if (id == null) return null;
+        String path = id.getPath().toUpperCase(java.util.Locale.ROOT);
+        com.bromax.bromaxbattle.weapon.WeaponCategory best = null;
+        for (var c : com.bromax.bromaxbattle.weapon.WeaponCategory.values()) {
+            if (path.startsWith(c.name() + "_") && (best == null || c.name().length() > best.name().length())) best = c;
+        }
+        return best;
+    }
+
+    /** Keyframes for one bone, in tick order (empty when the bone isn't animated). */
+    public List<Keyframe> keyframes(BoneTarget bone) {
+        List<Keyframe> frames = keyframesByBone.get(bone);
+        return frames == null ? List.of() : Collections.unmodifiableList(frames);
+    }
+
+    /** Keyframe ticks for one bone, in order (empty when the bone isn't animated). */
+    public List<Integer> keyframeTicks(BoneTarget bone) {
+        List<Keyframe> frames = keyframesByBone.get(bone);
+        if (frames == null) return List.of();
+        List<Integer> out = new ArrayList<>();
+        for (Keyframe kf : frames) out.add(kf.tick);
+        return out;
+    }
+
+    /** Share of the final pose eased off between the last keyframe and the end of the animation. */
+    private static final float SETTLE = 0.25f;
+
+    /**
+     * Most animations stop at their last keyframe and hold it for 15-40% of their length before
+     * the blend-out starts, which reads as the figure freezing after the hit. Past the last
+     * keyframe the pose now eases a little toward neutral so the recovery keeps moving.
+     */
+    private float settle(Keyframe last, float tick) {
+        float span = duration - last.tick;
+        if (span <= 0f) return 1f;
+        float t = Math.max(0f, Math.min(1f, (tick - last.tick) / span));
+        return 1f - SETTLE * t * t * (3f - 2f * t);
     }
 
     public boolean isHitWindowActive(float tick) {
@@ -61,7 +109,8 @@ public class AnimationDefinition {
         }
 
         if (before == null)               { out[0] = after.rx;  out[1] = after.ry;  out[2] = after.rz;  return; }
-        if (after == null || before == after) { out[0] = before.rx; out[1] = before.ry; out[2] = before.rz; return; }
+        if (after == null) { float k = settle(before, tick); out[0] = before.rx * k; out[1] = before.ry * k; out[2] = before.rz * k; return; }
+        if (before == after) { out[0] = before.rx; out[1] = before.ry; out[2] = before.rz; return; }
 
         float t = (tick - before.tick) / (float)(after.tick - before.tick);
         float e = before.easing.apply(t);
@@ -85,7 +134,8 @@ public class AnimationDefinition {
         }
 
         if (before == null)               { out[0] = after.tx;  out[1] = after.ty;  out[2] = after.tz;  return; }
-        if (after == null || before == after) { out[0] = before.tx; out[1] = before.ty; out[2] = before.tz; return; }
+        if (after == null) { float k = settle(before, tick); out[0] = before.tx * k; out[1] = before.ty * k; out[2] = before.tz * k; return; }
+        if (before == after) { out[0] = before.tx; out[1] = before.ty; out[2] = before.tz; return; }
 
         float t = (tick - before.tick) / (float)(after.tick - before.tick);
         float e = before.easing.apply(t);
@@ -105,6 +155,8 @@ public class AnimationDefinition {
 
         boolean hasTrail = json.has("trail");
         float lunge = json.has("lunge") ? Math.max(0f, Math.min(1f, json.get("lunge").getAsFloat())) : 0f;
+        WeaponGrip grip = json.has("grip") ? WeaponGrip.fromString(json.get("grip").getAsString()) : WeaponGrip.VANILLA;
+        float gripScale = json.has("grip_scale") ? json.get("grip_scale").getAsFloat() : 1.0f;
 
         int hitStart = 0, hitEnd = 0;
         if (json.has("hit_window")) {
@@ -127,7 +179,7 @@ public class AnimationDefinition {
 
         if (!json.has("keyframes"))
             return new AnimationDefinition(id, duration, blendMask, hitStart, hitEnd, hasTrail,
-                    lunge, Collections.emptyList());
+                    lunge, grip, gripScale, Collections.emptyList());
 
         List<Keyframe> keyframes = new ArrayList<>();
         for (JsonElement kfElem : json.getAsJsonArray("keyframes")) {
@@ -153,6 +205,6 @@ public class AnimationDefinition {
             } catch (Exception ignored) {}
         }
 
-        return new AnimationDefinition(id, duration, blendMask, hitStart, hitEnd, hasTrail, lunge, keyframes);
+        return new AnimationDefinition(id, duration, blendMask, hitStart, hitEnd, hasTrail, lunge, grip, gripScale, keyframes);
     }
 }

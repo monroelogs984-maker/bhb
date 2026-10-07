@@ -15,6 +15,10 @@ public class AnimationState {
     public float   lockedHeadRX     = Float.NaN;
     public float   lockedHeadRY     = Float.NaN;
     public boolean lungeImpulseFired = false;
+    /** Held at a fixed tick by the animation preview tool; never advanced or expired. */
+    public boolean frozen            = false;
+    /** Preview-only: replaces the animation's grip when set. */
+    public WeaponGrip gripOverride   = null;
 
     private static final float CROSSFADE_TICKS = 2.5f;
     private static final float BLENDIN_TICKS   = 2.0f;

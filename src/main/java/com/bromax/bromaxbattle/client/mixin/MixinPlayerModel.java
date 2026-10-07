@@ -27,6 +27,14 @@ public class MixinPlayerModel {
             float limbSwing, float limbSwingAmount, float ageInTicks,
             float netHeadYaw, float headPitch, CallbackInfo ci) {
 
+        // The torso attachment moves body/head x/z, which vanilla never resets, and the
+        // model is shared by every player: zero them each frame before anything else
+        PlayerModel<?> model = (PlayerModel<?>) (Object) this;
+        model.body.x = 0f; model.body.z = 0f;
+        model.head.x = 0f; model.head.z = 0f;
+        model.jacket.copyFrom(model.body);
+        model.hat.copyFrom(model.head);
+
         if (!(entity instanceof AbstractClientPlayer player)) return;
         if (!AnimationController.INSTANCE.hasActiveState(player.getUUID())) return;
         float partialTick = ageInTicks % 1.0f;

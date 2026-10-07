@@ -10,14 +10,14 @@
     },
     {
       "animation": "bromax_battle:staff_heavy",
-      "weight": 20,
+      "weight": 15,
       "speed_multiplier": 0.4,
       "damage_multiplier": 1.6,
       "hit_delay": 50
     },
     {
       "animation": "bromax_battle:staff_light",
-      "weight": 20,
+      "weight": 25,
       "speed_multiplier": 1.6,
       "damage_multiplier": 0.4,
       "hit_delay": 2

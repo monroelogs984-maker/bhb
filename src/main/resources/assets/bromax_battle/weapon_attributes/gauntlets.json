@@ -10,14 +10,14 @@
     },
     {
       "animation": "bromax_battle:gauntlets_heavy",
-      "weight": 5,
+      "weight": 2,
       "speed_multiplier": 0.5,
       "damage_multiplier": 1.5,
       "hit_delay": 20
     },
     {
       "animation": "bromax_battle:gauntlets_light",
-      "weight": 5,
+      "weight": 8,
       "speed_multiplier": 1.5,
       "damage_multiplier": 0.5,
       "hit_delay": 1
