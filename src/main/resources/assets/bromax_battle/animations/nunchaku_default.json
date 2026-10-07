@@ -2,7 +2,7 @@
   "duration": 14,
   "lunge": 0.18,
   "grip": "up",
-  "grip_scale": 0.5,
+  "grip_scale": 1.0,
   "blend_mask": [
     "RIGHT_ARM",
     "LEFT_ARM",

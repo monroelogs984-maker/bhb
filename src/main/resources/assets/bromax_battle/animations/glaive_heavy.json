@@ -159,7 +159,7 @@
       "easing": "EASE_OUT_CUBIC",
       "rx": 63,
       "ry": -22,
-      "rz": -24
+      "rz": -300
     },
     {
       "tick": 24,
@@ -167,7 +167,7 @@
       "easing": "EASE_OUT_QUAD",
       "rx": 47,
       "ry": -24,
-      "rz": -26
+      "rz": -300
     }
   ]
 }

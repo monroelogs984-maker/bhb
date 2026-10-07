@@ -2,7 +2,7 @@
   "duration": 10,
   "lunge": 0.08,
   "grip": "slash",
-  "grip_scale": 0.75,
+  "grip_scale": 1.0,
   "blend_mask": [
     "RIGHT_ARM",
     "LEFT_ARM",
@@ -152,7 +152,7 @@
       "easing": "EASE_IN_CUBIC",
       "rx": -40,
       "ry": 55,
-      "rz": 25
+      "rz": 300
     },
     {
       "tick": 4,
@@ -160,7 +160,7 @@
       "easing": "EASE_OUT_CUBIC",
       "rx": 55,
       "ry": -60,
-      "rz": -28
+      "rz": -300
     },
     {
       "tick": 8,
@@ -168,7 +168,7 @@
       "easing": "EASE_OUT_QUAD",
       "rx": 41,
       "ry": -66,
-      "rz": -31
+      "rz": -300
     }
   ]
 }
