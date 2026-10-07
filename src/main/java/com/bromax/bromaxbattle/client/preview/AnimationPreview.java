@@ -67,7 +67,10 @@ public final class AnimationPreview {
         List<ResourceLocation> out = new ArrayList<>();
         for (ResourceLocation id : WeaponRegistry.INSTANCE.getAllAnimationIds()) {
             if (AnimationRegistry.INSTANCE.get(id) == null) continue;
-            if (all || id.toString().contains(f)) out.add(id);
+            if (all) { out.add(id); continue; }
+            for (String part : f.split(",")) {
+                if (!part.isBlank() && id.toString().contains(part.trim())) { out.add(id); break; }
+            }
         }
         out.sort((a, b) -> a.toString().compareTo(b.toString()));
         return out;

@@ -1,7 +1,7 @@
 {
   "duration": 15,
   "lunge": 0.35,
-  "grip": "stab",
+  "grip": "thrust",
   "blend_mask": [
     "RIGHT_ARM",
     "LEFT_ARM",
@@ -169,5 +169,6 @@
       "ry": -3,
       "rz": 0
     }
-  ]
+  ],
+  "grip_scale": 1.0
 }

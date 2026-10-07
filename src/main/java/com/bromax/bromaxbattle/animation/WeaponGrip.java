@@ -21,8 +21,11 @@ import org.joml.Vector3f;
  *  slash   — blade laid horizontal in-plane, then rolled flat around its shaft
  *  down    — blade rotated in-plane to point downward (chop enders)
  *  up      — blade rotated in-plane to point straight up (rising strike enders)
- *  thrust  — blade along the forearm, out of the fist, for strikes with the arm raised
- *            forward (forward/stab assume the hanging vanilla arm and point back here)
+ *  thrust  — blade straight out of the fist along the forearm, whatever the arm pose.
+ *            Computed, not tuned: in the hand frame (after ItemInHandLayer's X-90/Y180) the
+ *            forearm runs along -Z, and the handheld display transform (0,-90,55) leaves the
+ *            blade at about (0, 0.985, -0.17), so a -80° turn about X lines them up. The
+ *            forward/stab presets assume the hanging vanilla arm and point back on a thrust.
  */
 public enum WeaponGrip {
     VANILLA(null),
@@ -31,7 +34,7 @@ public enum WeaponGrip {
     SLASH(axis(90, X()).mul(axis(-45, NORMAL()))),
     DOWN(axis(135, NORMAL())),
     UP(axis(-45, NORMAL())),
-    THRUST(axis(-90, EDGE()));
+    THRUST(axis(-80, X()));
 
     /** Target rotation, or null for identity. */
     public final Quaternionf rotation;
