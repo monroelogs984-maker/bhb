@@ -102,7 +102,7 @@ public final class OpConfig {
         b.pop();
 
         b.push("hud");
-        HUD_LINGER_TICKS = b.comment("Client: ticks the Overpower bar stays after combat before the XP bar returns.").defineInRange("lingerTicks", 80, 0, 1200);
+        HUD_LINGER_TICKS = b.comment("Client: the Overpower bar replaces the XP bar when a bar changes, and the XP bar returns after this many ticks without another change.").defineInRange("lingerTicks", 80, 0, 1200);
         b.pop();
         SPEC = b.build();
     }

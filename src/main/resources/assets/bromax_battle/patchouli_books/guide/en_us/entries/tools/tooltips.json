@@ -6,7 +6,7 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "Hold $(k:sneak) while looking at a weapon's tooltip to see its Overpower and Glare Strike levels, plus its damage trade-off."
+      "text": "Hold $(bold)Shift$() while looking at a weapon's tooltip to see its Overpower and Glare Strike levels, plus its damage trade-off."
     }
   ]
 }

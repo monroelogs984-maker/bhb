@@ -21,14 +21,25 @@ import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 public final class OpNetwork {
     private OpNetwork() {}
 
-    /** Server -> client: the player's own pressure, their target's, and any open Glare window. */
-    public record Hud(float self, int targetId, float target, int glareTicksLeft, int glareWindow, boolean glaring)
-            implements CustomPacketPayload {
+    /**
+     * Server -> client: the player's own pressure, their target's, and any open Glare window.
+     * {@code changed} is false for periodic refreshes (drain), true when a hit, block, break or
+     * Glare actually moved a bar; only changes bring the bar up.
+     */
+    public record Hud(float self, int targetId, float target, int glareTicksLeft, int glareWindow, boolean glaring,
+                      boolean changed) implements CustomPacketPayload {
         public static final Type<Hud> TYPE = new Type<>(id("hud"));
-        public static final StreamCodec<ByteBuf, Hud> CODEC = StreamCodec.composite(
-                ByteBufCodecs.FLOAT, Hud::self, ByteBufCodecs.VAR_INT, Hud::targetId, ByteBufCodecs.FLOAT, Hud::target,
-                ByteBufCodecs.VAR_INT, Hud::glareTicksLeft, ByteBufCodecs.VAR_INT, Hud::glareWindow, ByteBufCodecs.BOOL, Hud::glaring,
-                Hud::new);
+        // Seven fields: past StreamCodec.composite's six
+        public static final StreamCodec<ByteBuf, Hud> CODEC = StreamCodec.of((buf, h) -> {
+            buf.writeFloat(h.self());
+            ByteBufCodecs.VAR_INT.encode(buf, h.targetId());
+            buf.writeFloat(h.target());
+            ByteBufCodecs.VAR_INT.encode(buf, h.glareTicksLeft());
+            ByteBufCodecs.VAR_INT.encode(buf, h.glareWindow());
+            buf.writeBoolean(h.glaring());
+            buf.writeBoolean(h.changed());
+        }, buf -> new Hud(buf.readFloat(), ByteBufCodecs.VAR_INT.decode(buf), buf.readFloat(),
+                ByteBufCodecs.VAR_INT.decode(buf), ByteBufCodecs.VAR_INT.decode(buf), buf.readBoolean(), buf.readBoolean()));
         @Override public Type<? extends CustomPacketPayload> type() { return TYPE; }
     }
 
@@ -102,7 +113,17 @@ public final class OpNetwork {
         r.playToClient(GuardState.TYPE, GuardState.CODEC, (p, ctx) -> ClientHooks.guard(p));
     }
 
+    /** A bar actually changed: sync and bring the HUD up. */
     public static void syncHud(ServerPlayer player) {
+        syncHud(player, true);
+    }
+
+    /** Periodic refresh (drain, window closing): updates the numbers without bringing the HUD up. */
+    public static void refreshHud(ServerPlayer player) {
+        syncHud(player, false);
+    }
+
+    private static void syncHud(ServerPlayer player, boolean changed) {
         OverpowerData d = OverpowerManager.data(player);
         long now = player.level().getGameTime();
         d.lastSyncTick = now;
@@ -113,7 +134,7 @@ public final class OpNetwork {
         }
         int left = d.glareTargetId >= 0 ? (int) Math.max(0, d.glareUntilTick - now) : 0;
         PacketDistributor.sendToPlayer(player, new Hud(d.pressure, d.hudTargetId, tp, left, d.glareWindowTicks,
-                d.thrustTargetId >= 0));
+                d.thrustTargetId >= 0, changed));
     }
 
     public static void playGlare(ServerPlayer player, int poseTicks) {

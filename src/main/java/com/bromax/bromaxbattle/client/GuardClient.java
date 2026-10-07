@@ -94,7 +94,8 @@ public final class GuardClient {
 
     private static AnimationDefinition poseFor(Player player) {
         WeaponAttributes attrs = WeaponRegistry.INSTANCE.getAttributes(player.getMainHandItem());
-        boolean twoHanded = attrs != null && attrs.category.isTwoHanded();
+        // Both hands on the grip only when the off hand is free
+        boolean twoHanded = attrs != null && attrs.category.isTwoHanded() && player.getOffhandItem().isEmpty();
         return AnimationRegistry.INSTANCE.get(twoHanded ? AnimationRegistry.GUARD_TWO_HANDED : AnimationRegistry.GUARD_ONE_HANDED);
     }
 

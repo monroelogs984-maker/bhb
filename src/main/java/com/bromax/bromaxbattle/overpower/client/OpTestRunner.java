@@ -146,7 +146,18 @@ public final class OpTestRunner {
         if (c == 432) log("E guard after second Tab: %s", com.bromax.bromaxbattle.client.GuardClient.isGuarding(mc.player));
         if (c == 440) openGuide();
         if (c == 460) shot(mc, "guide");
-        if (c == 480) mc.stop();
+        // No bar changes for 4+ seconds: the XP bar should be back
+        if (c == 470) mc.setScreen(null);
+        if (c == 560) shot(mc, "hud_idle");
+        // BHB's creative tab
+        if (c == 570) mc.player.connection.sendCommand("gamemode creative");
+        if (c == 580) {
+            mc.setScreen(new net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen(
+                    mc.player, mc.player.connection.enabledFeatures(), mc.options.operatorItemsTab().get()));
+        }
+        if (c == 584) selectBhbTab(mc);
+        if (c == 592) shot(mc, "creative_tab");
+        if (c == 600) mc.stop();
     }
 
     /** First-person guard placement candidates {x, y, z, roll, yaw}, one screenshot each. */
@@ -171,6 +182,21 @@ public final class OpTestRunner {
             if ((t - 40) % 10 == 8) shot(mc, "guardfp_" + i);
         }
         if (t == 40 + GUARD_FP.length * 10 + 10) mc.stop();
+    }
+
+    private static void selectBhbTab(Minecraft mc) {
+        if (!(mc.screen instanceof net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen screen)) return;
+        try {
+            var tab = net.minecraft.core.registries.BuiltInRegistries.CREATIVE_MODE_TAB.get(
+                    net.minecraft.resources.ResourceLocation.fromNamespaceAndPath("bromax_battle", "main"));
+            var m = net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen.class
+                    .getDeclaredMethod("selectTab", net.minecraft.world.item.CreativeModeTab.class);
+            m.setAccessible(true);
+            m.invoke(screen, tab);
+            log("E creative tab items: %s", tab.getDisplayItems());
+        } catch (ReflectiveOperationException e) {
+            log("E creative tab: %s", e);
+        }
     }
 
     private static String offhandKind() {

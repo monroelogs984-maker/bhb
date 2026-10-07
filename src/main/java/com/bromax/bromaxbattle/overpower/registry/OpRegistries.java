@@ -30,6 +30,8 @@ public final class OpRegistries {
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(BromaxBattle.MOD_ID);
     public static final DeferredRegister<net.minecraft.world.level.block.entity.BlockEntityType<?>> BLOCK_ENTITIES =
             DeferredRegister.create(Registries.BLOCK_ENTITY_TYPE, BromaxBattle.MOD_ID);
+    public static final DeferredRegister<net.minecraft.world.item.CreativeModeTab> TABS =
+            DeferredRegister.create(Registries.CREATIVE_MODE_TAB, BromaxBattle.MOD_ID);
     public static final DeferredRegister<AttachmentType<?>> ATTACHMENTS = DeferredRegister.create(NeoForgeRegistries.ATTACHMENT_TYPES, BromaxBattle.MOD_ID);
 
     /** Multiplies the Overpower pressure this entity's hits deal. */
@@ -87,10 +89,38 @@ public final class OpRegistries {
         BLOCKS.register(modBus);
         ITEMS.register(modBus);
         BLOCK_ENTITIES.register(modBus);
+        TABS.register(modBus);
         modBus.addListener(OpRegistries::addAttributes);
         modBus.addListener((net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent e) -> {
             if (e.getTabKey() == net.minecraft.world.item.CreativeModeTabs.FUNCTIONAL_BLOCKS) e.accept(BENCH_ITEM);
         });
+    }
+
+    /** BHB's own tab: the Weaponsmith's Bench, and the Battle Manual when Patchouli is installed. */
+    public static final DeferredHolder<net.minecraft.world.item.CreativeModeTab, net.minecraft.world.item.CreativeModeTab> TAB =
+            TABS.register("main", () -> net.minecraft.world.item.CreativeModeTab.builder()
+                    .title(net.minecraft.network.chat.Component.translatable("itemGroup.bromax_battle"))
+                    .icon(() -> new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.IRON_SWORD))
+                    .displayItems((params, out) -> {
+                        out.accept(BENCH_ITEM.get());
+                        net.minecraft.world.item.ItemStack guide = guideBook();
+                        if (!guide.isEmpty()) out.accept(guide);
+                    })
+                    .build());
+
+    /** The Battle Manual through Patchouli's API (by reflection: Patchouli is optional). */
+    public static net.minecraft.world.item.ItemStack guideBook() {
+        if (!net.neoforged.fml.ModList.get().isLoaded("patchouli")) return net.minecraft.world.item.ItemStack.EMPTY;
+        try {
+            Class<?> api = Class.forName("vazkii.patchouli.api.PatchouliAPI");
+            Object inst = api.getMethod("get").invoke(null);
+            Object stack = inst.getClass().getMethod("getBookStack", ResourceLocation.class)
+                    .invoke(inst, id("guide"));
+            return stack instanceof net.minecraft.world.item.ItemStack s ? s : net.minecraft.world.item.ItemStack.EMPTY;
+        } catch (ReflectiveOperationException | RuntimeException e) {
+            BromaxBattle.LOGGER.warn("[BHB] Couldn't get the Battle Manual from Patchouli: {}", e.toString());
+            return net.minecraft.world.item.ItemStack.EMPTY;
+        }
     }
 
     /** Every living entity gets the four Overpower attributes. */

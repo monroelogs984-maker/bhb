@@ -42,13 +42,15 @@ public final class DualWield {
     /** Set while an off-hand hit is being applied, so the damage trade-off reads the off-hand profile. */
     public static final ThreadLocal<Boolean> OFFHAND_HIT = ThreadLocal.withInitial(() -> false);
 
-    /** Whether this player can attack with the off hand at all (client and server). */
+    /**
+     * Whether this player can attack with the off hand at all (client and server): any BHB weapon
+     * in the off hand, alongside anything in the main hand. A two-handed main weapon only gives up
+     * its empty-off-hand damage bonus.
+     */
     public static boolean canDualWield(Player player) {
         ItemStack off = player.getOffhandItem();
         if (off.isEmpty() || off.getItem() instanceof ShieldItem) return false;
-        if (WeaponRegistry.INSTANCE.getAttributes(off) == null) return false;
-        WeaponAttributes main = WeaponRegistry.INSTANCE.getAttributes(player.getMainHandItem());
-        return main == null || !main.category.isTwoHanded();
+        return WeaponRegistry.INSTANCE.getAttributes(off) != null;
     }
 
     /** Ticks between off-hand attacks: the vanilla full-charge time for the off-hand weapon's speed. */

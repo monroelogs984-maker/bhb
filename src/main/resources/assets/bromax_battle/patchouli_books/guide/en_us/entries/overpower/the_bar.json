@@ -6,7 +6,7 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "Every fighter has a hidden $(l)pressure$() bar from 0 to 100. Landing hits fills the enemy's bar; taking hits fills yours.$(br2)While you're in a fight, a red bar replaces your experience bar: $(4)your$() pressure on one side, your $(4)target's$() on the other."
+      "text": "Every fighter has a hidden $(l)pressure$() bar from 0 to 100. Landing hits fills the enemy's bar; taking hits fills yours.$(br2)Whenever a hit, block or break changes a bar, a red bar replaces your experience bar: $(4)your$() pressure on one side, your $(4)target's$() on the other. After four seconds without another change, the experience bar comes back."
     },
     {
       "type": "patchouli:text",

@@ -172,6 +172,17 @@ public final class OpTest {
             DualWield.handle(player, zombie.getId(), 0);
             log("C off-hand: zombie health %.1f -> %.1f (off-hand lock %d ticks)", hp, zombie.getHealth(),
                     DualWield.lockTicks(player.getOffhandItem()));
+            // Two-handed main weapon (trident) with an off-hand weapon still dual wields
+            player.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.TRIDENT));
+            {
+                zombie.invulnerableTime = 0;
+                float hp2 = zombie.getHealth();
+                DualWield.clear(player.getUUID());
+                DualWield.handle(player, zombie.getId(), 0);
+                log("C two-handed main + off-hand: canDualWield=%s, zombie health %.1f -> %.1f",
+                        DualWield.canDualWield(player), hp2, zombie.getHealth());
+            }
+            player.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.IRON_SWORD));
             step = 500;
             wait = 20;
             return;

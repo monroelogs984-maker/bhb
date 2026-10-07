@@ -205,7 +205,7 @@ public class OverpowerManager {
             if (d.thrustTargetId >= 0 && now >= d.thrustAtTick) fireThrust(player, d);
             if (d.glareTargetId >= 0 && now > d.glareUntilTick) {
                 d.glareTargetId = -1;
-                OpNetwork.syncHud(player);
+                OpNetwork.refreshHud(player);
             }
         }
         if (d.pressure > 0f) {
@@ -220,7 +220,7 @@ public class OverpowerManager {
         if (living instanceof ServerPlayer player && now - d.lastSyncTick >= 5) {
             Entity t = d.hudTargetId >= 0 ? player.level().getEntity(d.hudTargetId) : null;
             float tp = t instanceof LivingEntity tl && tl.hasData(OpRegistries.DATA) ? tl.getData(OpRegistries.DATA).pressure : 0f;
-            if (d.pressure > 0f || tp > 0f || d.glareTargetId >= 0) OpNetwork.syncHud(player);
+            if (d.pressure > 0f || tp > 0f || d.glareTargetId >= 0) OpNetwork.refreshHud(player);
         }
     }
 

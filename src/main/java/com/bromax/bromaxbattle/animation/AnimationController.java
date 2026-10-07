@@ -353,7 +353,9 @@ public class AnimationController {
             // A real off-hand attack animates the left arm itself
             AnimationState driver = mainhand != null ? mainhand : (offhand == null ? idle : null);
             if (driver != null && driver.cachedDeltas != null && driver.animation.blendMask.contains(BoneTarget.LEFT_ARM)) {
-                poseOffArm(model, driver.animation.category, driver.getBlendFactor(driver.tickF));
+                // A two-handed grip needs a free off hand; holding something there, swing it one-handed
+                boolean offHandFree = model.leftArmPose == HumanoidModel.ArmPose.EMPTY;
+                poseOffArm(model, driver.animation.category, offHandFree, driver.getBlendFactor(driver.tickF));
             }
         } catch (Exception e) {
             BromaxBattle.LOGGER.error("[BHB] Animation render error for {}, clearing: {}", playerId, e.getMessage());
@@ -554,7 +556,8 @@ public class AnimationController {
      * weapons (gauntlets, claws, sai, nunchaku) and bows keep their authored left arm.
      * {@code weight} fades the override in and out with the animation's own blend.
      */
-    private static void poseOffArm(HumanoidModel<?> model, com.bromax.bromaxbattle.weapon.WeaponCategory cat, float weight) {
+    private static void poseOffArm(HumanoidModel<?> model, com.bromax.bromaxbattle.weapon.WeaponCategory cat,
+                                   boolean offHandFree, float weight) {
         if (cat == null || cat.isRanged() || weight <= 0.001f) return;
         switch (cat) {
             case GAUNTLETS, CLAW, SAI, NUNCHAKU -> { return; }
@@ -562,7 +565,7 @@ public class AnimationController {
         }
         ModelPart right = model.rightArm, left = model.leftArm;
         float tx, ty, tz;
-        if (cat.isTwoHanded()) {
+        if (cat.isTwoHanded() && offHandFree) {
             org.joml.Vector3f hand = new org.joml.Quaternionf().rotationZYX(right.zRot, right.yRot, right.xRot)
                     .transform(new org.joml.Vector3f(-1f, HAND_REACH, 0f)).add(right.x, right.y, right.z);
             org.joml.Vector3f d = hand.sub(left.x, left.y, left.z);

@@ -10,7 +10,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "Some types are $(l)two-handed$(): greatswords, battleaxes, warhammers, polearms, spears, tridents, twinblades, scythes and quarterstaves, among others. A two-handed weapon in your main hand rules out off-hand attacks.$(br2)Hold $(k:sneak) over a weapon's tooltip, or set it on a $(l:bromax_battle:tools/bench)Weaponsmith's Bench$(), to see its type."
+      "text": "Some types are $(l)two-handed$(): greatswords, battleaxes, warhammers, polearms, spears, tridents, twinblades, scythes and quarterstaves, among others. Wielded with an empty off hand, they deal $(bold)15% more damage$(); anything in the off hand gives the bonus up.$(br2)Hold $(bold)Shift$() over a weapon's tooltip, or set it on a $(l:bromax_battle:tools/bench)Weaponsmith's Bench$(), to see its type."
     }
   ]
 }

@@ -39,12 +39,15 @@ public class OverpowerHud {
         glareWindow = p.glareWindow();
         glaring = p.glaring();
         receivedAtTick = mc.level.getGameTime();
-        if (self > 0.5f || target > 0.5f || glareLeft > 0 || glaring) lastActiveTick = receivedAtTick;
+        if (p.changed() || glareLeft > 0 || glaring) lastActiveTick = receivedAtTick;
     }
 
+    /** Up when a bar changes, then back to the XP bar after lingerTicks without another change. */
     private static boolean visible(Minecraft mc) {
         if (mc.level == null || mc.player == null) return false;
-        return mc.level.getGameTime() - lastActiveTick <= OpConfig.HUD_LINGER_TICKS.get();
+        long now = mc.level.getGameTime();
+        if (glaring || glareLeft - (now - receivedAtTick) > 0) return true;
+        return now - lastActiveTick <= OpConfig.HUD_LINGER_TICKS.get();
     }
 
     @SubscribeEvent

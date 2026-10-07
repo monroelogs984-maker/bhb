@@ -109,8 +109,8 @@
   "block.bromax_battle.weaponsmith_bench": "Weaponsmith's Bench",
   "screen.bromax_battle.bench": "Weaponsmith's Bench",
   "screen.bromax_battle.bench.category": "Weapon type: %s",
-  "screen.bromax_battle.bench.two_handed": "Two-handed: no off-hand attacks while held",
-  "screen.bromax_battle.bench.one_handed": "One-handed: can dual wield (right-click with it in the off hand)",
+  "screen.bromax_battle.bench.two_handed": "Two-handed: +15% damage while the off hand is empty",
+  "screen.bromax_battle.bench.one_handed": "One-handed",
   "screen.bromax_battle.bench.attacks": "Attacks",
   "screen.bromax_battle.bench.attack": " %s  %s%% chance, speed x%s, damage x%s, hits after %s ticks",
   "screen.bromax_battle.bench.kind.default": "Default",
@@ -120,5 +120,6 @@
   "book.bromax_battle.guide.name": "Battle Manual",
   "book.bromax_battle.guide.landing": "A field guide to $(l)BROMAX's Haphazard Battle$(): how weapons swing, how to break an enemy's guard, and how to turn their pressure back on them.",
   "key.categories.bromax_battle": "BROMAX's Haphazard Battle",
-  "key.bromax_battle.guard": "Raise / lower guard"
+  "key.bromax_battle.guard": "Raise / lower guard",
+  "itemGroup.bromax_battle": "BROMAX's Haphazard Battle"
 }
