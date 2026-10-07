@@ -1,8 +1,8 @@
 {
   "duration": 18,
   "lunge": 0.28,
-  "grip": "down",
-  "grip_scale": 0.5,
+  "grip": "thrust",
+  "grip_scale": 1.0,
   "blend_mask": [
     "RIGHT_ARM",
     "LEFT_ARM",
@@ -37,7 +37,7 @@
       "tick": 9,
       "bone": "RIGHT_ARM",
       "easing": "EASE_OUT_CUBIC",
-      "rx": 25,
+      "rx": 50,
       "ry": -43,
       "rz": -18
     },
@@ -45,7 +45,7 @@
       "tick": 15,
       "bone": "RIGHT_ARM",
       "easing": "EASE_OUT_QUAD",
-      "rx": 18,
+      "rx": 38,
       "ry": -47,
       "rz": -20
     },
