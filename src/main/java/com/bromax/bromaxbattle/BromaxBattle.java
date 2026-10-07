@@ -31,6 +31,7 @@ public class BromaxBattle {
         CombatHandler handler = new CombatHandler();
         CombatHandler.INSTANCE = handler;
         NeoForge.EVENT_BUS.register(handler);
+        com.bromax.bromaxbattle.combat.DamageProbe.register();
     }
 
     private void commonSetup(FMLCommonSetupEvent event) {

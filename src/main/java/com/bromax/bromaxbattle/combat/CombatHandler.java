@@ -182,7 +182,7 @@ public class CombatHandler {
                         // Offhand attacks roll the same 15% crit as main hand
                         boolean offCrit = player.getRandom().nextFloat() < 0.15f;
                         float offBase   = calcOffhandBaseDamage(player, offStack);
-                        float offDamage = (offBase + getEnchantBonus(player, offStack, event.getTarget()))
+                        float offDamage = (offBase + getEnchantBonus(player, offStack, event.getTarget(), offBase))
                                           * offVariantMult * DUAL_WIELD_DMG_MULT
                                           * (offCrit ? 1.5f : 1.0f)
                                           + calcBaseWeaponDamage(offStack) * speedBonusPct(player);
@@ -303,11 +303,13 @@ public class CombatHandler {
 
         // Direct damage — bypasses vanilla attack strength scale entirely.
         // combinedMult already includes crit (baked in at click time).
-        float baseDmg      = (float) hit.attacker.getAttributeValue(Attributes.ATTACK_DAMAGE);
-        float enchantBonus = getEnchantBonus(hit.attacker, hit.attacker.getMainHandItem(), hit.primaryTarget);
-        float totalDmg     = (baseDmg + enchantBonus) * hit.combinedMult + hit.flatBonus;
-
         DamageSource dmgSrc = hit.attacker.damageSources().playerAttack(hit.attacker);
+        ItemStack held      = hit.attacker.getMainHandItem();
+        float baseDmg      = (float) hit.attacker.getAttributeValue(Attributes.ATTACK_DAMAGE);
+        float enchantBonus = getEnchantBonus(hit.attacker, held, hit.primaryTarget, baseDmg);
+        // Item-specific bonus vanilla adds in Player.attack (mace smash, some modded weapons)
+        float itemBonus    = held.getItem().getAttackDamageBonus(hit.primaryTarget, baseDmg, dmgSrc);
+        float totalDmg     = (baseDmg + itemBonus + enchantBonus) * hit.combinedMult + hit.flatBonus;
 
         // Knockback — base attribute + sprint bonus (mirrors vanilla)
         if (hit.primaryTarget instanceof LivingEntity le) {
@@ -319,6 +321,7 @@ public class CombatHandler {
             }
         }
 
+        clearOwnInvulnerability(hit.primaryTarget, hit.attacker);
         try {
             hit.primaryTarget.hurt(dmgSrc, totalDmg);
         } catch (Exception e) {
@@ -364,6 +367,7 @@ public class CombatHandler {
         if (hit.attacker.isDeadOrDying() || hit.target.isRemoved()) return;
 
         try {
+            clearOwnInvulnerability(hit.target, hit.attacker);
             hit.target.hurt(hit.attacker.damageSources().playerAttack(hit.attacker), hit.damage);
         } catch (Exception e) {
             BromaxBattle.LOGGER.warn("[BHB] Offhand hit failed: {}", e.getMessage());
@@ -543,15 +547,32 @@ public class CombatHandler {
         }
     }
 
+    /**
+     * Delayed hits land hit_delay ticks after the click, and the delay varies by variant, so two
+     * hits paced by the attack lock can still arrive under 10 ticks apart (heavy then light).
+     * Vanilla's hurt() then keeps only the damage above the previous hit, often nothing. The
+     * attack lock already rate-limits BHB, so drop the i-frames this player's own last hit left;
+     * damage from anyone else keeps its normal protection.
+     */
+    private static void clearOwnInvulnerability(Entity target, Player attacker) {
+        if (target instanceof LivingEntity le && le.getLastHurtByMob() == attacker) {
+            le.invulnerableTime = 0;
+        }
+    }
+
     private static long calcLockTicks(Player player) {
         try {
             AttributeInstance attr = player.getAttribute(Attributes.ATTACK_SPEED);
             if (attr == null) return 12L;
             double speed = attr.getValue();
             if (!Double.isFinite(speed) || speed <= 0) return 12L;
-            // ceil(20/speed) matches vanilla's cooldown period exactly so the
-            // attack strength scale is always 1.0 when we allow the next hit.
-            long ticks = (long) Math.ceil(20.0 / speed);
+            // Vanilla deals full damage once getAttackStrengthScale(0.5) reaches 1,
+            // i.e. after ceil(period - 0.5) ticks. Plain ceil(period) was a tick
+            // longer for non-integer periods (sword 1.6: 13 vs 12), costing ~8% DPS
+            // and refusing clicks made on a full cooldown bar.
+            // (epsilon: attribute sums like 4.0 - 2.4 land a hair under 1.6, which
+            // would otherwise push 12.0 up to 13)
+            long ticks = (long) Math.ceil(20.0 / speed - 0.5 - 1e-6);
             return Math.max(4L, Math.min(50L, ticks));
         } catch (Exception e) {
             return 12L;
@@ -599,9 +620,14 @@ public class CombatHandler {
      * replacement is modifyDamage, which adds all enchantment damage bonuses to a
      * base value. Passing 0 yields just the bonus.
      */
-    private static float getEnchantBonus(Player player, ItemStack stack, Entity target) {
+    /**
+     * Enchantment damage on top of {@code baseDamage}, computed like vanilla's getEnchantedDamage:
+     * effects run against the real base, so multiplying enchantments contribute (against a base
+     * of 0 they added nothing).
+     */
+    private static float getEnchantBonus(Player player, ItemStack stack, Entity target, float baseDamage) {
         if (!(player.level() instanceof ServerLevel serverLevel)) return 0f;
         return EnchantmentHelper.modifyDamage(serverLevel, stack, target,
-                player.damageSources().playerAttack(player), 0f);
+                player.damageSources().playerAttack(player), baseDamage) - baseDamage;
     }
 }

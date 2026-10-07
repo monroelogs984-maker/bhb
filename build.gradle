@@ -19,7 +19,21 @@ runs {
         systemProperty 'neoforge.logging.console.level', 'debug'
         modSource project.sourceSets.main
     }
-    client {}
+    client {
+        // Unattended animation preview: ./gradlew runClient -PbhbPreview=all (or a name filter)
+        if (project.hasProperty('bhbPreview')) {
+            systemProperty 'bhb.preview', project.property('bhbPreview')
+        }
+        // Dev damage harness: -PbhbDmgTest="60 minecraft:iron_sword" (registers /bhbdmgtest, runs it, quits)
+        if (project.hasProperty('bhbDmgTest')) {
+            systemProperty 'bhb.debug', 'true'
+            systemProperty 'bhb.dmgtest', project.property('bhbDmgTest')
+        }
+        // Grip comparison sheets instead of timelines: add -PbhbGrips
+        if (project.hasProperty('bhbGrips')) {
+            systemProperty 'bhb.preview.grips', 'true'
+        }
+    }
     server {}
 }
 
@@ -46,7 +60,7 @@ tasks.register('deploy', Copy) {
         include "bromax_battle-*.jar"
         exclude "*-sources.jar"
     }
-    into '/home/glenn/Documents/curseforge/minecraft/Instances/S202 Neoforge/mods'
+    into '/home/glenn/Documents/curseforge/minecraft/Instances/S202Neoforge/mods'
 }
 
 tasks.register('deployTest', Copy) {

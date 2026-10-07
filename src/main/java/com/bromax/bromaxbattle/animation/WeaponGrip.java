@@ -21,6 +21,8 @@ import org.joml.Vector3f;
  *  slash   — blade laid horizontal in-plane, then rolled flat around its shaft
  *  down    — blade rotated in-plane to point downward (chop enders)
  *  up      — blade rotated in-plane to point straight up (rising strike enders)
+ *  thrust  — blade along the forearm, out of the fist, for strikes with the arm raised
+ *            forward (forward/stab assume the hanging vanilla arm and point back here)
  */
 public enum WeaponGrip {
     VANILLA(null),
@@ -28,7 +30,8 @@ public enum WeaponGrip {
     STAB(axis(90, Z()).mul(axis(90, EDGE()))),
     SLASH(axis(90, X()).mul(axis(-45, NORMAL()))),
     DOWN(axis(135, NORMAL())),
-    UP(axis(-45, NORMAL()));
+    UP(axis(-45, NORMAL())),
+    THRUST(axis(-90, EDGE()));
 
     /** Target rotation, or null for identity. */
     public final Quaternionf rotation;

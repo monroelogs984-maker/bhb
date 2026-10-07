@@ -46,6 +46,21 @@ public class AnimationDefinition {
         }
     }
 
+    /** Keyframes for one bone, in tick order (empty when the bone isn't animated). */
+    public List<Keyframe> keyframes(BoneTarget bone) {
+        List<Keyframe> frames = keyframesByBone.get(bone);
+        return frames == null ? List.of() : Collections.unmodifiableList(frames);
+    }
+
+    /** Keyframe ticks for one bone, in order (empty when the bone isn't animated). */
+    public List<Integer> keyframeTicks(BoneTarget bone) {
+        List<Keyframe> frames = keyframesByBone.get(bone);
+        if (frames == null) return List.of();
+        List<Integer> out = new ArrayList<>();
+        for (Keyframe kf : frames) out.add(kf.tick);
+        return out;
+    }
+
     public boolean isHitWindowActive(float tick) {
         return tick >= hitWindowStart && tick <= hitWindowEnd;
     }

@@ -74,6 +74,28 @@ public class AnimationController {
         states.put(playerId, new AnimationState(animation, speedMultiplier, snapshot));
     }
 
+    /**
+     * Holds {@code animation} at exactly {@code tick} for this entity until replaced or cleared.
+     * Used by the preview tool to render poses at chosen points in time.
+     */
+    public void pose(UUID playerId, AnimationDefinition animation, float tick) {
+        pose(playerId, animation, tick, null);
+    }
+
+    /** As {@link #pose(UUID, AnimationDefinition, float)}, rendering with {@code grip} instead of the animation's own. */
+    public void pose(UUID playerId, AnimationDefinition animation, float tick, WeaponGrip grip) {
+        if (playerId == null || animation == null) return;
+        AnimationState state = new AnimationState(animation, 1.0f, null);
+        state.frozen = true;
+        state.gripOverride = grip;
+        state.tickF = Math.max(0f, tick);
+        state.refreshCache();
+        state.refreshCache(); // second pass makes prev == current, so no interpolation
+        states.put(playerId, state);
+        cachedPartialTick.put(playerId, 1.0f);
+        lastInterpNanos.put(playerId, System.nanoTime());
+    }
+
     public void playOffhand(UUID playerId, AnimationDefinition animation, float speedMultiplier) {
         if (playerId == null || animation == null) return;
         if (!Float.isFinite(speedMultiplier) || speedMultiplier < 0.1f) speedMultiplier = 0.1f;
@@ -189,7 +211,7 @@ public class AnimationController {
     public org.joml.Quaternionf getGripRotation(UUID playerId, boolean mainhand) {
         AnimationState state = mainhand ? states.get(playerId) : offhandStates.get(playerId);
         if (state == null) return null;
-        WeaponGrip grip = state.animation.grip;
+        WeaponGrip grip = state.gripOverride != null ? state.gripOverride : state.animation.grip;
         if (grip.rotation == null) return null;
 
         // Interpolate the ramp between ticks so the turn runs at the same 40Hz
@@ -222,6 +244,7 @@ public class AnimationController {
     private static void tickMap(Map<UUID, AnimationState> map) {
         map.entrySet().removeIf(entry -> {
             AnimationState state = entry.getValue();
+            if (state.frozen) return false;
             try {
                 state.tickF += state.speedMultiplier;
                 if (state.isComplete()) return true;
@@ -258,10 +281,16 @@ public class AnimationController {
 
         if (!Float.isFinite(partialTick)) partialTick = 1.0f;
         else partialTick = Math.max(0f, Math.min(1f, partialTick));
+        if (mainhand != null && mainhand.frozen) {
+            cachedPartialTick.put(playerId, 1.0f);
+            partialTick = 1.0f;
+        }
 
         long now    = System.nanoTime();
         Long lastNs = lastInterpNanos.get(playerId);
-        if (lastNs == null || (now - lastNs) >= INTERP_INTERVAL_NS) {
+        if (mainhand != null && mainhand.frozen) {
+            // keep the frozen partial tick
+        } else if (lastNs == null || (now - lastNs) >= INTERP_INTERVAL_NS) {
             lastInterpNanos.put(playerId, now);
             cachedPartialTick.put(playerId, partialTick);
         } else {

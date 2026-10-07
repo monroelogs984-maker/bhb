@@ -28,6 +28,7 @@ public class ClientSetup {
     public static void register(IEventBus modBus) {
         modBus.addListener(ClientSetup::onClientSetup);
         NeoForge.EVENT_BUS.register(new ClientSetup());
+        com.bromax.bromaxbattle.client.preview.AnimationPreview.register();
     }
 
     private static void onClientSetup(FMLClientSetupEvent event) {
