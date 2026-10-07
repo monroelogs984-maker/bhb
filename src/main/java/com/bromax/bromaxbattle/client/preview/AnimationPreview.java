@@ -65,7 +65,9 @@ public final class AnimationPreview {
         String f = filter == null ? "" : filter.toLowerCase(Locale.ROOT);
         boolean all = f.isEmpty() || f.equals("all");
         List<ResourceLocation> out = new ArrayList<>();
-        for (ResourceLocation id : WeaponRegistry.INSTANCE.getAllAnimationIds()) {
+        java.util.Set<ResourceLocation> ids = new java.util.HashSet<>(WeaponRegistry.INSTANCE.getAllAnimationIds());
+        ids.addAll(AnimationRegistry.EXTRA_IDS);
+        for (ResourceLocation id : ids) {
             if (AnimationRegistry.INSTANCE.get(id) == null) continue;
             if (all) { out.add(id); continue; }
             for (String part : f.split(",")) {

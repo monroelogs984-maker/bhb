@@ -3,6 +3,7 @@ package com.bromax.bromaxbattle.overpower.debug;
 import com.bromax.bromaxbattle.BromaxBattle;
 import com.bromax.bromaxbattle.overpower.combat.OverpowerData;
 import com.bromax.bromaxbattle.overpower.combat.OverpowerManager;
+import com.bromax.bromaxbattle.combat.GuardHandler;
 import com.bromax.bromaxbattle.overpower.dualwield.DualWield;
 import com.bromax.bromaxbattle.overpower.registry.OpRegistries;
 import net.minecraft.commands.Commands;
@@ -48,7 +49,10 @@ public final class OpTest {
         event.getDispatcher().register(Commands.literal("optest").executes(ctx -> {
             start(ctx.getSource().getPlayerOrException());
             return 1;
-        }));
+        }).then(Commands.literal("hit").executes(ctx -> {
+            frontHit();
+            return 1;
+        })));
     }
 
     private static void start(ServerPlayer p) {
@@ -107,7 +111,7 @@ public final class OpTest {
         long now = player.level().getGameTime();
 
         // A) up to 40 ticks of clicking; BHB's lock lets one through every ~12 ticks
-        if (step < 120) {
+        if (step < 180) {
             float before = zd.pressure;
             player.attack(zombie);
             step++;
@@ -165,15 +169,86 @@ public final class OpTest {
             zombie.invulnerableTime = 0;
             log("C pre: canDualWield=%s, canReach=%s, dist=%.2f, offhand=%s", DualWield.canDualWield(player),
                     player.canInteractWithEntity(zombie, 1.0), player.distanceTo(zombie), player.getOffhandItem());
-            DualWield.handle(player, zombie.getId());
+            DualWield.handle(player, zombie.getId(), 0);
             log("C off-hand: zombie health %.1f -> %.1f (off-hand lock %d ticks)", hp, zombie.getHealth(),
                     DualWield.lockTicks(player.getOffhandItem()));
-            player.swing(InteractionHand.MAIN_HAND);
-            zombie.discard();
-            zombie = null;
-            player = null;
-            log("done");
+            step = 500;
+            wait = 20;
+            return;
         }
+        // D) guard: block one frontal hit, cooldown, hits from behind land, attacking lowers it
+        if (step == 500) {
+            place();
+            pd.pressure = 0f;
+            GuardHandler.toggle(player);
+            log("D raise: guarding=%s", GuardHandler.isGuarding(player));
+            step = 501;
+            wait = 6;
+            return;
+        }
+        if (step == 501) {
+            player.setHealth(player.getMaxHealth());
+            player.invulnerableTime = 0;
+            float hp = player.getHealth();
+            zombie.doHurtTarget(player);
+            log("D front hit: player health %.1f -> %.1f, guarding=%s, player pressure %.1f (blocked = half)",
+                    hp, player.getHealth(), GuardHandler.isGuarding(player), pd.pressure);
+            GuardHandler.toggle(player);
+            log("D raise during cooldown: guarding=%s (expect false)", GuardHandler.isGuarding(player));
+            step = 502;
+            wait = 32;
+            return;
+        }
+        if (step == 502) {
+            GuardHandler.toggle(player);
+            log("D raise after cooldown: guarding=%s", GuardHandler.isGuarding(player));
+            double yaw = Math.toRadians(player.getYRot());
+            zombie.moveTo(player.getX() + Math.sin(yaw) * 2, player.getY(), player.getZ() - Math.cos(yaw) * 2, 0, 0);
+            player.setHealth(player.getMaxHealth());
+            player.invulnerableTime = 0;
+            float hp = player.getHealth();
+            zombie.doHurtTarget(player);
+            log("D hit from behind: player health %.1f -> %.1f, guarding=%s (expect still up)",
+                    hp, player.getHealth(), GuardHandler.isGuarding(player));
+            step = 503;
+            wait = 4;
+            return;
+        }
+        if (step == 503) {
+            place();
+            zombie.invulnerableTime = 0;
+            player.attack(zombie);
+            log("D attack while guarding: guarding=%s (expect false)", GuardHandler.isGuarding(player));
+            place();
+            player.setHealth(player.getMaxHealth());
+            step = 999;
+            log("server phase done");
+        }
+    }
+
+    /** True once the scripted server phases finish; the client phase (OpTestRunner) then drives the zombie. */
+    public static boolean serverPhaseDone() {
+        return step == 999 && zombie != null;
+    }
+
+    /** {@code /optest hit}: the test zombie hits the player once from the front. */
+    private static void frontHit() {
+        if (player == null || zombie == null) return;
+        place();
+        player.setHealth(player.getMaxHealth());
+        player.invulnerableTime = 0;
+        boolean before = GuardHandler.isGuarding(player);
+        float hp = player.getHealth();
+        zombie.doHurtTarget(player);
+        log("E front hit: guarding %s -> %s, player health %.1f -> %.1f", before, GuardHandler.isGuarding(player),
+                hp, player.getHealth());
+    }
+
+    /** Server side of every BHB hit in the client phase: which variant the damage used. */
+    @SubscribeEvent
+    public void onBhbHit(com.bromax.bromaxbattle.api.BhbHitEvent event) {
+        if (step != 999 || event.getAttacker() != player) return;
+        log("E server variant: %s", event.getAttack() == null ? "-" : event.getAttack().animation);
     }
 
     private static void log(String fmt, Object... args) {

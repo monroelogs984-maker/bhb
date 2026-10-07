@@ -21,24 +21,35 @@ public class VariantIndicator {
     public enum Kind { DEFAULT, HEAVY, LIGHT }
 
     private static Kind current = Kind.DEFAULT;
+    private static Kind offhand = Kind.DEFAULT;
 
     public static void update(AttackDefinition variant) {
-        if (variant == null) {
-            current = Kind.DEFAULT;
-            return;
-        }
-        if (variant.speedMultiplier < 0.99f) {
-            current = Kind.HEAVY;
-        } else if (variant.speedMultiplier > 1.01f) {
-            current = Kind.LIGHT;
-        } else {
-            current = Kind.DEFAULT;
-        }
+        current = kindOf(variant);
+    }
+
+    /** The off-hand attack's variant, for the second cooldown bar. */
+    public static void updateOffhand(AttackDefinition variant) {
+        offhand = kindOf(variant);
+    }
+
+    public static Kind kindOf(AttackDefinition variant) {
+        if (variant == null) return Kind.DEFAULT;
+        if (variant.speedMultiplier < 0.99f) return Kind.HEAVY;
+        if (variant.speedMultiplier > 1.01f) return Kind.LIGHT;
+        return Kind.DEFAULT;
     }
 
     /** Returns an ARGB color for the current variant. */
     public static int getColor() {
-        return switch (current) {
+        return colorOf(current);
+    }
+
+    public static int getOffhandColor() {
+        return colorOf(offhand);
+    }
+
+    private static int colorOf(Kind kind) {
+        return switch (kind) {
             case HEAVY   -> 0xFFFF4444;
             case LIGHT   -> 0xFF44AAFF;
             default      -> 0xFFFFFFFF;

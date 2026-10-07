@@ -53,8 +53,6 @@ public class CombatHandler {
     private static final float TWO_HANDED_FOCUS_MULT = 1.15f;
 
     // Blocking
-    private static final float BLOCK_DAMAGE_MULT    = 0.25f; // 75% reduction
-    private static final int   BLOCK_COOLDOWN_TICKS = 60;    // 3 seconds
 
     // Speed damage bonus — thresholds in blocks/tick, smoothed by SpeedTracker.
     // Vanilla reference: sprint = 0.281 b/t, sprint-jump ≈ 0.356 b/t.
@@ -123,6 +121,18 @@ public class CombatHandler {
     // A client AttackEntityEvent handler used to trigger it as well, so every attack flipped the
     // dual-wield turn twice and the client never alternated hands.
 
+    /** Variant the client chose for its next attack (sent just before the attack packet). */
+    private final Map<UUID, Integer> chosenVariant = new ConcurrentHashMap<>();
+    private final java.util.Random clientRandom = new java.util.Random();
+
+    public void setChosenVariant(UUID playerId, int idx) {
+        chosenVariant.put(playerId, idx);
+    }
+
+    public void clearChosenVariant(UUID playerId) {
+        chosenVariant.remove(playerId);
+    }
+
     @SubscribeEvent(priority = EventPriority.HIGH)
     public void onAttackEntityServer(AttackEntityEvent event) {
         Player player = event.getEntity();
@@ -132,6 +142,7 @@ public class CombatHandler {
 
         UUID pid = player.getUUID();
         if (pendingHitRefiring.contains(pid)) return;
+        Integer chosen = chosenVariant.remove(pid);
 
         long now    = player.level().getGameTime();
         Long readyAt = attackReadyAtTick.get(pid);
@@ -140,8 +151,8 @@ public class CombatHandler {
             return;
         }
 
-        // Attacking cancels any active block
-        if (player.isUsingItem()) player.stopUsingItem();
+        // Attacking lowers the guard
+        if (player instanceof net.minecraft.server.level.ServerPlayer sp) GuardHandler.lower(sp, 0);
 
         try {
             long lockTicks = calcLockTicks(player);
@@ -204,7 +215,8 @@ public class CombatHandler {
             int   hitDelay          = 0;
             AttackDefinition variant = null;
             if (attrs != null && !attrs.attacks.isEmpty()) {
-                idx = ComboTracker.INSTANCE.pickAttack(pid, attrs, player.tickCount);
+                idx = chosen != null && chosen >= 0 && chosen < attrs.attacks.size()
+                        ? chosen : ComboTracker.INSTANCE.pickAttack(pid, attrs, player.tickCount);
                 variant = attrs.attacks.get(idx);
                 variantDamageMult = variant.damageMultiplier;
                 hitDelay          = variant.hitDelay;
@@ -422,17 +434,6 @@ public class CombatHandler {
         if (event.getSource() == null) return;
         if (!(event.getSource().getEntity() instanceof LivingEntity)) return;
         lastCombatHitTick.put(player.getUUID(), player.level().getGameTime());
-
-        // BHB blocking: player holds RMB on a BHB weapon
-        if (player.isBlocking()) {
-            ItemStack held = player.getMainHandItem();
-            if (WeaponRegistry.INSTANCE.getAttributes(held) != null) {
-                event.setAmount(event.getAmount() * BLOCK_DAMAGE_MULT);
-                // Item cooldown (synced to client, prevents immediate re-block)
-                player.getCooldowns().addCooldown(held.getItem(), BLOCK_COOLDOWN_TICKS);
-                player.stopUsingItem();
-            }
-        }
     }
 
     @SubscribeEvent
@@ -458,8 +459,7 @@ public class CombatHandler {
         pendingOffhandHits.remove(id);
         clientOffhandTurn.remove(id);
         serverOffhandTurn.remove(id);
-        // Release any active block so the item use state doesn't linger
-        if (player.isUsingItem()) player.stopUsingItem();
+        chosenVariant.remove(id);
     }
 
     @SubscribeEvent
@@ -476,20 +476,24 @@ public class CombatHandler {
         if (isDualWielding(player)) {
             clientOffhandTurn.put(pid, !clientOffhandTurn.getOrDefault(pid, false));
         }
-        triggerAnimation(player, true);
+        int idx = triggerAnimation(player, true);
+        // The server applies this variant's damage, so the hit always matches the swing shown
+        if (idx >= 0) net.neoforged.neoforge.network.PacketDistributor.sendToServer(
+                new com.bromax.bromaxbattle.overpower.network.OpNetwork.AttackVariant(idx));
     }
 
-    private void triggerAnimation(Player player, boolean dualWieldTurn) {
+    /** Picks this swing's variant and plays it; returns the variant index, or -1 for no BHB weapon. */
+    private int triggerAnimation(Player player, boolean dualWieldTurn) {
+        int idx = -1;
         try {
             UUID pid = player.getUUID();
             ItemStack held = player.getMainHandItem();
             WeaponAttributes attrs = WeaponRegistry.INSTANCE.getAttributes(held);
-            if (attrs == null || attrs.attacks.isEmpty()) return;
+            if (attrs == null || attrs.attacks.isEmpty()) return -1;
 
-            int idx = ComboTracker.INSTANCE.pickAttack(pid, attrs, player.tickCount);
-            if (idx < 0 || idx >= attrs.attacks.size()) return;
+            idx = ComboTracker.INSTANCE.pickAttackRandom(attrs, clientRandom);
             AttackDefinition attack = attrs.attacks.get(idx);
-            if (attack == null || attack.animation == null) return;
+            if (attack == null || attack.animation == null) return idx;
 
             // Tell the cooldown-bar indicator what variant just fired
             com.bromax.bromaxbattle.client.VariantIndicator.update(attack);
@@ -497,7 +501,7 @@ public class CombatHandler {
             AnimationDefinition anim = AnimationRegistry.INSTANCE.get(attack.animation);
             if (anim == null) {
                 BromaxBattle.LOGGER.warn("[BHB] Animation not found: {}", attack.animation);
-                return;
+                return idx;
             }
 
             float speed = liveSpeedMultiplier(player) * attack.speedMultiplier;
@@ -514,6 +518,7 @@ public class CombatHandler {
         } catch (Exception e) {
             BromaxBattle.LOGGER.warn("[BHB] triggerAnimation failed: {}", e.getMessage());
         }
+        return idx;
     }
 
     // -------------------------------------------------------------------------

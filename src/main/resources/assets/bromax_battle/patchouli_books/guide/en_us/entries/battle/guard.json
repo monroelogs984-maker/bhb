@@ -1,0 +1,16 @@
+{
+  "name": "Guarding",
+  "icon": "minecraft:shield",
+  "category": "bromax_battle:battle",
+  "sortnum": 4,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Press $(k:key.bromax_battle.guard) to raise your weapon into a $(l)guard$(), and again to lower it. Brackets around the crosshair show it's up.$(br2)A guard stops one hit from the front completely, like a shield. Then it drops, and the brackets turn $(4)red$() while it recovers for a moment before it can be raised again."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Hits from behind or the sides get through, and attacking with either hand lowers the guard.$(br2)A blocked blow still pushes your $(l:bromax_battle:overpower/the_bar)pressure bar$(), by half as much as a hit would. Guarding buys time; it doesn't win a fight on its own."
+    }
+  ]
+}

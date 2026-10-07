@@ -28,6 +28,11 @@ runs {
         if (project.hasProperty('opTest')) {
             systemProperty 'bhb.optest', 'true'
         }
+        // First-person guard placement candidates: -PguardFpTune (screenshots optest_guardfp_*.png)
+        if (project.hasProperty('guardFpTune')) {
+            systemProperty 'bhb.optest', 'true'
+            systemProperty 'bhb.guardfp.tune', 'true'
+        }
         // Dev damage harness: -PbhbDmgTest="60 minecraft:iron_sword" (registers /bhbdmgtest, runs it, quits)
         if (project.hasProperty('bhbDmgTest')) {
             systemProperty 'bhb.debug', 'true'

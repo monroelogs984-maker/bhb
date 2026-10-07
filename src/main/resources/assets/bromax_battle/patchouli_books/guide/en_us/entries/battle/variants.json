@@ -10,7 +10,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "How common the rare swings are, and how far they stray from the default, depends on the weapon type.$(br2)The attack-cooldown bar is tinted $(4)red$() after a heavy swing and $(9)blue$() after a light one, so you can always read what just happened.$(br2)Heavy swings build much more Overpower pressure; light swings build less."
+      "text": "How common the rare swings are, and how far they stray from the default, depends on the weapon type.$(br2)The cooldown bar under the crosshair is tinted $(4)red$() after a heavy swing and $(9)blue$() after a light one, so you can always read what just happened.$(br2)Heavy swings build much more Overpower pressure; light swings build less."
     }
   ]
 }

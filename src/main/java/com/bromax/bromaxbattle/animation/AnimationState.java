@@ -17,6 +17,8 @@ public class AnimationState {
     public boolean lungeImpulseFired = false;
     /** Held at a fixed tick by the animation preview tool; never advanced or expired. */
     public boolean frozen            = false;
+    /** Freeze on the last keyframe instead of finishing (held poses such as the guard). */
+    public boolean holdAtEnd         = false;
     /** Preview-only: replaces the animation's grip when set. */
     public WeaponGrip gripOverride   = null;
 

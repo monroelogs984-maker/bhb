@@ -24,6 +24,7 @@ public final class OpConfig {
     public static final ModConfigSpec.IntValue    DECAY_DELAY_TICKS;
     public static final ModConfigSpec.DoubleValue MOB_DECAY_PER_TICK;
     public static final ModConfigSpec.DoubleValue PLAYER_DECAY_PER_TICK;
+    public static final ModConfigSpec.DoubleValue STEADY_DRAIN_PER_SECOND;
     // Overpowered
     public static final ModConfigSpec.IntValue    OVERPOWERED_TICKS;
     public static final ModConfigSpec.IntValue    BOSS_STAGGER_TICKS;
@@ -38,6 +39,8 @@ public final class OpConfig {
     public static final ModConfigSpec.DoubleValue GLARE_FLIP_PRESSURE;
     // Dual wield
     public static final ModConfigSpec.DoubleValue OFFHAND_DAMAGE;
+    public static final ModConfigSpec.IntValue    GUARD_COOLDOWN_TICKS;
+    public static final ModConfigSpec.DoubleValue GUARD_BLOCKED_PRESSURE;
     // HUD
     public static final ModConfigSpec.IntValue    HUD_LINGER_TICKS;
 
@@ -65,6 +68,8 @@ public final class OpConfig {
         DECAY_DELAY_TICKS = b.comment("Ticks without pressure before the bar starts draining.").defineInRange("delayTicks", 40, 0, 600);
         MOB_DECAY_PER_TICK = b.defineInRange("mobPerTick", 0.6, 0.0, 100.0);
         PLAYER_DECAY_PER_TICK = b.comment("Players drain fast so swarms can't chain-lock them.").defineInRange("playerPerTick", 1.2, 0.0, 100.0);
+        STEADY_DRAIN_PER_SECOND = b.comment("Every bar also loses this much per second at all times, even mid-fight, so an advantage fades unless it's kept up.")
+                .defineInRange("steadyPerSecond", 2.0, 0.0, 100.0);
         b.pop();
 
         b.push("overpowered");
@@ -87,6 +92,13 @@ public final class OpConfig {
 
         b.comment("Dual wielding: right-click attacks with a BHB weapon in the off hand.").push("dualWield");
         OFFHAND_DAMAGE = b.comment("Off-hand hits deal the off-hand weapon's damage times this.").defineInRange("offhandDamage", 0.85, 0.0, 2.0);
+        b.pop();
+
+        b.comment("Guard: the guard key (Tab by default) raises a weapon to block one frontal hit.").push("guard");
+        GUARD_COOLDOWN_TICKS = b.comment("After blocking a hit the guard drops and can't be raised again for this long.")
+                .defineInRange("cooldownTicks", 30, 0, 600);
+        GUARD_BLOCKED_PRESSURE = b.comment("A blocked hit still adds this fraction of its normal Overpower pressure to the blocker.")
+                .defineInRange("blockedPressure", 0.5, 0.0, 1.0);
         b.pop();
 
         b.push("hud");

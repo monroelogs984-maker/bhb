@@ -28,6 +28,7 @@ public class ClientSetup {
     public static void register(IEventBus modBus) {
         modBus.addListener(ClientSetup::onClientSetup);
         NeoForge.EVENT_BUS.register(new ClientSetup());
+        GuardClient.register(modBus);
         com.bromax.bromaxbattle.client.preview.AnimationPreview.register();
     }
 
@@ -39,12 +40,10 @@ public class ClientSetup {
     }
 
     /**
-     * Draws a 16×2-pixel colored bar just below the crosshair to indicate the
-     * next attack's variant type:  red = heavy,  blue = light,  white = default.
-     *
-     * The bar fills left-to-right as the attack cooldown recovers, matching the
-     * vanilla cooldown rhythm. Only shows when holding a BHB weapon and the
-     * cooldown is actively recovering (0 < scale < 1).
+     * Draws 16×2-pixel colored bars just below the crosshair for the next attack's variant type:
+     * red = heavy, blue = light, white = default. Each fills left-to-right as its cooldown
+     * recovers and only shows while recovering. The main-hand bar sits 9px below the crosshair
+     * center; the off-hand bar sits under it. Guard marks bracket the crosshair.
      */
     @SubscribeEvent
     public void onRenderGuiLayerPost(RenderGuiLayerEvent.Post event) {
@@ -54,28 +53,25 @@ public class ClientSetup {
         LocalPlayer player = mc.player;
         if (player == null || mc.options.hideGui) return;
 
-        WeaponAttributes attrs = WeaponRegistry.INSTANCE.getAttributes(player.getMainHandItem());
-        if (attrs == null) return;
-
-        float strength = player.getAttackStrengthScale(0.0f);
-        if (strength <= 0f || strength >= 1.0f) return;
-
-        int sw = mc.getWindow().getGuiScaledWidth();
-        int sh = mc.getWindow().getGuiScaledHeight();
-        int cx = sw / 2;
-        int cy = sh / 2;
-
-        // Position: 8px below the crosshair center
-        int barY = cy + 9;
-        int barX = cx - 8;
-        int fill  = (int) (strength * 16f);
-        int color = VariantIndicator.getColor();
-        // Darken color for background
-        int bg    = (color & 0xFF000000) | ((color & 0xFEFEFE) >> 1);
-
+        int cx = mc.getWindow().getGuiScaledWidth() / 2;
+        int cy = mc.getWindow().getGuiScaledHeight() / 2;
         GuiGraphics g = event.getGuiGraphics();
-        g.fill(barX,          barY, barX + 16,   barY + 2, 0x88000000);
-        g.fill(barX,          barY, barX + fill,  barY + 2, color);
+        float partial = event.getPartialTick().getGameTimeDeltaPartialTick(false);
+
+        if (WeaponRegistry.INSTANCE.getAttributes(player.getMainHandItem()) != null) {
+            float strength = player.getAttackStrengthScale(0.0f);
+            if (strength > 0f && strength < 1.0f) drawBar(g, cx - 8, cy + 9, strength, VariantIndicator.getColor());
+        }
+        float off = com.bromax.bromaxbattle.overpower.client.DualWieldClient.cooldownProgress(partial);
+        if (off > 0f && off < 1.0f) drawBar(g, cx - 8, cy + 14, off, VariantIndicator.getOffhandColor());
+
+        GuardClient.renderMarks(g, cx, cy, partial);
+    }
+
+    private static void drawBar(GuiGraphics g, int barX, int barY, float progress, int color) {
+        int fill = (int) (progress * 16f);
+        g.fill(barX, barY, barX + 16,   barY + 2, 0x88000000);
+        g.fill(barX, barY, barX + fill, barY + 2, color);
         // Bright leading-edge pixel
         if (fill > 0 && fill < 16) {
             g.fill(barX + fill - 1, barY, barX + fill, barY + 2, 0xFFFFFFFF);

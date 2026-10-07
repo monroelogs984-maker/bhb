@@ -17,8 +17,17 @@ public class AnimationRegistry {
 
     private final Map<ResourceLocation, AnimationDefinition> registry = new HashMap<>();
 
-    public void load(Set<ResourceLocation> ids) {
+    /** Animations no weapon file references: the guard poses. Loaded alongside the weapons' own. */
+    public static final ResourceLocation GUARD_ONE_HANDED =
+            ResourceLocation.fromNamespaceAndPath(BromaxBattle.MOD_ID, "guard_one_handed");
+    public static final ResourceLocation GUARD_TWO_HANDED =
+            ResourceLocation.fromNamespaceAndPath(BromaxBattle.MOD_ID, "guard_two_handed");
+    public static final java.util.List<ResourceLocation> EXTRA_IDS = java.util.List.of(GUARD_ONE_HANDED, GUARD_TWO_HANDED);
+
+    public void load(Set<ResourceLocation> weaponIds) {
         registry.clear();
+        Set<ResourceLocation> ids = new java.util.HashSet<>(weaponIds);
+        ids.addAll(EXTRA_IDS);
         for (ResourceLocation id : ids) {
             // Strip namespace prefix from path component — IDs are stored as "bromax_battle:shortsword_default"
             // but the file lives at assets/bromax_battle/animations/shortsword_default.json

@@ -2,6 +2,7 @@ package com.bromax.bromaxbattle.animation;
 
 import com.bromax.bromaxbattle.BromaxBattle;
 import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.util.Mth;
@@ -97,6 +98,26 @@ public class AnimationController {
         lastInterpNanos.put(playerId, System.nanoTime());
     }
 
+    /** Plays {@code animation} and then holds its last frame until {@link #release} or another play. */
+    public void hold(UUID playerId, AnimationDefinition animation) {
+        play(playerId, animation, 1.0f);
+        AnimationState s = states.get(playerId);
+        if (s != null) s.holdAtEnd = true;
+    }
+
+    /** Ends a held pose started with {@link #hold}, blending back to neutral. */
+    public void release(UUID playerId, AnimationDefinition animation) {
+        AnimationState s = states.get(playerId);
+        if (s == null || !s.holdAtEnd || s.animation != animation) return;
+        s.holdAtEnd = false;
+        s.frozen = false;
+    }
+
+    public boolean isHolding(UUID playerId, AnimationDefinition animation) {
+        AnimationState s = states.get(playerId);
+        return s != null && s.holdAtEnd && s.animation == animation;
+    }
+
     public void playOffhand(UUID playerId, AnimationDefinition animation, float speedMultiplier) {
         if (playerId == null || animation == null) return;
         if (!Float.isFinite(speedMultiplier) || speedMultiplier < 0.1f) speedMultiplier = 0.1f;
@@ -117,6 +138,12 @@ public class AnimationController {
     public boolean isPlaying(UUID playerId) {
         AnimationState s = states.get(playerId);
         return s != null && !s.isMainBodyComplete();
+    }
+
+    /** Id of the animation currently playing in the main or off-hand slot (null if none). */
+    public ResourceLocation currentAnimation(UUID playerId, boolean offhand) {
+        AnimationState s = (offhand ? offhandStates : states).get(playerId);
+        return s == null ? null : s.animation.id;
     }
 
     public boolean isOffhandPlaying(UUID playerId) {
@@ -248,6 +275,13 @@ public class AnimationController {
             if (state.frozen) return false;
             try {
                 state.tickF += state.speedMultiplier;
+                if (state.holdAtEnd && state.tickF >= state.animation.duration) {
+                    state.tickF = state.animation.duration;
+                    state.refreshCache();
+                    state.refreshCache(); // prev == current: no interpolation while held
+                    state.frozen = true;
+                    return false;
+                }
                 if (state.isComplete()) return true;
                 if (state.tickF > state.animation.duration * 4f) return true;
                 state.refreshCache();

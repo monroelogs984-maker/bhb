@@ -111,6 +111,22 @@ public class OverpowerManager {
         OpNetwork.syncHud(player);
     }
 
+    /** A guard stopped this hit: the blow still pushes the player's bar, by a fraction of a normal hit. */
+    public static void onBlockedHit(ServerPlayer player, Entity attacker) {
+        if (!(attacker instanceof LivingEntity src)) return;
+        float amount;
+        float cap = Float.MAX_VALUE;
+        if (src instanceof Player) {
+            amount = OpConfig.f(OpConfig.PLAYER_HIT_PRESSURE) * power(src);
+        } else {
+            amount = OpConfig.f(OpConfig.MOB_HIT_PRESSURE) * mobClassMult(src) * power(src);
+            if (!isEliteOrBoss(src)) cap = OpConfig.f(OpConfig.ORDINARY_MOB_CAP);
+        }
+        addPressure(player, amount * OpConfig.f(OpConfig.GUARD_BLOCKED_PRESSURE), src, cap);
+        data(player).hudTargetId = src.getId();
+        OpNetwork.syncHud(player);
+    }
+
     // -------------------------------------------------------------------------
     // Glare Strike
     // -------------------------------------------------------------------------
@@ -123,7 +139,11 @@ public class OverpowerManager {
         long now = player.level().getGameTime();
         Entity target = event.getTarget();
         if (!(target instanceof LivingEntity living)) return;
-        if (tryGlare(player, living, now)) event.setCanceled(true);
+        if (tryGlare(player, living, now)) {
+            event.setCanceled(true);
+            // BHB's attack handler never sees this click, so drop the variant the client sent for it
+            com.bromax.bromaxbattle.combat.CombatHandler.INSTANCE.clearChosenVariant(player.getUUID());
+        }
     }
 
     /** Starts a Glare Strike if this player's window is open against this target. */
@@ -138,6 +158,7 @@ public class OverpowerManager {
     private static void startGlare(ServerPlayer player, LivingEntity target, long now) {
         OverpowerData d = data(player);
         int pose = OpConfig.GLARE_POSE_TICKS.get();
+        com.bromax.bromaxbattle.combat.GuardHandler.lower(player, 0);
         target.addEffect(new MobEffectInstance(OpRegistries.STAGGERED, OpConfig.GLARE_STAGGER_TICKS.get(), 0, false, false, false));
         if (target instanceof Mob mob) mob.getNavigation().stop();
         player.addEffect(new MobEffectInstance(OpRegistries.GLARING, pose + 4, 0, false, false, false));
@@ -186,6 +207,10 @@ public class OverpowerManager {
                 d.glareTargetId = -1;
                 OpNetwork.syncHud(player);
             }
+        }
+        if (d.pressure > 0f) {
+            // Steady drain, always on
+            d.pressure = Math.max(0f, d.pressure - OpConfig.f(OpConfig.STEADY_DRAIN_PER_SECOND) / 20f);
         }
         if (d.pressure > 0f && now - d.lastPressureTick > OpConfig.DECAY_DELAY_TICKS.get()) {
             float rate = living instanceof Player ? OpConfig.f(OpConfig.PLAYER_DECAY_PER_TICK) : OpConfig.f(OpConfig.MOB_DECAY_PER_TICK);

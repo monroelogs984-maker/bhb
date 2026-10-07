@@ -118,5 +118,7 @@
   "screen.bromax_battle.bench.kind.light": "Light",
   "screen.bromax_battle.bench.details": "Item details",
   "book.bromax_battle.guide.name": "Battle Manual",
-  "book.bromax_battle.guide.landing": "A field guide to $(l)BROMAX's Haphazard Battle$(): how weapons swing, how to break an enemy's guard, and how to turn their pressure back on them."
+  "book.bromax_battle.guide.landing": "A field guide to $(l)BROMAX's Haphazard Battle$(): how weapons swing, how to break an enemy's guard, and how to turn their pressure back on them.",
+  "key.categories.bromax_battle": "BROMAX's Haphazard Battle",
+  "key.bromax_battle.guard": "Raise / lower guard"
 }

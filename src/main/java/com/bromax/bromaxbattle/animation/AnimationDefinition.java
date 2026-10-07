@@ -18,8 +18,11 @@ public class AnimationDefinition {
     public final float               lunge;
     public final WeaponGrip          grip;
     public final float               gripScale;
-    /** Weapon category inferred from the id ("greatsword_heavy" -> GREATSWORD), or null. */
-    public final com.bromax.bromaxbattle.weapon.WeaponCategory category;
+    /**
+     * Weapon category inferred from the id ("greatsword_heavy" -> GREATSWORD), or null. Shared poses
+     * that aren't named after a weapon (the guard) can set it with a "category" field instead.
+     */
+    public com.bromax.bromaxbattle.weapon.WeaponCategory category;
 
     private final Map<BoneTarget, List<Keyframe>> keyframesByBone;
 
@@ -205,6 +208,13 @@ public class AnimationDefinition {
             } catch (Exception ignored) {}
         }
 
-        return new AnimationDefinition(id, duration, blendMask, hitStart, hitEnd, hasTrail, lunge, grip, gripScale, keyframes);
+        AnimationDefinition def = new AnimationDefinition(id, duration, blendMask, hitStart, hitEnd, hasTrail, lunge, grip, gripScale, keyframes);
+        if (json.has("category")) {
+            try {
+                def.category = com.bromax.bromaxbattle.weapon.WeaponCategory.valueOf(
+                        json.get("category").getAsString().toUpperCase(java.util.Locale.ROOT));
+            } catch (IllegalArgumentException ignored) {}
+        }
+        return def;
     }
 }

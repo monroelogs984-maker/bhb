@@ -28,6 +28,7 @@ public final class OverpowerSetup {
 
         NeoForge.EVENT_BUS.register(new DamageTradeoff());
         NeoForge.EVENT_BUS.register(new OverpowerManager());
+        NeoForge.EVENT_BUS.register(new com.bromax.bromaxbattle.combat.GuardHandler());
         com.bromax.bromaxbattle.overpower.debug.OpTest.register();
         if (FMLEnvironment.dist == Dist.CLIENT) {
             com.bromax.bromaxbattle.overpower.client.OpClient.register(modBus);

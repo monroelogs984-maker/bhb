@@ -44,6 +44,13 @@ public class MixinItemInHandRenderer {
 
         boolean mainhand = (hand == InteractionHand.MAIN_HAND);
         UUID id = player.getUUID();
+        // The guard has its own first-person placement; its third-person arm angles would swing
+        // the weapon out of view
+        if (mainhand && com.bromax.bromaxbattle.client.GuardClient.isGuardAnimation(
+                AnimationController.INSTANCE.currentAnimation(id, false))) {
+            com.bromax.bromaxbattle.client.GuardClient.applyFirstPerson(poseStack, partialTick);
+            return;
+        }
         float[] angles = AnimationController.INSTANCE.getArmAngles(id, mainhand, partialTick);
         if (angles == null) return;
 

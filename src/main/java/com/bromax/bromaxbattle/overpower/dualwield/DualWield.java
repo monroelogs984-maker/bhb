@@ -66,14 +66,18 @@ public final class DualWield {
         return (int) Math.max(4, Math.ceil(20.0 / speed - 0.5 - 1e-6));
     }
 
-    public static void handle(ServerPlayer player, int targetId) {
+    public static void handle(ServerPlayer player, int targetId, int variant) {
         if (!canDualWield(player) || player.isSpectator()) return;
         long now = player.level().getGameTime();
         Long ready = READY_AT.get(player.getUUID());
         if (ready != null && now < ready) return;
         ItemStack off = player.getOffhandItem();
         READY_AT.put(player.getUUID(), now + lockTicks(off));
-        OpNetwork.offhandSwing(player);
+        com.bromax.bromaxbattle.combat.GuardHandler.lower(player, 0);
+        WeaponAttributes attrs = WeaponRegistry.INSTANCE.getAttributes(off);
+        // The client picked the variant and is already animating it; the hit matches it
+        int idx = variant >= 0 && variant < attrs.attacks.size() ? variant : 0;
+        OpNetwork.offhandSwing(player, idx);
         player.swing(net.minecraft.world.InteractionHand.OFF_HAND, false);
 
         Entity e = targetId >= 0 ? player.level().getEntity(targetId) : null;
@@ -83,8 +87,7 @@ public final class DualWield {
         // A Glare Strike can be thrown with either hand
         if (OverpowerManager.tryGlare(player, target, now)) return;
 
-        WeaponAttributes attrs = WeaponRegistry.INSTANCE.getAttributes(off);
-        AttackDefinition attack = attrs.attacks.isEmpty() ? null : attrs.attacks.get(0);
+        AttackDefinition attack = attrs.attacks.isEmpty() ? null : attrs.attacks.get(idx);
         DamageSource src = player.damageSources().playerAttack(player);
         float base = offhandBaseDamage(player, off);
         float enchant = player.level() instanceof ServerLevel sl

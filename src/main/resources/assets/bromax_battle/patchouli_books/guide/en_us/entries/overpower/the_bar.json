@@ -10,7 +10,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "Pressure fades on its own after about two seconds without new pressure. Mobs drain slowly; players drain fast, so a crowd can't pin you down forever.$(br2)Each hit you land also relieves some of your own pressure: attacking is the best defense."
+      "text": "Pressure slowly fades all the time, so an advantage has to be kept up. After about two seconds without new pressure it drains quickly: mobs fairly fast, players faster still, so a crowd can't pin you down forever.$(br2)Each hit you land also relieves some of your own pressure: attacking is the best defense."
     }
   ]
 }

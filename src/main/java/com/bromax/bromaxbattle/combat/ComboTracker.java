@@ -15,6 +15,23 @@ public class ComboTracker {
      * result for the same attack — they share the same tickCount for the local
      * player and neither side has accumulated a separate counter to drift.
      */
+    /**
+     * Client-side pick for the local player's own attacks. The client chooses, plays the animation
+     * and sends the choice to the server ahead of the attack, so the damage always matches what
+     * was shown. (Seeding both sides from tickCount desynced: the two counters differ.)
+     */
+    public int pickAttackRandom(WeaponAttributes attrs, java.util.Random random) {
+        List<AttackDefinition> attacks = attrs.attacks;
+        if (attacks.size() <= 1 || attrs.totalWeight <= 0) return 0;
+        int roll = random.nextInt(attrs.totalWeight);
+        int cumulative = 0;
+        for (int i = 0; i < attacks.size(); i++) {
+            cumulative += attacks.get(i).weight;
+            if (roll < cumulative) return i;
+        }
+        return attacks.size() - 1;
+    }
+
     public int pickAttack(UUID playerId, WeaponAttributes attrs, int currentTick) {
         List<AttackDefinition> attacks = attrs.attacks;
         if (attacks.isEmpty()) return 0;
