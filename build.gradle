@@ -10,7 +10,7 @@ buildscript {
 
 apply plugin: 'net.minecraftforge.gradle'
 
-version = '0.9'
+version = '1.4.0-1.12.2'
 group = 'com.bromax.bromaxbattle'
 archivesBaseName = 'bromax_battle'
 
@@ -29,8 +29,9 @@ minecraft {
 
 dependencies {
     minecraft 'net.minecraftforge:forge:1.12.2-14.23.5.2859'
-    // Build bromaxlib first: cd ../bromaxlib && ./gradlew build
-    compile files('../bromaxlib/build/libs/bromaxlib-1.0.0.jar')
+    // BROMAX's Lib carries the animation engine and mixins. Build it first:
+    //   cd ../bromaxlib-repo && ./gradlew build
+    compile files('../bromaxlib-repo/build/libs/bromaxlib-2.0.0.jar')
 }
 
 jar {
@@ -44,16 +45,6 @@ jar {
 
 jar.finalizedBy('reobfJar')
 
-task deploy {
-    doLast {
-        copy {
-            from 'build/libs/bromax_battle-0.9.jar'
-            into '/home/glenn/Documents/curseforge/minecraft/Instances/Dummy 101/mods'
-        }
-        println "[DEPLOY] bromax_battle → Dummy 101"
-    }
-}
-build.finalizedBy(deploy)
 
 processResources {
     inputs.property 'version', project.version

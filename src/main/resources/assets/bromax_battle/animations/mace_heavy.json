@@ -1,6 +1,8 @@
 {
   "duration": 26,
   "lunge": 0.06,
+  "grip": "thrust",
+  "grip_scale": 1.0,
   "blend_mask": [
     "RIGHT_ARM",
     "LEFT_ARM",
@@ -27,80 +29,80 @@
       "tick": 5,
       "bone": "RIGHT_ARM",
       "easing": "EASE_IN_CUBIC",
-      "rx": -148,
+      "rx": 140,
       "ry": 0,
-      "rz": -8
-    },
-    {
-      "tick": 14,
-      "bone": "RIGHT_ARM",
-      "easing": "EASE_OUT_CUBIC",
-      "rx": 108,
-      "ry": 0,
-      "rz": 22
-    },
-    {
-      "tick": 22,
-      "bone": "RIGHT_ARM",
-      "easing": "EASE_OUT_QUAD",
-      "rx": 88,
-      "ry": 0,
-      "rz": 18
-    },
-    {
-      "tick": 0,
-      "bone": "LEFT_ARM",
-      "easing": "EASE_IN_QUAD"
-    },
-    {
-      "tick": 5,
-      "bone": "LEFT_ARM",
-      "easing": "EASE_IN_CUBIC",
-      "rx": 28,
-      "ry": 0,
-      "rz": -22
-    },
-    {
-      "tick": 14,
-      "bone": "LEFT_ARM",
-      "easing": "EASE_OUT_CUBIC",
-      "rx": 42,
-      "ry": 0,
-      "rz": -18
-    },
-    {
-      "tick": 22,
-      "bone": "LEFT_ARM",
-      "easing": "EASE_OUT_QUAD",
-      "rx": 32,
-      "ry": 0,
-      "rz": -15
-    },
-    {
-      "tick": 0,
-      "bone": "BODY",
-      "easing": "EASE_IN_QUAD"
-    },
-    {
-      "tick": 5,
-      "bone": "BODY",
-      "easing": "EASE_IN_CUBIC",
-      "rx": -28,
       "rz": 0
     },
     {
-      "tick": 14,
-      "bone": "BODY",
+      "tick": 13,
+      "bone": "RIGHT_ARM",
       "easing": "EASE_OUT_CUBIC",
+      "rx": 50,
+      "ry": 0,
+      "rz": 0
+    },
+    {
+      "tick": 22,
+      "bone": "RIGHT_ARM",
+      "easing": "EASE_OUT_QUAD",
       "rx": 38,
+      "ry": 0,
       "rz": 0
+    },
+    {
+      "tick": 0,
+      "bone": "LEFT_ARM",
+      "easing": "EASE_IN_QUAD"
+    },
+    {
+      "tick": 5,
+      "bone": "LEFT_ARM",
+      "easing": "EASE_IN_CUBIC",
+      "rx": 70,
+      "ry": 0,
+      "rz": 0
+    },
+    {
+      "tick": 13,
+      "bone": "LEFT_ARM",
+      "easing": "EASE_OUT_CUBIC",
+      "rx": 10,
+      "ry": 0,
+      "rz": 0
+    },
+    {
+      "tick": 22,
+      "bone": "LEFT_ARM",
+      "easing": "EASE_OUT_QUAD",
+      "rx": 7,
+      "ry": 0,
+      "rz": 0
+    },
+    {
+      "tick": 0,
+      "bone": "BODY",
+      "easing": "EASE_IN_QUAD"
+    },
+    {
+      "tick": 5,
+      "bone": "BODY",
+      "easing": "EASE_IN_CUBIC",
+      "rx": -16,
+      "rz": 0
+    },
+    {
+      "tick": 13,
+      "bone": "BODY",
+      "easing": "EASE_OUT_CUBIC",
+      "rx": 22,
+      "rz": 4
     },
     {
       "tick": 22,
       "bone": "BODY",
       "easing": "EASE_OUT_QUAD",
-      "rx": 28,
-      "rz": 0
+      "rx": 16,
+      "rz": 4
     },
     {
       "tick": 0,
@@ -108,16 +110,16 @@
       "easing": "EASE_IN_QUAD"
     },
     {
-      "tick": 14,
+      "tick": 7,
       "bone": "RIGHT_LEG",
       "easing": "EASE_OUT_CUBIC",
-      "rx": -42
+      "rx": -57
     },
     {
       "tick": 22,
       "bone": "RIGHT_LEG",
       "easing": "EASE_OUT_QUAD",
-      "rx": -18
+      "rx": -23
     },
     {
       "tick": 0,
@@ -125,35 +127,38 @@
       "easing": "EASE_IN_QUAD"
     },
     {
-      "tick": 14,
+      "tick": 7,
       "bone": "LEFT_LEG",
       "easing": "EASE_OUT_CUBIC",
-      "rx": 52
+      "rx": 69
     },
     {
       "tick": 22,
       "bone": "LEFT_LEG",
       "easing": "EASE_OUT_QUAD",
-      "rx": 22
+      "rx": 28
     },
     {
       "tick": 0,
       "bone": "WEAPON_HAND",
-      "easing": "EASE_IN_QUAD"
+      "easing": "EASE_IN_QUAD",
+      "rx": -36,
+      "ry": 0,
+      "rz": 0
     },
     {
       "tick": 5,
       "bone": "WEAPON_HAND",
       "easing": "EASE_IN_CUBIC",
-      "rx": -35,
+      "rx": -90,
       "ry": 0,
       "rz": 0
     },
     {
-      "tick": 14,
+      "tick": 13,
       "bone": "WEAPON_HAND",
       "easing": "EASE_OUT_CUBIC",
-      "rx": -75,
+      "rx": 70,
       "ry": 0,
       "rz": 0
     },
@@ -161,7 +166,7 @@
       "tick": 22,
       "bone": "WEAPON_HAND",
       "easing": "EASE_OUT_QUAD",
-      "rx": -85,
+      "rx": 52,
       "ry": 0,
       "rz": 0
     }

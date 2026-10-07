@@ -10,14 +10,14 @@
     },
     {
       "animation": "bromax_battle:hunters_knife_heavy",
-      "weight": 30,
+      "weight": 25,
       "speed_multiplier": 0.8,
       "damage_multiplier": 1.2,
       "hit_delay": 10
     },
     {
       "animation": "bromax_battle:hunters_knife_light",
-      "weight": 30,
+      "weight": 35,
       "speed_multiplier": 1.2,
       "damage_multiplier": 0.8,
       "hit_delay": 2

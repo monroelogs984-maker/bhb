@@ -9,6 +9,9 @@ public class CommonProxy {
     public void preInit(FMLPreInitializationEvent event) {}
 
     public void init(FMLInitializationEvent event) {
-        MinecraftForge.EVENT_BUS.register(new CombatHandler());
+        CombatHandler handler = new CombatHandler();
+        CombatHandler.INSTANCE = handler;
+        MinecraftForge.EVENT_BUS.register(handler);
+        com.bromax.bromaxbattle.combat.DamageProbe.register();
     }
 }
