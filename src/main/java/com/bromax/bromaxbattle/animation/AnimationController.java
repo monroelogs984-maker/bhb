@@ -4,6 +4,7 @@ import com.bromax.bromaxbattle.BromaxBattle;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.util.Mth;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 
@@ -315,6 +316,11 @@ public class AnimationController {
                 applyToModelUnsafe(offhand, model, partialTick, true, mainhand != null, false);
             }
             attachToTorso(model, vbx, vby, vbz, vpx, vpy, vpz);
+            // A real off-hand attack animates the left arm itself
+            AnimationState driver = mainhand != null ? mainhand : (offhand == null ? idle : null);
+            if (driver != null && driver.cachedDeltas != null && driver.animation.blendMask.contains(BoneTarget.LEFT_ARM)) {
+                poseOffArm(model, driver.animation.category, driver.getBlendFactor(driver.tickF));
+            }
         } catch (Exception e) {
             BromaxBattle.LOGGER.error("[BHB] Animation render error for {}, clearing: {}", playerId, e.getMessage());
             states.remove(playerId);
@@ -495,6 +501,54 @@ public class AnimationController {
         part.x = p.x; part.y = p.y; part.z = p.z;
     }
 
+
+    // -------------------------------------------------------------------------
+    // Off arm
+    // -------------------------------------------------------------------------
+
+    private static final float HAND_REACH = 10f;  // shoulder pivot to fist, model pixels
+    private static final float COUNTER_SWING = 0.3f;
+    private static final float COUNTER_MAX   = 0.5f;
+    private static final float COUNTER_OUT   = -0.12f; // left arm held slightly away from the body
+
+    /**
+     * The mass-generated animations set the left arm to a fixed fraction of the right arm
+     * (0.5 one-handed, 0.85 two-handed) with the same sign, so as the weapon arm swings across
+     * the body the left arm swings outward into a T-pose, and two-handed grips never meet.
+     * Replaces it: two-handed weapons reach the left hand to the right hand every frame, and
+     * one-handed weapons swing the left arm back as a counterbalance to the strike. Paired
+     * weapons (gauntlets, claws, sai, nunchaku) and bows keep their authored left arm.
+     * {@code weight} fades the override in and out with the animation's own blend.
+     */
+    private static void poseOffArm(HumanoidModel<?> model, com.bromax.bromaxbattle.weapon.WeaponCategory cat, float weight) {
+        if (cat == null || cat.isRanged() || weight <= 0.001f) return;
+        switch (cat) {
+            case GAUNTLETS, CLAW, SAI, NUNCHAKU -> { return; }
+            default -> { }
+        }
+        ModelPart right = model.rightArm, left = model.leftArm;
+        float tx, ty, tz;
+        if (cat.isTwoHanded()) {
+            org.joml.Vector3f hand = new org.joml.Quaternionf().rotationZYX(right.zRot, right.yRot, right.xRot)
+                    .transform(new org.joml.Vector3f(-1f, HAND_REACH, 0f)).add(right.x, right.y, right.z);
+            org.joml.Vector3f d = hand.sub(left.x, left.y, left.z);
+            if (d.lengthSquared() < 1e-4f) return;
+            d.normalize();
+            // Arm hangs along +Y; with yRot 0, rotationZYX maps it to (-cos x sin z, cos x cos z, sin x)
+            tx = (float) Math.asin(Math.max(-1f, Math.min(1f, d.z)));
+            tz = (float) Math.atan2(-d.x, d.y);
+            ty = 0f;
+        } else {
+            float strike = VANILLA_RIGHT_ARM_RX - right.xRot; // how far the weapon arm is raised forward
+            tx = Math.max(-COUNTER_MAX, Math.min(COUNTER_MAX, strike * COUNTER_SWING));
+            ty = 0f;
+            tz = COUNTER_OUT;
+        }
+        left.xRot = Mth.lerp(weight, left.xRot, tx);
+        left.yRot = Mth.lerp(weight, left.yRot, ty);
+        left.zRot = Mth.lerp(weight, left.zRot, tz);
+        if (model instanceof PlayerModel<?> pm) pm.leftSleeve.copyFrom(left);
+    }
 
     // -------------------------------------------------------------------------
     // ModelPart helpers — 1.19.2 API (xRot/yRot/zRot, x/y/z)

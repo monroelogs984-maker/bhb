@@ -18,6 +18,8 @@ public class AnimationDefinition {
     public final float               lunge;
     public final WeaponGrip          grip;
     public final float               gripScale;
+    /** Weapon category inferred from the id ("greatsword_heavy" -> GREATSWORD), or null. */
+    public final com.bromax.bromaxbattle.weapon.WeaponCategory category;
 
     private final Map<BoneTarget, List<Keyframe>> keyframesByBone;
 
@@ -33,6 +35,7 @@ public class AnimationDefinition {
         this.lunge          = Math.max(0f, Math.min(1f, lunge));
         this.grip           = grip != null ? grip : WeaponGrip.VANILLA;
         this.gripScale      = Math.max(0f, Math.min(2f, gripScale));
+        this.category       = categoryOf(id);
 
         this.keyframesByBone = new EnumMap<>(BoneTarget.class);
         boolean anyTranslation = false;
@@ -44,6 +47,17 @@ public class AnimationDefinition {
         for (List<Keyframe> list : this.keyframesByBone.values()) {
             list.sort(Comparator.comparingInt(k -> k.tick));
         }
+    }
+
+    /** Longest category name that prefixes the animation path, so hunters_knife_* beats a shorter match. */
+    private static com.bromax.bromaxbattle.weapon.WeaponCategory categoryOf(ResourceLocation id) {
+        if (id == null) return null;
+        String path = id.getPath().toUpperCase(java.util.Locale.ROOT);
+        com.bromax.bromaxbattle.weapon.WeaponCategory best = null;
+        for (var c : com.bromax.bromaxbattle.weapon.WeaponCategory.values()) {
+            if (path.startsWith(c.name() + "_") && (best == null || c.name().length() > best.name().length())) best = c;
+        }
+        return best;
     }
 
     /** Keyframes for one bone, in tick order (empty when the bone isn't animated). */
@@ -59,6 +73,21 @@ public class AnimationDefinition {
         List<Integer> out = new ArrayList<>();
         for (Keyframe kf : frames) out.add(kf.tick);
         return out;
+    }
+
+    /** Share of the final pose eased off between the last keyframe and the end of the animation. */
+    private static final float SETTLE = 0.25f;
+
+    /**
+     * Most animations stop at their last keyframe and hold it for 15-40% of their length before
+     * the blend-out starts, which reads as the figure freezing after the hit. Past the last
+     * keyframe the pose now eases a little toward neutral so the recovery keeps moving.
+     */
+    private float settle(Keyframe last, float tick) {
+        float span = duration - last.tick;
+        if (span <= 0f) return 1f;
+        float t = Math.max(0f, Math.min(1f, (tick - last.tick) / span));
+        return 1f - SETTLE * t * t * (3f - 2f * t);
     }
 
     public boolean isHitWindowActive(float tick) {
@@ -80,7 +109,8 @@ public class AnimationDefinition {
         }
 
         if (before == null)               { out[0] = after.rx;  out[1] = after.ry;  out[2] = after.rz;  return; }
-        if (after == null || before == after) { out[0] = before.rx; out[1] = before.ry; out[2] = before.rz; return; }
+        if (after == null) { float k = settle(before, tick); out[0] = before.rx * k; out[1] = before.ry * k; out[2] = before.rz * k; return; }
+        if (before == after) { out[0] = before.rx; out[1] = before.ry; out[2] = before.rz; return; }
 
         float t = (tick - before.tick) / (float)(after.tick - before.tick);
         float e = before.easing.apply(t);
@@ -104,7 +134,8 @@ public class AnimationDefinition {
         }
 
         if (before == null)               { out[0] = after.tx;  out[1] = after.ty;  out[2] = after.tz;  return; }
-        if (after == null || before == after) { out[0] = before.tx; out[1] = before.ty; out[2] = before.tz; return; }
+        if (after == null) { float k = settle(before, tick); out[0] = before.tx * k; out[1] = before.ty * k; out[2] = before.tz * k; return; }
+        if (before == after) { out[0] = before.tx; out[1] = before.ty; out[2] = before.tz; return; }
 
         float t = (tick - before.tick) / (float)(after.tick - before.tick);
         float e = before.easing.apply(t);
