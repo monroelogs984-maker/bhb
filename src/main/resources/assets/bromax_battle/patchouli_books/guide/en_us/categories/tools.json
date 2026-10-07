@@ -1,0 +1,6 @@
+{
+  "name": "Tools",
+  "description": "Reading a weapon's traits: tooltips and the Weaponsmith's Bench.",
+  "icon": "bromax_battle:weaponsmith_bench",
+  "sortnum": 4
+}

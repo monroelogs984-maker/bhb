@@ -1,0 +1,20 @@
+{
+  "name": "Weaponsmith's Bench",
+  "icon": "bromax_battle:weaponsmith_bench",
+  "category": "bromax_battle:tools",
+  "sortnum": 1,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "A workbench for studying weapons.$(br2)$(li)$(k:use) with a weapon to set it on the bench.$(li)$(k:use) with an empty hand to examine it.$(li)$(k:sneak) + $(k:use) to take it back."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Examining a weapon shows everything BHB knows about it: its type, whether it's two-handed, each attack variant's chance, speed and damage, and when its hit lands, plus its Overpower ratings."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "bromax_battle:weaponsmith_bench"
+    }
+  ]
+}

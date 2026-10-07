@@ -1,0 +1,170 @@
+{
+  "_about": [
+    "Per-weapon-category Overpower and Glare Strike levels, -2 (low) to +2 (good).",
+    "Damage modifier = 1 - damage_per_level x (overpower + glare): investing in the",
+    "Overpower minigame costs a little raw damage, low investment gains a little."
+  ],
+  "damage_per_level": 0.015,
+  "categories": {
+    "shortsword": {
+      "overpower": -1,
+      "glare": 1
+    },
+    "longsword": {
+      "overpower": 0,
+      "glare": 0
+    },
+    "broadsword": {
+      "overpower": 1,
+      "glare": -1
+    },
+    "sabre": {
+      "overpower": -1,
+      "glare": -1
+    },
+    "falchion": {
+      "overpower": 0,
+      "glare": -1
+    },
+    "rapier": {
+      "overpower": -2,
+      "glare": 2
+    },
+    "katana": {
+      "overpower": -1,
+      "glare": 2
+    },
+    "flamberge": {
+      "overpower": 1,
+      "glare": 0
+    },
+    "zweihander": {
+      "overpower": 2,
+      "glare": -1
+    },
+    "greatsword": {
+      "overpower": 2,
+      "glare": -2
+    },
+    "twinblades": {
+      "overpower": 0,
+      "glare": 2
+    },
+    "executioner_sword": {
+      "overpower": 1,
+      "glare": -2
+    },
+    "dagger": {
+      "overpower": -1,
+      "glare": 2
+    },
+    "hunters_knife": {
+      "overpower": 0,
+      "glare": 1
+    },
+    "sai": {
+      "overpower": -2,
+      "glare": 2
+    },
+    "spear": {
+      "overpower": 0,
+      "glare": 0
+    },
+    "trident": {
+      "overpower": 0,
+      "glare": -1
+    },
+    "lance": {
+      "overpower": 1,
+      "glare": -2
+    },
+    "glaive": {
+      "overpower": 1,
+      "glare": -1
+    },
+    "halberd": {
+      "overpower": 1,
+      "glare": -1
+    },
+    "polearm": {
+      "overpower": 0,
+      "glare": 0
+    },
+    "mace": {
+      "overpower": 1,
+      "glare": 0
+    },
+    "flail": {
+      "overpower": 1,
+      "glare": -1
+    },
+    "hammer": {
+      "overpower": 1,
+      "glare": 1
+    },
+    "warhammer": {
+      "overpower": 2,
+      "glare": -1
+    },
+    "greathammer": {
+      "overpower": 1,
+      "glare": -1
+    },
+    "handaxe": {
+      "overpower": 1,
+      "glare": 0
+    },
+    "cleaver": {
+      "overpower": 1,
+      "glare": -2
+    },
+    "battleaxe": {
+      "overpower": 2,
+      "glare": -1
+    },
+    "lumberaxe": {
+      "overpower": 1,
+      "glare": -2
+    },
+    "scythe": {
+      "overpower": 0,
+      "glare": -1
+    },
+    "sickle": {
+      "overpower": -1,
+      "glare": 1
+    },
+    "gauntlets": {
+      "overpower": 1,
+      "glare": 2
+    },
+    "claw": {
+      "overpower": 0,
+      "glare": 2
+    },
+    "nunchaku": {
+      "overpower": 1,
+      "glare": 1
+    },
+    "quarterstaff": {
+      "overpower": 2,
+      "glare": 2
+    },
+    "staff": {
+      "overpower": 1,
+      "glare": 1
+    },
+    "whip": {
+      "overpower": -1,
+      "glare": 0
+    },
+    "sword": {
+      "overpower": 0,
+      "glare": 0
+    },
+    "axe": {
+      "overpower": 0,
+      "glare": 0
+    }
+  }
+}

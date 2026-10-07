@@ -1,0 +1,12 @@
+{
+  "name": "Weapon Tooltips",
+  "icon": "minecraft:name_tag",
+  "category": "bromax_battle:tools",
+  "sortnum": 0,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Hold $(k:sneak) while looking at a weapon's tooltip to see its Overpower and Glare Strike levels, plus its damage trade-off."
+    }
+  ]
+}

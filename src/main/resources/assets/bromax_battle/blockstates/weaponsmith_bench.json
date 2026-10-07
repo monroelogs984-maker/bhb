@@ -1,0 +1,20 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "bromax_battle:block/weaponsmith_bench",
+      "y": 0
+    },
+    "facing=east": {
+      "model": "bromax_battle:block/weaponsmith_bench",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "bromax_battle:block/weaponsmith_bench",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "bromax_battle:block/weaponsmith_bench",
+      "y": 270
+    }
+  }
+}

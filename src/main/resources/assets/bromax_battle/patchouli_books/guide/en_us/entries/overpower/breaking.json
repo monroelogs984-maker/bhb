@@ -1,0 +1,16 @@
+{
+  "name": "Breaking a Bar",
+  "icon": "minecraft:iron_axe",
+  "category": "bromax_battle:overpower",
+  "sortnum": 1,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "When a bar reaches 100 it $(l)breaks$(). The victim is knocked back and becomes $(4)Overpowered$() for a few seconds: much slower, and dealing 15% less damage.$(br2)Overpowered is your opening to press the attack."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(bold)Bosses$() don't slow down. A broken boss is $(4)Staggered$() for a moment (it can't move or deal damage) and then $(4)Exposed$(): weakened like Overpowered, but still moving at full speed.$(br2)Bosses and elites also shrug off part of the pressure you deal."
+    }
+  ]
+}

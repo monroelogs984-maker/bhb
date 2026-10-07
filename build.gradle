@@ -2,7 +2,7 @@ plugins {
     id 'net.neoforged.gradle.userdev' version '7.1.38'
 }
 
-version = '1.4.1-Neoforge1.21.1'
+version = '1.5.0-Neoforge1.21.1'
 group = 'com.bromax.bromaxbattle'
 
 base {
@@ -23,6 +23,10 @@ runs {
         // Unattended animation preview: ./gradlew runClient -PbhbPreview=all (or a name filter)
         if (project.hasProperty('bhbPreview')) {
             systemProperty 'bhb.preview', project.property('bhbPreview')
+        }
+        // Unattended Overpower test: -PopTest (flat survival world, runs /optest, quits)
+        if (project.hasProperty('opTest')) {
+            systemProperty 'bhb.optest', 'true'
         }
         // Dev damage harness: -PbhbDmgTest="60 minecraft:iron_sword" (registers /bhbdmgtest, runs it, quits)
         if (project.hasProperty('bhbDmgTest')) {

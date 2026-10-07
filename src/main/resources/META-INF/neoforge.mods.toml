@@ -6,7 +6,7 @@ license="Creative Commons 4.0"
     modId="bromax_battle"
     version="${file.jarVersion}"
     displayName="BROMAX's Haphazard Battle"
-    description="Weapon-aware melee combat overhaul: per-weapon attack animations, combos, AOE arcs, dual wielding, and lunges."
+    description="Weapon-aware melee combat overhaul: per-weapon attack animations, combos, AOE arcs, dual wielding and lunges, plus Overpower: wear down an enemy's guard, break it, and counter with a Glare Strike."
 
 [[dependencies.bromax_battle]]
     modId="neoforge"
@@ -19,6 +19,13 @@ license="Creative Commons 4.0"
     modId="minecraft"
     type="required"
     versionRange="[1.21.1,1.22)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.bromax_battle]]
+    modId="patchouli"
+    type="optional"
+    versionRange="[1.21.1-90,)"
     ordering="NONE"
     side="BOTH"
 

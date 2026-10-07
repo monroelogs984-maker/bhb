@@ -1,0 +1,20 @@
+{
+  "name": "Glare Strike",
+  "icon": "minecraft:spectral_arrow",
+  "category": "bromax_battle:glare",
+  "sortnum": 0,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "When your own bar is already high and an enemy hits you, you may get a brief chance to $(l)glare$() back. The bar flashes $(6)gold$() and you hear a chime.$(br2)Attack $(bold)that enemy$() before the flash fades (with either hand) to throw a Glare Strike."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "The enemy is $(6)Staggered$(): frozen and harmless. You strike a pose (taking far less damage while you hold it), then deliver a thrust.$(br2)The thrust deals fixed damage, wipes your own bar clean, and dumps a large chunk of pressure onto the enemy."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "The weapon's $(l)Glare level$() decides how much pressure you need before a window can open, and how long it stays open. Daggers, rapiers and katanas glare easily; greatswords and cleavers barely at all."
+    }
+  ]
+}

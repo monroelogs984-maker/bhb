@@ -1,0 +1,16 @@
+{
+  "name": "Weapon Types",
+  "icon": "minecraft:iron_sword",
+  "category": "bromax_battle:battle",
+  "sortnum": 0,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Every melee weapon belongs to a $(l)weapon type$(): shortsword, greatsword, spear, warhammer, dagger and dozens more. Modded weapons are sorted into a type automatically.$(br2)The type decides how the weapon swings, how far it reaches, how wide it sweeps and how it fares in the $(l:bromax_battle:overpower/the_bar)Overpower$() system."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Some types are $(l)two-handed$(): greatswords, battleaxes, warhammers, polearms, spears, tridents, twinblades, scythes and quarterstaves, among others. A two-handed weapon in your main hand rules out off-hand attacks.$(br2)Hold $(k:sneak) over a weapon's tooltip, or set it on a $(l:bromax_battle:tools/bench)Weaponsmith's Bench$(), to see its type."
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "name": "Building Pressure",
+  "icon": "minecraft:blaze_powder",
+  "category": "bromax_battle:overpower",
+  "sortnum": 2,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "How much pressure a hit adds depends on:$(br2)$(li)The weapon's $(l)Overpower level$().$(li)The swing: heavy swings add far more, light swings less, crits more.$(li)The target: tougher enemies resist."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Enemies build pressure on you the same way. Elites (hefty mobs with 40+ health) and bosses push harder.$(br2)$(bold)Ordinary mobs can't break your bar$(): they can only push it to 70. Only elites, bosses and other players can overpower you."
+    }
+  ]
+}

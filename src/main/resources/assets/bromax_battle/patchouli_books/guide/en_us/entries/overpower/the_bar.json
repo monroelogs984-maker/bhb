@@ -1,0 +1,16 @@
+{
+  "name": "The Pressure Bar",
+  "icon": "minecraft:redstone",
+  "category": "bromax_battle:overpower",
+  "sortnum": 0,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Every fighter has a hidden $(l)pressure$() bar from 0 to 100. Landing hits fills the enemy's bar; taking hits fills yours.$(br2)While you're in a fight, a red bar replaces your experience bar: $(4)your$() pressure on one side, your $(4)target's$() on the other."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Pressure fades on its own after about two seconds without new pressure. Mobs drain slowly; players drain fast, so a crowd can't pin you down forever.$(br2)Each hit you land also relieves some of your own pressure: attacking is the best defense."
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "name": "Weapon Levels",
+  "icon": "minecraft:anvil",
+  "category": "bromax_battle:overpower",
+  "sortnum": 3,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Each weapon type has two ratings, from $(4)Very low$() to $(2)Excellent$():$(br2)$(li)$(l)Overpower$(): how hard its hits push an enemy's bar.$(li)$(l)Glare Strike$(): how easy it is to counter with a $(l:bromax_battle:glare/glare_strike)Glare Strike$()."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Investing in Overpower costs a little raw damage: every level above Standard trims about 1.5% from the weapon's hits, and every level below adds it back.$(br2)A greatsword is a bar-breaker that struggles to counter; a rapier barely dents a bar but counters effortlessly. A quarterstaff does both, and pays for it in damage."
+    }
+  ]
+}

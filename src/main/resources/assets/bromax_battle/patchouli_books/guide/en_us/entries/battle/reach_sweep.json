@@ -1,0 +1,16 @@
+{
+  "name": "Reach and Sweeps",
+  "icon": "minecraft:iron_sword",
+  "category": "bromax_battle:battle",
+  "sortnum": 2,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Every weapon type has its own reach and area of effect, in three broad shapes:$(br2)$(li)$(bold)Balanced$(): a medium arc in front of you. Shortswords, axes, blunt weapons.$(li)$(bold)Wide$(): a broad arc. Greatswords, scythes.$(li)$(bold)Forward$(): long and narrow. Spears, rapiers, lances."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "The enemy you aim at takes the full blow a moment into the swing, not on the click; slower weapons land later. Most weapons also catch other enemies inside their reach shape for part of the damage."
+    }
+  ]
+}

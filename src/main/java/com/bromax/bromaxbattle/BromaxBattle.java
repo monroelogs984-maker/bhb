@@ -21,6 +21,7 @@ public class BromaxBattle {
 
     public BromaxBattle(IEventBus modBus, ModContainer container) {
         BromaxBattleConfig.register(container);
+        com.bromax.bromaxbattle.overpower.OverpowerSetup.init(modBus, container);
 
         modBus.addListener(this::commonSetup);
 

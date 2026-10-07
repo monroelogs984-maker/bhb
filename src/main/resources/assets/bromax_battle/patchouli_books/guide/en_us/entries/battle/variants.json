@@ -1,0 +1,16 @@
+{
+  "name": "Attack Variants",
+  "icon": "minecraft:clock",
+  "category": "bromax_battle:battle",
+  "sortnum": 1,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Each swing is one of three $(l)variants$(), rolled at random:$(br2)$(li)$(bold)Default$(): the weapon's usual swing.$(li)$(4)Heavy$(): rare, slower, hits harder.$(li)$(9)Light$(): rare, quicker, hits softer."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "How common the rare swings are, and how far they stray from the default, depends on the weapon type.$(br2)The attack-cooldown bar is tinted $(4)red$() after a heavy swing and $(9)blue$() after a light one, so you can always read what just happened.$(br2)Heavy swings build much more Overpower pressure; light swings build less."
+    }
+  ]
+}

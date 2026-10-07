@@ -1,0 +1,12 @@
+{
+  "name": "Momentum",
+  "icon": "minecraft:feather",
+  "category": "bromax_battle:battle",
+  "sortnum": 3,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Moving fast when you swing adds damage:$(br2)$(li)Sprinting: +5% of the weapon's damage.$(li)Sprint-jumping: +10%.$(li)Faster than vanilla movement (mounts, elytra, Speed): +15%."
+    }
+  ]
+}

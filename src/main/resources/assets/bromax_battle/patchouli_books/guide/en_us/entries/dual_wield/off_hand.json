@@ -1,0 +1,16 @@
+{
+  "name": "Off-hand Attacks",
+  "icon": "minecraft:golden_sword",
+  "category": "bromax_battle:dual_wield",
+  "sortnum": 0,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Hold a one-handed weapon in your off hand and $(k:use) to attack with it. The off hand has its own cooldown, based on that weapon's speed, so you can alternate hands for a quicker rhythm.$(br2)Off-hand hits deal 85% of the weapon's damage, can crit, and build pressure like any other hit."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "You can't attack with the off hand while holding a $(l)two-handed$() weapon in your main hand, and shields stay shields.$(br2)A Glare Strike can be thrown with whichever hand is ready."
+    }
+  ]
+}
