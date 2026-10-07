@@ -27,6 +27,7 @@ import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.living.LivingHealEvent;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import net.neoforged.neoforge.event.entity.player.AttackEntityEvent;
@@ -70,10 +71,12 @@ public class CombatHandler {
         final WeaponCategory category;
         final long     fireAtTick;
         final boolean  wasCrit;
+        final AttackDefinition variant;
 
         PendingHit(Player attacker, Entity primaryTarget,
                    float combinedMult, float flatBonus, float aoeDamage,
-                   WeaponCategory category, long fireAtTick, boolean wasCrit) {
+                   WeaponCategory category, long fireAtTick, boolean wasCrit, AttackDefinition variant) {
+            this.variant        = variant;
             this.attacker       = attacker;
             this.primaryTarget  = primaryTarget;
             this.combinedMult   = combinedMult;
@@ -116,16 +119,9 @@ public class CombatHandler {
 
     // -------------------------------------------------------------------------
 
-    @SubscribeEvent
-    public void onAttackEntity(AttackEntityEvent event) {
-        Player player = event.getEntity();
-        if (!player.level().isClientSide) return;
-        UUID pid = player.getUUID();
-        if (isDualWielding(player)) {
-            clientOffhandTurn.put(pid, !clientOffhandTurn.getOrDefault(pid, false));
-        }
-        triggerAnimation(player, true);
-    }
+    // The client-side attack animation is triggered by MixinMultiPlayerGameMode -> clientAttack().
+    // A client AttackEntityEvent handler used to trigger it as well, so every attack flipped the
+    // dual-wield turn twice and the client never alternated hands.
 
     @SubscribeEvent(priority = EventPriority.HIGH)
     public void onAttackEntityServer(AttackEntityEvent event) {
@@ -206,9 +202,10 @@ public class CombatHandler {
             int   idx               = 0;
             float variantDamageMult = 1.0f;
             int   hitDelay          = 0;
+            AttackDefinition variant = null;
             if (attrs != null && !attrs.attacks.isEmpty()) {
                 idx = ComboTracker.INSTANCE.pickAttack(pid, attrs, player.tickCount);
-                AttackDefinition variant = attrs.attacks.get(idx);
+                variant = attrs.attacks.get(idx);
                 variantDamageMult = variant.damageMultiplier;
                 hitDelay          = variant.hitDelay;
             }
@@ -243,8 +240,10 @@ public class CombatHandler {
                         player, event.getTarget(),
                         combinedMult, speedBonus, aoeDamage,
                         attrs != null ? attrs.category : null,
-                        now + hitDelay, wasCrit));
+                        now + hitDelay, wasCrit, variant));
             } else {
+                NeoForge.EVENT_BUS.post(new com.bromax.bromaxbattle.api.BhbHitEvent(
+                        player, event.getTarget(), variant, attrs != null ? attrs.category : null, wasCrit));
                 if (combinedMult != 1.0f) pendingDamageMult.put(pid, combinedMult);
                 if (speedBonus > 0f)      pendingFlatBonus.put(pid, speedBonus);
                 if (attrs != null && AoeCalculator.hasAoe(attrs.category)) {
@@ -322,10 +321,15 @@ public class CombatHandler {
         }
 
         clearOwnInvulnerability(hit.primaryTarget, hit.attacker);
+        boolean landed = false;
         try {
-            hit.primaryTarget.hurt(dmgSrc, totalDmg);
+            landed = hit.primaryTarget.hurt(dmgSrc, totalDmg);
         } catch (Exception e) {
             BromaxBattle.LOGGER.warn("[BHB] Pending hit failed: {}", e.getMessage());
+        }
+        if (landed) {
+            NeoForge.EVENT_BUS.post(new com.bromax.bromaxbattle.api.BhbHitEvent(
+                    hit.attacker, hit.primaryTarget, hit.variant, hit.category, hit.wasCrit));
         }
 
         ItemStack weapon = hit.attacker.getMainHandItem();
@@ -515,6 +519,7 @@ public class CombatHandler {
     // -------------------------------------------------------------------------
 
     private static boolean isDualWielding(Player player) {
+        if (com.bromax.bromaxbattle.api.BhbApi.isDualWieldHandledExternally()) return false;
         WeaponAttributes mainAttrs = WeaponRegistry.INSTANCE.getAttributes(player.getMainHandItem());
         if (mainAttrs != null && mainAttrs.category.isTwoHanded()) return false;
         ItemStack offhand = player.getItemBySlot(EquipmentSlot.OFFHAND);
