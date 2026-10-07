@@ -299,6 +299,11 @@ public class AnimationController {
 
         AnimationState idle = idleStates.get(playerId);
 
+        // Vanilla torso pose, so the arms and head can be re-attached after BHB moves it
+        ModelPart torso = model.body;
+        float vbx = torso.xRot, vby = torso.yRot, vbz = torso.zRot;
+        float vpx = torso.x, vpy = torso.y, vpz = torso.z;
+
         try {
             if (mainhand == null && offhand == null && idle != null && idle.cachedDeltas != null) {
                 applyToModelUnsafe(idle, model, partialTick, false, false, true);
@@ -309,6 +314,7 @@ public class AnimationController {
             if (offhand != null && offhand.cachedDeltas != null) {
                 applyToModelUnsafe(offhand, model, partialTick, true, mainhand != null, false);
             }
+            attachToTorso(model, vbx, vby, vbz, vpx, vpy, vpz);
         } catch (Exception e) {
             BromaxBattle.LOGGER.error("[BHB] Animation render error for {}, clearing: {}", playerId, e.getMessage());
             states.remove(playerId);
@@ -435,6 +441,60 @@ public class AnimationController {
             }
         }
     }
+
+    // -------------------------------------------------------------------------
+    // Torso attachment
+    // -------------------------------------------------------------------------
+
+    private static final float HIP_Y = 12f; // torso cube is 12px tall below its neck pivot
+    private static final float TORSO_HIP_SCALE = 0.6f;
+
+    /**
+     * In HumanoidModel the head and arms are not children of the body: their pivots sit at
+     * fixed points, so any torso lean or tilt the animation adds leaves the shoulders behind
+     * (arms appear to sprout from the back or side of the chest). This takes the rotation BHB
+     * added to the torso, pivots it at the hips so the figure bends at the waist with the legs
+     * planted, and carries the head and both shoulders along with it. Arm angles are left as
+     * authored: the clock/degree reference describes where the weapon points in the world, so
+     * only the shoulder pivots move.
+     */
+    private static void attachToTorso(HumanoidModel<?> model, float vbx, float vby, float vbz,
+                                      float vpx, float vpy, float vpz) {
+        ModelPart torso = model.body;
+        if (Math.abs(torso.xRot - vbx) < 1e-4f && Math.abs(torso.yRot - vby) < 1e-4f
+                && Math.abs(torso.zRot - vbz) < 1e-4f) return;
+
+        org.joml.Quaternionf vanilla = new org.joml.Quaternionf().rotationZYX(vbz, vby, vbx);
+        org.joml.Quaternionf posed   = new org.joml.Quaternionf().rotationZYX(torso.zRot, torso.yRot, torso.xRot);
+        org.joml.Quaternionf delta   = new org.joml.Quaternionf(posed).mul(new org.joml.Quaternionf(vanilla).conjugate());
+        // Torso angles were authored around the neck pivot, where they only rock the chest;
+        // bent at the hips the same angle tips the whole upper body, so scale it down
+        delta = new org.joml.Quaternionf().slerp(delta, TORSO_HIP_SCALE);
+        org.joml.Vector3f e = new org.joml.Quaternionf(delta).mul(vanilla).getEulerAnglesZYX(new org.joml.Vector3f());
+        torso.xRot = e.x; torso.yRot = e.y; torso.zRot = e.z;
+
+        // Hip point in model space, from the vanilla torso pose
+        org.joml.Vector3f hip = new org.joml.Vector3f(0f, HIP_Y, 0f).rotate(vanilla).add(vpx, vpy, vpz);
+
+        moveAboutHip(torso, delta, hip, vpx, vpy, vpz);
+        moveAboutHip(model.head, delta, hip, model.head.x, model.head.y, model.head.z);
+        moveAboutHip(model.rightArm, delta, hip, model.rightArm.x, model.rightArm.y, model.rightArm.z);
+        moveAboutHip(model.leftArm, delta, hip, model.leftArm.x, model.leftArm.y, model.leftArm.z);
+
+        if (model instanceof PlayerModel<?> pm) {
+            pm.jacket.copyFrom(torso);
+            pm.hat.copyFrom(model.head);
+            pm.rightSleeve.copyFrom(model.rightArm);
+            pm.leftSleeve.copyFrom(model.leftArm);
+        }
+    }
+
+    private static void moveAboutHip(ModelPart part, org.joml.Quaternionf delta, org.joml.Vector3f hip,
+                                     float x, float y, float z) {
+        org.joml.Vector3f p = new org.joml.Vector3f(x, y, z).sub(hip).rotate(delta).add(hip);
+        part.x = p.x; part.y = p.y; part.z = p.z;
+    }
+
 
     // -------------------------------------------------------------------------
     // ModelPart helpers — 1.19.2 API (xRot/yRot/zRot, x/y/z)
